@@ -1,0 +1,38 @@
+
+==================================================
+ iPlant - Core Software - Database Schema Archive
+==================================================
+
+:guilty-party: Andrew Lenards <lenards@iplantcollaborative.org>
+:date: November 13, 2009 ("Friday the 13th")
+
+Assumtpions
+***********
+
+   The following is assumed prior to running the ``db_init.sh`` contained in the archive: 
+
+   * The discovery environment database already exists and is named ``de``
+
+   * The application user already exists and is named ``de``
+
+   * A password file per PostgreSQL format exists in $HOME of the existing user. 
+
+       See: https://pods.iplantcollaborative.org/wiki/display/coresw/Database+Migration+Steps
+
+   * The script will be executed on the machine running postgresql 
+
+       This could change in the future such that the ``-h`` parameter is assumed to be ``localhost``, or passed to the script.  But is not done in the current implementation.
+
+Doing a database initialization
+*******************************
+
+  The script is not set to be executable, but assumed that bash as at ``/bin/bash``.  The intended execution would be the following: 
+
+  bash db_init.sh
+
+  This will do a drop of the existing schema followed by creating it.  The ownership is then reassigned to ``de`` and the schema is built from the SQL scripts listed in the ``$scripts`` variable in ``db_init.sh``.  
+
+Adding a new SQL script
+***********************
+
+  Simply add the name of the script to the ``$scripts`` in ``db_init.sh``.  Remember that the order of script names in the list are the order of execution.  If you example your script to run last, it should be last in the list. 
