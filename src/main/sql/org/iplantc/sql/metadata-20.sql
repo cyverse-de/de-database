@@ -63,3 +63,7 @@ CREATE VIEW rating_listing AS
     FROM transformation_activity analysis
          CROSS JOIN users u
          LEFT JOIN ratings ur ON analysis.hid = ur.transformation_activity_id AND ur.user_id = u.id;
+
+-- Add is_implicit column for output dataobjects.
+ALTER TABLE dataobjects ADD COLUMN is_implicit BOOLEAN DEFAULT FALSE;
+
