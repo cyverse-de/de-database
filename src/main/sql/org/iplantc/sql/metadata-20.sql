@@ -67,3 +67,6 @@ CREATE VIEW rating_listing AS
 -- Add is_implicit column for output dataobjects.
 ALTER TABLE dataobjects ADD COLUMN is_implicit BOOLEAN DEFAULT FALSE;
 
+-- Add required column for output validator.
+ALTER TABLE validator ADD COLUMN required BOOLEAN DEFAULT FALSE;
+
