@@ -56,7 +56,7 @@ scripts=(database-0.sql database-1.sql database-2.sql metadata-2-0.sql database-
          metadata-3-2.sql database-4.sql metadata-4-0.sql metadata-4-1.sql metadata-5.sql metadata-6.sql metadata-7.sql \
          metadata-8.sql metadata-9.sql metadata-10.sql database-11.sql metadata-11.sql metadata-12.sql metadata-13.sql  \
          metadata-14.sql metadata-15.sql metadata-16.sql metadata-16-1.sql metadata-17.sql metadata-18.sql \
-         metadata-19.sql metadata-19-1.sql metadata-20.sql)
+         metadata-19.sql metadata-19-1.sql metadata-20.sql metadata-21.sql)
 # note: they will be executed in the under they appear in the array
 
 # check for the .pgpass file in $HOME
