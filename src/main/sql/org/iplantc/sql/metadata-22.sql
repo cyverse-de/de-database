@@ -5,7 +5,7 @@ BEGIN;
 -- Add edited_date column for transformation_activity.
 ALTER TABLE transformation_activity ADD COLUMN edited_date TIMESTAMP;
 
--- Drop and re-create the analysis listing view, including the edited_date.
+-- Drop and re-create the analysis listing view, including the edited_date and the overall job type.
 DROP VIEW analysis_listing;
 CREATE VIEW analysis_listing AS
     SELECT analysis.hid,
@@ -31,10 +31,19 @@ CREATE VIEW analysis_listing AS
                WHERE tts.transformation_task_id = analysis.hid
            ) AS step_count,
            analysis.deleted,
-           analysis.disabled
+           analysis.disabled,
+           CASE WHEN COUNT(DISTINCT dc."type") = 0 THEN 'unknown'
+                WHEN COUNT(DISTINCT dc."type") > 1 THEN 'mixed'
+                ELSE MAX(dc."type")
+           END AS overall_job_type
     FROM transformation_activity analysis
          LEFT JOIN integration_data integration ON analysis.integration_data_id = integration.id
          LEFT JOIN ratings ON analysis.hid = ratings.transformation_activity_id
+         LEFT JOIN transformation_task_steps tts ON analysis.hid = tts.transformation_task_id
+         LEFT JOIN transformation_steps ts ON tts.transformation_step_id = ts.id
+         LEFT JOIN transformations tx ON ts.transformation_id = tx.id
+         LEFT JOIN template t ON tx.template_id = t.id
+         LEFT JOIN deployed_components dc ON t.component_id = dc.id
     GROUP BY analysis.hid,
              analysis.id,
              analysis."name",
@@ -48,4 +57,3 @@ CREATE VIEW analysis_listing AS
              analysis.disabled;
 
 COMMIT;
-
