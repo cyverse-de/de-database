@@ -5,16 +5,6 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: analysis_group_listing; Type: VIEW; Schema: public; Owner: de
---
-
-CREATE VIEW analysis_group_listing AS
-    SELECT g.hid, g.id, g.name, g.description, g.workspace_id, w.is_public FROM (template_group g LEFT JOIN workspace w ON ((g.workspace_id = w.id)));
-
-
-ALTER TABLE public.analysis_group_listing OWNER TO de;
-
---
 -- Name: deployed_component_id_seq; Type: SEQUENCE; Schema: public; Owner: de
 --
 
