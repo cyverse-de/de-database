@@ -5,28 +5,6 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: transformation_activity; Type: TABLE; Schema: public; Owner: de; Tablespace: 
---
-
-CREATE TABLE transformation_activity (
-    hid bigint NOT NULL,
-    name character varying(255),
-    id character varying(255) NOT NULL,
-    description character varying(255),
-    workspace_id bigint NOT NULL,
-    type character varying(255),
-    deleted boolean,
-    integration_data_id bigint NOT NULL,
-    wikiurl character varying(1024),
-    integration_date timestamp without time zone,
-    disabled boolean DEFAULT false NOT NULL,
-    edited_date timestamp without time zone
-);
-
-
-ALTER TABLE public.transformation_activity OWNER TO de;
-
---
 -- Name: transformation_steps_id_seq; Type: SEQUENCE; Schema: public; Owner: de
 --
 
