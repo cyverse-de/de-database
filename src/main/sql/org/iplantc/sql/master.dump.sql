@@ -5,16 +5,6 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: analysis_job_types; Type: VIEW; Schema: public; Owner: de
---
-
-CREATE VIEW analysis_job_types AS
-    SELECT a.hid AS analysis_id, dc.type AS job_type FROM (((((transformation_activity a JOIN transformation_task_steps tts ON ((a.hid = tts.transformation_task_id))) JOIN transformation_steps ts ON ((tts.transformation_step_id = ts.id))) JOIN transformations tx ON ((ts.transformation_id = tx.id))) JOIN template t ON (((tx.template_id)::text = (t.id)::text))) JOIN deployed_components dc ON (((t.component_id)::text = (dc.id)::text)));
-
-
-ALTER TABLE public.analysis_job_types OWNER TO de;
-
---
 -- Name: integration_data_id_seq; Type: SEQUENCE; Schema: public; Owner: de
 --
 
