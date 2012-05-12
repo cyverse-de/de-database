@@ -5,19 +5,6 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: transformation_task_steps; Type: TABLE; Schema: public; Owner: de; Tablespace: 
---
-
-CREATE TABLE transformation_task_steps (
-    transformation_task_id bigint NOT NULL,
-    transformation_step_id bigint NOT NULL,
-    hid integer NOT NULL
-);
-
-
-ALTER TABLE public.transformation_task_steps OWNER TO de;
-
---
 -- Name: transformations_id_seq; Type: SEQUENCE; Schema: public; Owner: de
 --
 
