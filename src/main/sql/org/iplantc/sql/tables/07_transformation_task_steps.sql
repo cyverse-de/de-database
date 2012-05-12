@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- transformation_steps table
+-- transformation_task_steps table
 --
 CREATE TABLE transformation_task_steps (
     transformation_task_id bigint NOT NULL,
