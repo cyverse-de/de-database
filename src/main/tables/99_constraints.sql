@@ -857,4 +857,3 @@ ALTER TABLE ONLY workspace
     ADD CONSTRAINT workspace_users_fk
     FOREIGN KEY (user_id)
     REFERENCES users(id);
-
