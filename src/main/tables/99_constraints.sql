@@ -1,12 +1,4 @@
 --
--- Name: block_type_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY block_type
-    ADD CONSTRAINT block_type_pkey
-    PRIMARY KEY (id);
-
---
 -- Name: data_format_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
 -- Tablespace:
 --
@@ -53,21 +45,6 @@ ALTER TABLE ONLY deployed_component_data_files
 ALTER TABLE ONLY deployed_components
     ADD CONSTRAINT deployed_components_pkey
     PRIMARY KEY (hid);
-
---
--- Name: file_type_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY file_type
-    ADD CONSTRAINT file_type_pkey
-    PRIMARY KEY (id);
-
---
--- Name: folder_pkey; Type: CONSTRAINT; Schema: public; Owner: de; Tablespace:
---
-ALTER TABLE ONLY folder
-    ADD CONSTRAINT folder_pkey
-    PRIMARY KEY (id);
 
 --
 -- Name: importedworkflow_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
@@ -142,14 +119,6 @@ ALTER TABLE ONLY notifications_receivers
     PRIMARY KEY (notification_id, hid);
 
 --
--- Name: predicate_lookup_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY predicate_lookup
-    ADD CONSTRAINT predicate_lookup_pkey
-    PRIMARY KEY (id);
-
---
 -- Name: property_group_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
 -- Tablespace:
 --
@@ -180,14 +149,6 @@ ALTER TABLE ONLY property
 ALTER TABLE ONLY property_type
     ADD CONSTRAINT property_type_pkey
     PRIMARY KEY (hid);
-
---
--- Name: provenance_device_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY provenance_device
-    ADD CONSTRAINT provenance_device_pkey
-    PRIMARY KEY (id);
 
 --
 -- Name: ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
@@ -227,14 +188,6 @@ ALTER TABLE ONLY rule_subtype
 ALTER TABLE ONLY rule_type
     ADD CONSTRAINT rule_type_pkey
     PRIMARY KEY (hid);
-
---
--- Name: statement_type_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY statement_type
-    ADD CONSTRAINT statement_type_pkey
-    PRIMARY KEY (id);
 
 --
 -- Name: suggested_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
@@ -299,14 +252,6 @@ ALTER TABLE ONLY template
 ALTER TABLE ONLY template_property_group
     ADD CONSTRAINT template_property_group_pkey
     PRIMARY KEY (template_id, hid);
-
---
--- Name: thing_type_code_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY thing_type_code
-    ADD CONSTRAINT thing_type_code_pkey
-    PRIMARY KEY (id);
 
 --
 -- Name: transformation_activity_mappings_pkey; Type: CONSTRAINT; Schema:
@@ -472,24 +417,6 @@ ALTER TABLE ONLY deployed_component_data_files
     ADD CONSTRAINT deployed_component_data_files_deployed_component_id_fkey
     FOREIGN KEY (deployed_component_id)
     REFERENCES deployed_components(hid);
-
---
--- Name: folder_folder_child_folder_id_fkey; Type: FK CONSTRAINT; Schema:
--- public; Owner: de
---
-ALTER TABLE ONLY folder_folder
-    ADD CONSTRAINT folder_folder_child_folder_id_fkey
-    FOREIGN KEY (child_folder_id)
-    REFERENCES folder(id);
-
---
--- Name: folder_folder_parent_folder_id_fkey; Type: FK CONSTRAINT; Schema:
--- public; Owner: de
---
-ALTER TABLE ONLY folder_folder
-    ADD CONSTRAINT folder_folder_parent_folder_id_fkey
-    FOREIGN KEY (parent_folder_id)
-    REFERENCES folder(id);
 
 --
 -- Name: input_output_mapping_source_fkey; Type: FK CONSTRAINT; Schema:
@@ -772,8 +699,7 @@ ALTER TABLE ONLY transformation_activity_mappings
 -- Name: transformation_activity_referen_transformation_activity_id_fkey;
 -- Type: FK CONSTRAINT; Schema: public; Owner: de
 --
-ALTER TABLE ONLY
-transformation_activity_references
+ALTER TABLE ONLY transformation_activity_references
     ADD CONSTRAINT transformation_activity_referen_transformation_activity_id_fkey
     FOREIGN KEY (transformation_activity_id)
     REFERENCES transformation_activity(hid);
@@ -831,15 +757,6 @@ ALTER TABLE ONLY validator_rule
     ADD CONSTRAINT validator_rule_validator_id_fkey
     FOREIGN KEY (validator_id)
     REFERENCES validator(hid);
-
---
--- Name: workspace_home_folder_fkey; Type: FK CONSTRAINT; Schema: public;
--- Owner: de
---
-ALTER TABLE ONLY workspace
-    ADD CONSTRAINT workspace_home_folder_fkey
-    FOREIGN KEY (home_folder)
-    REFERENCES folder(id);
 
 --
 -- Name: workspace_root_analysis_group_id_fkey; Type: FK CONSTRAINT; Schema:
