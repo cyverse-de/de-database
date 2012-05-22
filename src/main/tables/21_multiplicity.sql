@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: multiplicity; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table for our enumeration of multiplicities.
 --
 CREATE TABLE multiplicity (
     hid bigint NOT NULL,

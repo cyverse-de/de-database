@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: notifications_receivers; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- notifications_receivers table
 --
 CREATE TABLE notifications_receivers (
     notification_id bigint NOT NULL,

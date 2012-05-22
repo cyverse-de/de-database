@@ -1,7 +1,8 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: deployed_component_listing; Type: VIEW; Schema: public; Owner: de
+-- A view containing the deployed component information needed for the analysis
+-- listing service.
 --
 CREATE VIEW deployed_component_listing AS
     SELECT row_number() OVER (ORDER BY analysis.hid, tts.hid) AS id,

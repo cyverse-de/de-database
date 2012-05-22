@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: input_output_mapping; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- input_output_mapping table
 --
 CREATE TABLE input_output_mapping (
     hid bigint NOT NULL,

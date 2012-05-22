@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: deployed_component_data_files_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for deployed_component_data_files table
 --
 CREATE SEQUENCE deployed_component_data_files_id_seq
     START WITH 1
@@ -11,7 +11,7 @@ CREATE SEQUENCE deployed_component_data_files_id_seq
     CACHE 1;
 
 --
--- Name: deployed_component_data_files; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- deployed_component_data_files table
 --
 CREATE TABLE deployed_component_data_files (
     id bigint DEFAULT nextval('deployed_component_data_files_id_seq'::regclass) NOT NULL,

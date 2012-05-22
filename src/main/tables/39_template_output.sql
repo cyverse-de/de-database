@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: template_output; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- template_output table
 --
 CREATE TABLE template_output (
     template_id bigint NOT NULL,

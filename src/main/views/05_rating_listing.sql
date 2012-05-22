@@ -1,7 +1,8 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: rating_listing; Type: VIEW; Schema: public; Owner: de
+-- A view containing the analysis rating information needed for the analysis
+-- listing service.
 --
 CREATE VIEW rating_listing AS
     SELECT row_number() OVER (ORDER BY analysis.hid, u.id) AS id,

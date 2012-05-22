@@ -1,7 +1,8 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: analysis_listing; Type: VIEW; Schema: public; Owner: de
+-- A view containing the top-level information needed for the analysis listing
+-- service.
 --
 CREATE VIEW analysis_listing AS
     SELECT analysis.hid,

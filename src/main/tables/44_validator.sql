@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: validator; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- validator table
 --
 CREATE TABLE validator (
     hid bigint NOT NULL,

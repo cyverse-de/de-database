@@ -1,7 +1,8 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: importedworkflow; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table to capture raw JSON as it is imported via the `import-workflow`
+-- service.
 --
 CREATE TABLE importedworkflow (
     hid bigint NOT NULL,

@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for users table
 --
 CREATE SEQUENCE users_id_seq
     START WITH 1
@@ -12,7 +12,7 @@ CREATE SEQUENCE users_id_seq
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- users table
 --
 CREATE TABLE users (
     id bigint DEFAULT nextval('users_id_seq'::regclass) NOT NULL,

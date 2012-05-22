@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: transformation_activity_references_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for transformation_activity_references table
 --
 CREATE SEQUENCE transformation_activity_references_id_seq
     START WITH 1
@@ -11,8 +11,7 @@ CREATE SEQUENCE transformation_activity_references_id_seq
     CACHE 1;
 
 --
--- Name: transformation_activity_references; Type: TABLE; Schema: public; Owner: de;
--- Tablespace: 
+-- transformation_activity_references table
 --
 CREATE TABLE transformation_activity_references (
     id bigint DEFAULT nextval('transformation_activity_references_id_seq'::regclass) NOT NULL,

@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: ratings_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for ratings table
 --
 CREATE SEQUENCE ratings_id_seq
     START WITH 1
@@ -11,7 +11,7 @@ CREATE SEQUENCE ratings_id_seq
     CACHE 1;
 
 --
--- Name: ratings; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- ratings table
 --
 CREATE TABLE ratings (
     id bigint DEFAULT nextval('ratings_id_seq'::regclass) NOT NULL,

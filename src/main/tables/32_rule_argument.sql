@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: rule_argument; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- rule_argument table
 --
 CREATE TABLE rule_argument (
     rule_id bigint NOT NULL,

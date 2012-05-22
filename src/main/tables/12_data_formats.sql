@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: data_formats; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- id SERIAL type for data_formats table
 --
 CREATE SEQUENCE data_formats_id_seq
     START WITH 1
@@ -11,7 +11,7 @@ CREATE SEQUENCE data_formats_id_seq
     CACHE 1;
 
 --
--- Name: data_formats; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table for data object file formats.
 --
 CREATE TABLE data_formats (
     id bigint DEFAULT nextval('data_formats_id_seq'::regclass) NOT NULL,

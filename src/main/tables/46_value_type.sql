@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: value_type; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table to store value types associated with various property types.
 --
 CREATE TABLE value_type (
     hid bigint NOT NULL,

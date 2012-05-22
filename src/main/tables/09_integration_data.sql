@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: integration_data_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for integration_data table
 --
 CREATE SEQUENCE integration_data_id_seq
     START WITH 1
@@ -11,7 +11,7 @@ CREATE SEQUENCE integration_data_id_seq
     CACHE 1;
 
 --
--- Name: integration_data; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- integration_data table
 --
 CREATE TABLE integration_data (
     id bigint DEFAULT nextval('integration_data_id_seq'::regclass) NOT NULL,

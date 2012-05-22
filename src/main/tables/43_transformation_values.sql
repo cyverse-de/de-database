@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: transformation_values_id_seq; Type: SEQUENCE; Schema: public; Owner: de
+-- id SERIAL type for transformation_values table
 --
 CREATE SEQUENCE transformation_values_id_seq
     START WITH 1
@@ -11,7 +11,7 @@ CREATE SEQUENCE transformation_values_id_seq
     CACHE 1;
 
 --
--- Name: transformation_values; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- transformation_values table
 --
 CREATE TABLE transformation_values (
     transformation_id bigint NOT NULL,

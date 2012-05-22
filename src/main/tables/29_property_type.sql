@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: property_type; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- property_type table
 --
 CREATE TABLE property_type (
     hid bigint NOT NULL,

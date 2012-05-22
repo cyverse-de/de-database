@@ -1,7 +1,9 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: dataelementpreservation; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table to perserve desired DataElements (aka DataObjects) used for Tool
+-- Integration.
+-- 2011/05/11 (alenards)
 --
 CREATE TABLE dataelementpreservation (
     hid bigint NOT NULL,

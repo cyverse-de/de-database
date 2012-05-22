@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: rule_subtype; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- A table to store rule subtypes.
 --
 CREATE TABLE rule_subtype (
     hid bigint NOT NULL,

@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 --
--- Name: dataobjects; Type: TABLE; Schema: public; Owner: de; Tablespace: 
+-- dataobjects table
 --
 CREATE TABLE dataobjects (
     hid bigint NOT NULL,
