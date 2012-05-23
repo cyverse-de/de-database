@@ -8,9 +8,9 @@ CREATE VIEW rating_listing AS
     SELECT row_number() OVER (ORDER BY analysis.hid, u.id) AS id,
            analysis.hid AS analysis_id,
            u.id AS user_id,
+           ur.comment_id AS comment_id,
            ur.rating AS user_rating
     FROM transformation_activity analysis
          CROSS JOIN users u
-         LEFT JOIN ratings ur
-              ON analysis.hid = ur.transformation_activity_id
-              AND ur.user_id = u.id;
+         LEFT JOIN ratings ur ON analysis.hid = ur.transformation_activity_id
+             AND ur.user_id = u.id;
