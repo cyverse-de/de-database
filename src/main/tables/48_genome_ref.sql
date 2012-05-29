@@ -10,15 +10,11 @@ CREATE SEQUENCE genome_ref_id_seq;
 --
 CREATE TABLE genome_reference (
     id bigint DEFAULT nextval('genome_ref_id_seq'),
-    uuid bigint NOT NULL,
-    path character varying(1024) NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    created_by bigint --references users(id)
-    ,
+    uuid varchar(40) NOT NULL,
+    path text NOT NULL,
+    deleted boolean DEFAULT false,
+    created_by bigint,
     created_on timestamp DEFAULT now(),
-    last_modified_by bigint --references users(id)
-    ,
-    last_modified_on timestamp,
-    PRIMARY KEY (id)
+    last_modified_by bigint,
+    last_modified_on timestamp
 );
-
