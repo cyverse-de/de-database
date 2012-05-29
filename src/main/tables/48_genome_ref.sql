@@ -11,6 +11,7 @@ CREATE SEQUENCE genome_ref_id_seq;
 CREATE TABLE genome_reference (
     id bigint DEFAULT nextval('genome_ref_id_seq'),
     uuid varchar(40) NOT NULL,
+    name varchar(512) NOT NULL,
     path text NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     created_by bigint,
