@@ -12,9 +12,9 @@ CREATE TABLE genome_reference (
     id bigint DEFAULT nextval('genome_ref_id_seq'),
     uuid varchar(40) NOT NULL,
     path text NOT NULL,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     created_by bigint,
-    created_on timestamp DEFAULT now(),
+    created_on timestamp DEFAULT now() NOT NULL,
     last_modified_by bigint,
     last_modified_on timestamp
 );
