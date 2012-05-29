@@ -17,5 +17,5 @@ CREATE SEQUENCE users_id_seq
 CREATE TABLE users (
     id bigint DEFAULT nextval('users_id_seq'::regclass) UNIQUE NOT NULL,
     username character varying(512) NOT NULL,
-    PRIMARY KEY(id);
+    PRIMARY KEY (id)
 );
