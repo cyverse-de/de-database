@@ -774,3 +774,27 @@ ALTER TABLE ONLY workspace
     ADD CONSTRAINT workspace_users_fk
     FOREIGN KEY (user_id)
     REFERENCES users(id);
+
+--
+-- Name: genome_reference_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
+--
+ALTER TABLE ONLY genome_reference
+    ADD CONSTRAINT genome_reference_pkey
+    PRIMARY KEY (id);
+
+--
+-- Name: genome_reference_created_by_fkey; Type: CONSTRAINT; Schema:
+-- public; Owner: de;
+--
+ALTER TABLE ONLY genome_reference
+    ADD CONSTRAINT genome_reference_created_by_fkey
+    FOREIGN KEY (created_by)
+    REFERENCES users(id);
+--
+-- Name: genome_reference_last_modified_by_fkey; Type: CONSTRAINT; Schema:
+-- public; Owner: de;
+--
+ALTER TABLE ONLY genome_reference
+    ADD CONSTRAINT genome_reference_last_modified_by_fkey
+    FOREIGN KEY (last_modified_by)
+    REFERENCES users(id);
