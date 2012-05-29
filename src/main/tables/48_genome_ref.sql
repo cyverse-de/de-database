@@ -14,13 +14,14 @@ CREATE SEQUENCE genome_ref_id_seq
 -- template_group table
 --
 CREATE TABLE genome_reference (
-    id int8 DEFAULT PRIMARY KEY nextval('genome_ref_id_seq'::regclass) NOT NULL,
-    uuid character varying(255) NOT NULL,
-    path character varying(255) NOT NULL,
+    id bigint DEFAULT nextval('genome_ref_id_seq'::regclass) NOT NULL,
+    uuid bigint NOT NULL,
+    path character varying(1024) NOT NULL,
     deleted boolean NOT NULL,
-    created_by character varying(255),
-    created_on character varying(255) NOT NULL,
-    last_modified_by character varying(255),
-    last_modified_on DATE
+    created_by bigint references users(id),
+    created_on date NOT NULL,
+    last_modified_by bigint references users(id),
+    last_modified_on date,
+    PRIMARY KEY (id)
 );
 
