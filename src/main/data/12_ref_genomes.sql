@@ -2,7 +2,7 @@
 --postgresDB in the genome_reference table.
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('54DC0C16-226C-459A-B186-5E570228A130','Arabidopsis lyrata Araly1 (Ensembl 13)',
+VALUES ('A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11','Arabidopsis lyrata Araly1 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Arabidopsis_lyrata.Araly1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
@@ -66,53 +66,53 @@ VALUES ('D09C1C16-225C-459A-B187-5E570229A130','Oryza glaberrima AGI1.1 (Ensembl
     '/data2/collections/genomeservices/0.2/Oryza_glaberrima.AGI1.1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC1C16-425C-459A-B186-5E5702363130','Oryza indica Jan_2005 (Ensembl 13)',
+VALUES ('970E8ED8-B65D-46FA-899E-03D6344397DC','Oryza indica Jan_2005 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Oryza_indica.Jan_2005/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('802C1C16-225C-459A-BR88-5E570229A130','Oryza sativa MSU6 (Ensembl 13)',
+VALUES ('563DF22A-0B33-44EE-A30D-2B5033D8C71E','Oryza sativa MSU6 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Oryza_sativa.MSU6/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('801C1C16-725C-458A-B187-5E570229A130','Pan troglodytes CHIMP2.1.4 (Ensembl 66)',
+VALUES ('0F1BC02C-7741-4CC5-9936-D4692F412070','Pan troglodytes CHIMP2.1.4 (Ensembl 66)',
     '/data2/collections/genomeservices/0.2/Pan_troglodytes.CHIMP2.1.4/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('F0D31C16-224C-457A-B188-5E570229A130','Physcomitrella patens Phypa1.1 (Ensembl 13)',
+VALUES ('9B5AED20-7882-44AB-BEBC-8DD7B4C7E13F','Physcomitrella patens Phypa1.1 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Physcomitrella_patens.Phypa1.1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC1C16-725C-457A-B18R-5E570229A130','Populus trichocarpa JGI2.0 (Ensembl 13)',
+VALUES ('710A06B3-FB13-4843-A607-80FD303B555D','Populus trichocarpa JGI2.0 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Populus_trichocarpa.JGI2.0/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('R0DC3C16-825C-459A-B189-5R570229A130','Rattus norvegicus RGSC3.4 (Ensembl 66)',
+VALUES ('080C3A4A-3566-4C62-9F4D-04F129915761','Rattus norvegicus RGSC3.4 (Ensembl 66)',
     '/data2/collections/genomeservices/0.2/Rattus_norvegicus.RGSC3.4/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC1C16-225C-459A-B188-5E570229A130','Saccharomyces cerevisiae EF4 (Ensembl 66)',
+VALUES ('08D6F8D0-5B93-4607-9159-DC0BBDF3EC70','Saccharomyces cerevisiae EF4 (Ensembl 66)',
     '/data2/collections/genomeservices/0.2/Saccharomyces_cerevisiae.EF4/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('R0DC1C16-925C-458A-B186-5R570229A130','Selaginella moellendorffii ENA1 (Ensembl 13)',
+VALUES ('1CFEAAD6-F5F2-4B2A-BA85-A16A9E8EB35C','Selaginella moellendorffii ENA1 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Selaginella_moellendorffii.ENA1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC1C17-224C-457A-B186-5E570229A130','Sorghum bicolor Sbi1 (Ensembl 13)',
+VALUES ('B533B529-8602-4FBD-B812-A2279CCEE452','Sorghum bicolor Sbi1 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Sorghum_bicolor.Sbi1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC1C16-225C-459A-B186-5E570229A130','Tursiops truncatus turTru1 (Ensembl 66)',
+VALUES ('803A7C3D-69A4-46EE-B884-72C2636A2B29','Tursiops truncatus turTru1 (Ensembl 66)',
     '/data2/collections/genomeservices/0.2/Tursiops_truncatus.turTru1/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('8RDC1C18-225C-459A-B186-5E570229A130','Vitis vinifera IGGP_12x (Ensembl 13)',
+VALUES ('891AD871-8204-4F3E-B296-173511D4B0F3','Vitis vinifera IGGP_12x (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Vitis_vinifera.IGGP_12x/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('80DC3C16-225C-459A-B186-5E570229A130','Xenopus tropicalis JGI_4.2 (Ensembl 66)',
+VALUES ('E47B2299-BA9C-47C5-9EAF-1CF7A90754BF','Xenopus tropicalis JGI_4.2 (Ensembl 66)',
     '/data2/collections/genomeservices/0.2/Xenopus_tropicalis.JGI_4.2/de_support/',0);
 
 INSERT INTO genome_reference (uuid, name, path, created_by)
-VALUES ('86DC2C16-225C-459A-B186-5E570229A130','Zea mays AGPv2 (Ensembl 13)',
+VALUES ('0699265D-6F90-4C46-B15C-1E294C76B3D4','Zea mays AGPv2 (Ensembl 13)',
     '/data2/collections/genomeservices/0.2/Zea_mays.AGPv2/de_support/',0);
