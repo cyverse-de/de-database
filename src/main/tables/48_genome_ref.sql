@@ -10,7 +10,7 @@ CREATE SEQUENCE genome_ref_id_seq;
 --
 CREATE TABLE genome_reference (
     id bigint DEFAULT nextval('genome_ref_id_seq'),
-    uuid char(36) NOT NULL,
+    uuid char(36) UNIQUE NOT NULL,
     name varchar(512) NOT NULL,
     path varchar(1024) NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
