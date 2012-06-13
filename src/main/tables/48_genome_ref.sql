@@ -17,5 +17,5 @@ CREATE TABLE genome_reference (
     created_by bigint,
     created_on timestamp DEFAULT now() NOT NULL,
     last_modified_by bigint,
-    last_modified_on timestamp
+    last_modified_on timestamp DEFAULT now() NOT NULL
 );
