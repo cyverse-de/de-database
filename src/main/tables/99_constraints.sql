@@ -821,3 +821,10 @@ ALTER TABLE ONLY collaborators
     ADD CONSTRAINT collaborators_collaborator_id_fkey
     FOREIGN KEY (collaborator_id)
     REFERENCES users(id);
+
+--
+-- Add a uniqueness constraint for the integration_data table.
+--
+ALTER TABLE ONLY integration_data
+    ADD CONSTRAINT integration_data_name_email_unique
+    UNIQUE (integrator_name, integrator_email);
