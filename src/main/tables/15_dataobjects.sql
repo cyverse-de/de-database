@@ -16,5 +16,6 @@ CREATE TABLE dataobjects (
     required boolean DEFAULT true,
     multiplicity bigint,
     retain boolean DEFAULT false,
-    is_implicit boolean DEFAULT false
+    is_implicit boolean DEFAULT false,
+    data_source_id bigint
 );

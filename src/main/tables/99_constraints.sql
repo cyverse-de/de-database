@@ -828,3 +828,18 @@ ALTER TABLE ONLY collaborators
 ALTER TABLE ONLY integration_data
     ADD CONSTRAINT integration_data_name_email_unique
     UNIQUE (integrator_name, integrator_email);
+
+--
+-- The primary key for the data_source table.
+--
+ALTER TABLE ONLY data_source
+    ADD CONSTRAINT data_source_pkey
+    PRIMARY KEY (id);
+
+--
+-- Foreign key constraint for the data_source field of the dataobjects table.
+--
+ALTER TABLE ONLY dataobjects
+    ADD CONSTRAINT dataobjects_data_source_id_fkey
+    FOREIGN KEY (data_source_id)
+    REFERENCES data_source(id);
