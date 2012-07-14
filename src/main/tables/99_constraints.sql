@@ -837,6 +837,13 @@ ALTER TABLE ONLY data_source
     PRIMARY KEY (id);
 
 --
+-- Each data source must have a unique name.
+--
+ALTER TABLE ONLY data_source
+    ADD CONSTRAINT data_source_unique_name
+    UNIQUE (name);
+
+--
 -- Foreign key constraint for the data_source field of the dataobjects table.
 --
 ALTER TABLE ONLY dataobjects
