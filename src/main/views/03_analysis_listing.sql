@@ -29,9 +29,9 @@ CREATE VIEW analysis_listing AS
            ) AS step_count,
            analysis.deleted,
            analysis.disabled,
-           CASE WHEN COUNT(DISTINCT dc."type") = 0 THEN 'unknown'
-                WHEN COUNT(DISTINCT dc."type") > 1 THEN 'mixed'
-                ELSE MAX(dc."type")
+           CASE WHEN COUNT(DISTINCT tt.name) = 0 THEN 'unknown'
+                WHEN COUNT(DISTINCT tt.name) > 1 THEN 'mixed'
+                ELSE MAX(tt.name)
            END AS overall_job_type
     FROM transformation_activity analysis
          LEFT JOIN integration_data integration ON analysis.integration_data_id = integration.id
@@ -41,6 +41,7 @@ CREATE VIEW analysis_listing AS
          LEFT JOIN transformations tx ON ts.transformation_id = tx.id
          LEFT JOIN template t ON tx.template_id = t.id
          LEFT JOIN deployed_components dc ON t.component_id = dc.id
+         LEFT JOIN tool_types tt ON dc.tool_type_id = tt.id
     GROUP BY analysis.hid,
              analysis.id,
              analysis."name",

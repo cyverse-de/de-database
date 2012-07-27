@@ -850,3 +850,12 @@ ALTER TABLE ONLY dataobjects
     ADD CONSTRAINT dataobjects_data_source_id_fkey
     FOREIGN KEY (data_source_id)
     REFERENCES data_source(id);
+
+--
+-- Foreign key constraint for the tool_type_id field of the deployed_components
+-- table.
+--
+ALTER TABLE ONLY deployed_components
+    ADD CONSTRAINT deployed_components_tool_type_id_fkey
+    FOREIGN KEY (tool_type_id)
+    REFERENCES tool_types(id);
