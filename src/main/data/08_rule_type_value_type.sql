@@ -33,3 +33,12 @@ INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
 
 INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
     VALUES (6, 3);
+
+INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
+    VALUES (5, 6);
+
+INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
+    VALUES (10, 6);
+
+INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
+    VALUES (11, 6);

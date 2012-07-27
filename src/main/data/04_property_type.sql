@@ -84,3 +84,9 @@ INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('18', 'F7007237-040D-4253-9323-CAA4F71E9795', 'Output',
             'Output file or folder', NULL, FALSE, '999', '5');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('19', 'A024716E-1F18-4AF7-B59E-0745786D1B69', 'EnvironmentVariable',
+            'An environment variable that is set before running a job', NULL,
+            FALSE, '999', '6');

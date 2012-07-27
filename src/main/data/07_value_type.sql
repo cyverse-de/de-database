@@ -17,3 +17,7 @@ INSERT INTO value_type (hid, id, name, description)
 INSERT INTO value_type (hid, id, name, description)
     VALUES ('5', '65E1E927-A1ED-4E25-BC0C-74C155215973', 'Output',
             'Output file or folder');
+
+INSERT INTO value_type (hid, id, name, description)
+    VALUES ('6', '96DE7B1E-FE29-468F-85C0-A9458CE66FB1', 'EnvironmentVariable',
+            'An environment variable that is set before running a job');
