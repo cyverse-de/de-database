@@ -5,6 +5,6 @@ SET search_path = public, pg_catalog;
 --
 CREATE TABLE rule_argument (
     rule_id bigint NOT NULL,
-    argument_value character varying(255),
+    argument_value text,
     hid integer NOT NULL
 );

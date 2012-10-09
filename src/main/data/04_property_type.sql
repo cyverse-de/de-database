@@ -90,3 +90,10 @@ INSERT INTO property_type
     VALUES ('19', 'A024716E-1F18-4AF7-B59E-0745786D1B69', 'EnvironmentVariable',
             'An environment variable that is set before running a job', NULL,
             FALSE, '999', '6');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('20', '548A55C2-53FE-40A5-AD38-033F79C8C0AB', 'TreeSelection',
+            'A hierarchical list for selecting a choice', NULL,
+            FALSE, '10', '1');
+
