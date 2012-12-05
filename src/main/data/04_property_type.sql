@@ -42,7 +42,7 @@ INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('10', 'ptf22ca553-856b-4253-b0f3-514701ed4567', 'QuotedText',
             'A text box that will add quotes for passing string to command line',
-            NULL, FALSE, '3', '1');
+            NULL, TRUE, '3', '1');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
@@ -67,13 +67,13 @@ INSERT INTO property_type
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('11', 'pt67bdfe81-361e-41fe-852a-35159e1e7bc5', 'XBasePairs',
-            'A text box with caption (x=user specified number)', NULL, FALSE, '4',
+            'A text box with caption (x=user specified number)', NULL, TRUE, '4',
             '3');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('16', '871AA217-2E6C-48E2-880A-EE7815E8F7F8', 'XBasePairsText',
-            'A text box with caption (x=user specified text)', '', FALSE, '4', '1');
+            'A text box with caption (x=user specified text)', '', TRUE, '4', '1');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
@@ -96,4 +96,3 @@ INSERT INTO property_type
     VALUES ('20', '548A55C2-53FE-40A5-AD38-033F79C8C0AB', 'TreeSelection',
             'A hierarchical list for selecting a choice', NULL,
             FALSE, '10', '1');
-
