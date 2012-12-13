@@ -22,11 +22,9 @@ CREATE VIEW analysis_listing AS
                JOIN workspace w ON tg.workspace_id = w.id
                WHERE analysis.hid = tgt.template_id
                AND w.is_public IS TRUE
-           ) AS is_public, (
-               SELECT COUNT(*)
-               FROM transformation_task_steps tts
-               WHERE tts.transformation_task_id = analysis.hid
-           ) AS step_count,
+           ) AS is_public,
+           COUNT(tts.*) AS step_count,
+           COUNT(t.component_id) AS component_count,
            analysis.deleted,
            analysis.disabled,
            CASE WHEN COUNT(DISTINCT tt.name) = 0 THEN 'unknown'
