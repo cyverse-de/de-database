@@ -13,10 +13,10 @@ CREATE SEQUENCE notifications_id_seq
 -- Stores notification information.
 --
 CREATE TABLE notifications (
-    id BIGINT DEFAULT nextval('notification_id_seq'::regclass) NOT NULL,
+    id BIGINT DEFAULT nextval('notifications_id_seq'::regclass) NOT NULL,
     uuid UUID NOT NULL,
     type VARCHAR(32),
-    user VARCHAR(512),
+    username VARCHAR(512),
     subject VARCHAR(255),
     seen BOOLEAN,
     deleted BOOLEAN,
