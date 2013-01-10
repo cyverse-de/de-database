@@ -15,12 +15,12 @@ CREATE SEQUENCE notifications_id_seq
 CREATE TABLE notifications (
     id BIGINT DEFAULT nextval('notifications_id_seq'::regclass) NOT NULL,
     uuid UUID NOT NULL,
-    type VARCHAR(32),
-    username VARCHAR(512),
-    subject VARCHAR(255),
-    seen BOOLEAN,
-    deleted BOOLEAN,
-    date_created TIMESTAMP DEFAULT now(),
-    message TEXT,
+    type VARCHAR(32) NOT NULL,
+    username VARCHAR(512) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    seen BOOLEAN DEFAULT FALSE NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    date_created TIMESTAMP DEFAULT now() NOT NULL,
+    message TEXT NOT NULL,
     PRIMARY KEY(id)
 );

@@ -15,9 +15,9 @@ CREATE SEQUENCE email_notifications_id_seq
 CREATE TABLE email_notification_messages (
     id BIGINT DEFAULT nextval('email_notifications_id_seq'::regclass) NOT NULL,
     notification_id BIGINT REFERENCES notifications(id) NOT NULL,
-    template VARCHAR(256),
-    address VARCHAR(1024),
-    date_sent TIMESTAMP DEFAULT now(),
-    payload TEXT,
+    template VARCHAR(256) NOT NULL,
+    address VARCHAR(1024) NOT NULL,
+    date_sent TIMESTAMP DEFAULT now() NOT NULL,
+    payload TEXT NOT NULL,
     PRIMARY KEY(id)
 );

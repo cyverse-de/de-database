@@ -17,7 +17,7 @@ CREATE SEQUENCE analysis_execution_statuses_id_seq
 CREATE TABLE analysis_execution_statuses (
     id BIGINT DEFAULT nextval('analysis_execution_statuses_id_seq'::regclass) NOT NULL,
     uuid UUID NOT NULL,
-    status VARCHAR(32),
-    date_modified TIMESTAMP DEFAULT now(),
+    status VARCHAR(32) NOT NULL,
+    date_modified TIMESTAMP DEFAULT now() NOT NULL,
     PRIMARY KEY(id)
 );
