@@ -17,7 +17,7 @@ CREATE TABLE notifications (
     uuid UUID NOT NULL,
     type VARCHAR(32) NOT NULL,
     username VARCHAR(512) NOT NULL,
-    subject VARCHAR(255) NOT NULL,
+    subject TEXT NOT NULL,
     seen BOOLEAN DEFAULT FALSE NOT NULL,
     deleted BOOLEAN DEFAULT FALSE NOT NULL,
     date_created TIMESTAMP DEFAULT now() NOT NULL,
