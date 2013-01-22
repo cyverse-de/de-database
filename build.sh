@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-tar czvf database.tar.gz -C src/main .
+tar czvf database.tar.gz -C src/main --exclude '*~' .
