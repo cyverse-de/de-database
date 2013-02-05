@@ -16,7 +16,7 @@ CREATE TABLE notifications (
     id BIGINT DEFAULT nextval('notifications_id_seq'::regclass) NOT NULL,
     uuid UUID NOT NULL,
     type VARCHAR(32) NOT NULL,
-    username VARCHAR(512) NOT NULL,
+    user_id BIGINT REFERENCES users(id) NOT NULL,
     subject TEXT NOT NULL,
     seen BOOLEAN DEFAULT FALSE NOT NULL,
     deleted BOOLEAN DEFAULT FALSE NOT NULL,
