@@ -20,3 +20,9 @@ CREATE TABLE system_notification_acknowledgments (
     date_acknowledged TIMESTAMP DEFAULT now() NOT NULL,
     PRIMARY KEY(id)
 );
+
+--
+-- Each system notification can be acknowledged at most once by each user.
+--
+CREATE UNIQUE INDEX system_notification_acknowledgments_for_user_index
+ON system_notification_acknowledgments(user_id, system_notification_id);

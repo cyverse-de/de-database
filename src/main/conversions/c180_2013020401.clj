@@ -103,7 +103,10 @@
    "system_notification_id BIGINT REFERENCES system_notifications(id) NOT NULL,"
    "deleted BOOLEAN DEFAULT FALSE NOT NULL,"
    "date_acknowledged TIMESTAMP DEFAULT now() NOT NULL,"
-   "PRIMARY KEY(id))"))
+   "PRIMARY KEY(id))")
+  (exec-statement
+   "CREATE UNIQUE INDEX system_notification_acknowledgments_for_user_index"
+   "ON system_notification_acknowledgments(user_id, system_notification_id)"))
 
 (defn convert
   "Performs the conversion for database version 1.8.0:20130204.01."
