@@ -51,7 +51,6 @@
   [{hid :hid arg-str :name}]
   (let [args         (string/split arg-str #",\s*")
         labels       (load-selection-labels hid)
-        strip-quotes #(string/replace % #"^[\"']|[\"']$" "")
         split-arg    #(string/split % #"=|\s+" 2)]
     (if (= 1 (count args))
       (dorun (map (fn [{rule-hid :rule_hid arg-hid :hid value :value}]
@@ -59,7 +58,7 @@
                   labels))
       (dorun (map (fn [[opt value] {rule-hid :rule_hid arg-hid :hid display :value}]
                     (convert-must-contain-arg rule-hid arg-hid opt value display))
-                  (map (comp #(map strip-quotes %) split-arg) args)
+                  (map split-arg args)
                   labels)))))
 
 (defn- convert-must-contain-rules
