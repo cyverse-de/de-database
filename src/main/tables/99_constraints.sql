@@ -7,14 +7,6 @@ ALTER TABLE ONLY data_formats
     PRIMARY KEY (id);
 
 --
--- Name: dataelementpreservation_pkey; Type: CONSTRAINT; Schema: public;
--- Owner: de; Tablespace:
---
-ALTER TABLE ONLY dataelementpreservation
-    ADD CONSTRAINT dataelementpreservation_pkey
-    PRIMARY KEY (hid);
-
---
 -- Name: dataobject_mapping_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
 -- Tablespace:
 --
@@ -44,14 +36,6 @@ ALTER TABLE ONLY deployed_component_data_files
 --
 ALTER TABLE ONLY deployed_components
     ADD CONSTRAINT deployed_components_pkey
-    PRIMARY KEY (hid);
-
---
--- Name: importedworkflow_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY importedworkflow
-    ADD CONSTRAINT importedworkflow_pkey
     PRIMARY KEY (hid);
 
 --
