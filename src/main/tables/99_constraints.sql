@@ -861,3 +861,21 @@ ALTER TABLE ONLY tool_type_property_type
     ADD CONSTRAINT tool_type_property_type_property_type_fkey
     FOREIGN KEY (property_type_id)
     REFERENCES property_type(hid);
+
+--
+-- Foreign key constraint for the requestor_id field of the
+-- tool_requests table.
+--
+ALTER TABLE ONLY tool_requests
+    ADD CONSTRAINT tool_requests_users_fkey
+    FOREIGN KEY (requestor_id)
+    REFERENCES users(id);
+
+--
+-- Foreign key constraint for the deployed_component_id field of the
+-- tool_requests table.
+--
+ALTER TABLE ONLY tool_requests
+    ADD CONSTRAINT tool_requests_deployed_components_fkey
+    FOREIGN KEY (deployed_component_id)
+    REFERENCES deployed_components(hid);
