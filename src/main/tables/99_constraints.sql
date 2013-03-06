@@ -867,7 +867,7 @@ ALTER TABLE ONLY tool_type_property_type
 -- tool_requests table.
 --
 ALTER TABLE ONLY tool_requests
-    ADD CONSTRAINT tool_requests_users_fkey
+    ADD CONSTRAINT tool_requests_requestor_id_fkey
     FOREIGN KEY (requestor_id)
     REFERENCES users(id);
 
@@ -876,6 +876,15 @@ ALTER TABLE ONLY tool_requests
 -- tool_requests table.
 --
 ALTER TABLE ONLY tool_requests
-    ADD CONSTRAINT tool_requests_deployed_components_fkey
+    ADD CONSTRAINT tool_requests_deployed_component_id_fkey
     FOREIGN KEY (deployed_component_id)
     REFERENCES deployed_components(hid);
+
+--
+-- Foreign key constraint for the updater_id field of the tool_request_statuses
+-- table.
+--
+ALTER TABLE ONLY tool_request_statuses
+    ADD CONSTRAINT tool_request_statuses_updater_id_fkey
+    FOREIGN KEY (updater_id)
+    REFERENCES users(id)

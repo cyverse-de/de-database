@@ -15,6 +15,7 @@ CREATE SEQUENCE tool_requests_id_seq
 --
 CREATE TABLE tool_requests (
     id BIGINT DEFAULT nextval('tool_requests_id_seq'::regclass) NOT NULL,
+    uuid UUID NOT NULL,
     requestor_id BIGINT NOT NULL,
     phone VARCHAR(30),
     tool_name VARCHAR(255) NOT NULL,

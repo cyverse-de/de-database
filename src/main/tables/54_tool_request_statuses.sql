@@ -18,6 +18,7 @@ CREATE TABLE tool_request_statuses (
     tool_request_id BIGINT REFERENCES tool_requests(id) NOT NULL,
     tool_request_status_code_id BIGINT REFERENCES tool_request_status_codes(id) NOT NULL,
     date_assigned TIMESTAMP DEFAULT now() NOT NULL,
+    updater_id BIGINT NOT NULL,
     comments TEXT,
     PRIMARY KEY(id)
 );

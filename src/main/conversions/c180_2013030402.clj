@@ -93,6 +93,7 @@
   (exec-raw
    "CREATE TABLE tool_requests (
         id BIGINT DEFAULT nextval('tool_requests_id_seq'::regclass) NOT NULL,
+        uuid UUID NOT NULL,
         requestor_id BIGINT REFERENCES users(id) NOT NULL,
         phone VARCHAR(30),
         tool_name VARCHAR(255) NOT NULL,
@@ -127,6 +128,7 @@
         tool_request_id BIGINT REFERENCES tool_requests(id) NOT NULL,
         tool_request_status_code_id BIGINT REFERENCES tool_request_status_codes(id) NOT NULL,
         date_assigned TIMESTAMP DEFAULT now() NOT NULL,
+        updater_id BIGINT NOT NULL REFERENCES users(id),
         comments TEXT,
         PRIMARY KEY(id))"))
 
