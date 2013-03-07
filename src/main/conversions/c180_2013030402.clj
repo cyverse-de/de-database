@@ -132,6 +132,36 @@
         comments TEXT,
         PRIMARY KEY(id))"))
 
+(defn- create-first-aggregate-function
+  "Creates an aggregate function that always returns the first non-null item."
+  []
+  (println "\t* creating the aggregate function, 'first'")
+  (exec-raw
+   "CREATE OR REPLACE FUNCTION public.first_agg ( anyelement, anyelement )
+    RETURNS anyelement LANGUAGE sql IMMUTABLE STRICT AS $$
+            SELECT $1
+    $$")
+  (exec-raw
+   "CREATE AGGREGATE public.first (
+        sfunc    = public.first_agg,
+        basetype = anyelement,
+        stype    = anyelement)"))
+
+(defn- create-last-aggregate-function
+  "Creates an aggregate function that always returns the last non-null item."
+  []
+  (println "\t* creating the aggregate function, 'last'")
+  (exec-raw
+   "CREATE OR REPLACE FUNCTION public.last_agg ( anyelement, anyelement )
+    RETURNS anyelement LANGUAGE sql IMMUTABLE STRICT AS $$
+        SELECT $2
+    $$")
+  (exec-raw
+   "CREATE AGGREGATE public.last (
+        sfunc    = public.last_agg,
+        basetype = anyelement,
+        stype    = anyelement)"))
+
 (defn convert
   "Performs the database conversion for DE version 1.8.0:20130304.02."
   []
@@ -141,4 +171,6 @@
   (create-tool-architectures-table)
   (populate-tool-architectures-table)
   (create-tool-requests-table)
-  (create-tool-request-statuses-table))
+  (create-tool-request-statuses-table)
+  (create-first-aggregate-function)
+  (create-last-aggregate-function))
