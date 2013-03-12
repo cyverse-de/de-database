@@ -41,6 +41,8 @@
       :description "The support team is evaluating the tool for installation."}
      {:name        "Installation"
       :description "The support team is installing the tool."}
+     {:name        "Validation"
+      :description "The support team is verifying that the installation was successful."}
      {:name        "Completion"
       :description "The tool has been installed successfully."}
      {:name        "Failed"
