@@ -22,7 +22,7 @@ CREATE TABLE tool_requests (
     description TEXT NOT NULL,
     source_url TEXT NOT NULL,
     doc_url TEXT NOT NULL,
-    version VARCHAR(64) NOT NULL,
+    version VARCHAR(255) NOT NULL,
     attribution TEXT NOT NULL,
     multithreaded BOOLEAN,
     tool_architecture_id BIGINT REFERENCES tool_architectures(id) NOT NULL,
