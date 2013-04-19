@@ -125,3 +125,21 @@ INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('25', 'B8566277-C368-40E9-8B66-BC1C884CF69B', 'DoubleSelection',
             'A list for selecting a real number value.', NULL, FALSE, '8', '3');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('26', '3B3FAD4C-691B-44A8-BF34-D406F9052239', 'FileInput',
+            'A control allowing for the selection of a single file.', NULL, FALSE,
+            '12', '4');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('27', '9633FD4C-5FFC-4471-B531-2ECAAA683E26', 'FolderInput',
+            'A control allowing for the selection of an entire folder.',
+            NULL, FALSE, '13', '4');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('28', 'FD5C9D3E-663D-469C-9455-5EE59621BF0E', 'MultiFileSelector',
+            'A control allowing for the selection of multiple files.',
+            NULL, FALSE, '14', '4');
