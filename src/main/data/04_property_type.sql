@@ -87,7 +87,7 @@ INSERT INTO property_type
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('18', 'F7007237-040D-4253-9323-CAA4F71E9795', 'Output',
-            'Output file or folder', NULL, FALSE, '11', '5');
+            'Output file or folder', NULL, FALSE, '999', '5');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
@@ -130,16 +130,33 @@ INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('26', '3B3FAD4C-691B-44A8-BF34-D406F9052239', 'FileInput',
             'A control allowing for the selection of a single file.', NULL, FALSE,
-            '12', '4');
+            '11', '4');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('27', '9633FD4C-5FFC-4471-B531-2ECAAA683E26', 'FolderInput',
             'A control allowing for the selection of an entire folder.',
-            NULL, FALSE, '13', '4');
+            NULL, FALSE, '12', '4');
 
 INSERT INTO property_type
     (hid, id, name, description, label, deprecated, display_order, value_type_id)
     VALUES ('28', 'FD5C9D3E-663D-469C-9455-5EE59621BF0E', 'MultiFileSelector',
             'A control allowing for the selection of multiple files.',
-            NULL, FALSE, '14', '4');
+            NULL, FALSE, '13', '4');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('29', '0E2E3BE4-18A8-487B-BB27-C96A5A5A141F', 'FileOutput',
+            'A single output file.', NULL, FALSE, '14', '5');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('30', '108011CA-1908-494E-B76F-83BB2BA696D7', 'FolderOutput',
+            'A collection of output files in a single folder.', NULL, FALSE,
+            '15', '5');
+
+INSERT INTO property_type
+    (hid, id, name, description, label, deprecated, display_order, value_type_id)
+    VALUES ('31', '8EF87E50-460F-402A-B5C8-BFBB83211A54', 'MultiFileOutput',
+            'Multiple output files matched by a glob pattern.', NULL, FALSE,
+            '16', '5');
