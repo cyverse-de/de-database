@@ -1,6 +1,5 @@
 (ns facepalm.c180-2013041901
-  (:use [korma.core])
-  (:import [java.util UUID]))
+  (:use [korma.core]))
 
 (def ^:private version
   "The destination database version."
@@ -21,42 +20,42 @@
   (insert :property_type
           (values
            [{:hid           21
-             :id            (UUID/fromString "C389D80A-F94E-4904-B6EF-BD658A18FC8A")
+             :id            "C389D80A-F94E-4904-B6EF-BD658A18FC8A"
              :name          "Integer"
              :description   "An integer value."
              :value_type_id 3}
             {:hid           22
-             :id            (UUID/fromString "01250DB2-F8E9-4D9E-B82E-C4713DA84068")
+             :id            "01250DB2-F8E9-4D9E-B82E-C4713DA84068"
              :name          "Double"
              :description   "A real number value."
              :value_type_id 3}
             {:hid           23
-             :id            (UUID/fromString "C529C00A-8B6F-4B73-80DA-C460C09722ED")
+             :id            "C529C00A-8B6F-4B73-80DA-C460C09722ED"
              :name          "TextSelection"
              :description   "A list for selecting a textual value."
              :value_type_id 1}
             {:hid           24
-             :id            (UUID/fromString "0F4E0460-893B-4724-BC7C-D145575B9B73")
+             :id            "0F4E0460-893B-4724-BC7C-D145575B9B73"
              :name          "IntegerSelection"
              :description   "A list for selecting an integer value."
              :value_type_id 3}
             {:hid           25
-             :id            (UUID/fromString "B8566277-C368-40E9-8B66-BC1C884CF69B")
+             :id            "B8566277-C368-40E9-8B66-BC1C884CF69B"
              :name          "DoubleSelection"
              :description   "A list for selecting a real number value."
              :value_type_id 3}
             {:hid           26
-             :id            (UUID/fromString "3B3FAD4C-691B-44A8-BF34-D406F9052239")
+             :id            "3B3FAD4C-691B-44A8-BF34-D406F9052239"
              :name          "FileInput"
              :description   "A control allowing for the selection of a single file."
              :value_type_id 4}
             {:hid           27
-             :id            (UUID/fromString "9633FD4C-5FFC-4471-B531-2ECAAA683E26")
+             :id            "9633FD4C-5FFC-4471-B531-2ECAAA683E26"
              :name          "FolderInput"
              :description   "A control allowing for the selection of an entire folder."
              :value_type_id 4}
             {:hid           28
-             :id            (UUID/fromString "FD5C9D3E-663D-469C-9455-5EE59621BF0E")
+             :id            "FD5C9D3E-663D-469C-9455-5EE59621BF0E"
              :name          "MultiFileSelector"
              :description   "A control allowing for the selection of multiple files."
              :value_type_id 4}])))

@@ -1,6 +1,5 @@
 (ns facepalm.c180-2013050201
-  (:use [korma.core])
-  (:import [java.util UUID]))
+  (:use [korma.core]))
 
 (def ^:private version
   "The destination database version."
@@ -21,17 +20,17 @@
   (insert :property_type
           (values
            [{:hid           29
-             :id            (UUID/fromString "0E2E3BE4-18A8-487B-BB27-C96A5A5A141F")
+             :id            "0E2E3BE4-18A8-487B-BB27-C96A5A5A141F"
              :name          "FileOutput"
              :description   "A single output file."
              :value_type_id 5}
             {:hid           30
-             :id            (UUID/fromString "108011CA-1908-494E-B76F-83BB2BA696D7")
+             :id            "108011CA-1908-494E-B76F-83BB2BA696D7"
              :name          "FolderOutput"
              :description   "A collection of output files in a single folder."
              :value_type_id 5}
             {:hid           31
-             :id            (UUID/fromString "8EF87E50-460F-402A-B5C8-BFBB83211A54")
+             :id            "8EF87E50-460F-402A-B5C8-BFBB83211A54"
              :name          "MultiFileOutput"
              :description   "Multiple output files matched by a glob pattern."
              :value_type_id 5}])))
