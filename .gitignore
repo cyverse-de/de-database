@@ -5,3 +5,5 @@
 *~
 target
 database.tar.gz
+.dir-locals.el
+.*.eld
