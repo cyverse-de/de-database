@@ -20,6 +20,16 @@
           (set-fields {:property_type (prop-type-subselect "TextSelection")})
           (where {:property_type (prop-type-subselect "Selection")})))
 
+(defn- rule-argument-subselect
+  "Creates a subselect statement that can be used to determine whether or not a property
+   has any rule arguments associated with it."
+  []
+  (subselect [:validator :v]
+               (join [:validator_rule :vr] {:v.hid :vr.validator_id})
+               (join [:rule :r] {:vr.rule_id :r.hid})
+               (join [:rule_argument :ra] {:r.hid :ra.rule_id})
+               (where {:property.validator :v.hid})))
+
 (defn- selection-value-subselect
   "Creates a subselect statement that can be used to determine if a 'Selection' or
    'ValueSelection' property is not associated with any values that match one of the
@@ -43,8 +53,8 @@
   (update :property
           (set-fields {:property_type (prop-type-subselect new-property-type)})
           (where (and {:property_type (prop-type-subselect "ValueSelection")}
-                      (sqlfn "NOT EXISTS "
-                             (selection-value-subselect patterns))))))
+                      (sqlfn "EXISTS " (rule-argument-subselect))
+                      (sqlfn "NOT EXISTS " (selection-value-subselect patterns))))))
 
 (defn- convert-double-selection-props
   "Converts 'ValueSelection' properties that contain only values that appear to be floating point
