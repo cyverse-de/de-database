@@ -13,7 +13,6 @@
 (defn- update-compatibilities
   "Updates the tool_type_property_type table with the given set of values."
   [vals]
-  (clojure.pprint/pprint vals)
   (insert :tool_type_property_type
           (values vals)))
 
