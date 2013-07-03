@@ -14,7 +14,10 @@ CREATE VIEW analysis_listing AS
            analysis.integration_date,
            analysis.edited_date,
            analysis.wikiurl,
-           CAST(COALESCE(AVG(ratings.rating), 0.0) AS DOUBLE PRECISION) AS average_rating,
+           (   SELECT CAST(COALESCE(AVG(rating), 0.0) AS DOUBLE PRECISION)
+               FROM ratings
+               WHERE transformation_activity_id = analysis.hid
+           ) AS average_rating,
            EXISTS (
                SELECT *
                FROM template_group_template tgt
@@ -33,7 +36,6 @@ CREATE VIEW analysis_listing AS
            END AS overall_job_type
     FROM transformation_activity analysis
          LEFT JOIN integration_data integration ON analysis.integration_data_id = integration.id
-         LEFT JOIN ratings ON analysis.hid = ratings.transformation_activity_id
          LEFT JOIN transformation_task_steps tts ON analysis.hid = tts.transformation_task_id
          LEFT JOIN transformation_steps ts ON tts.transformation_step_id = ts.id
          LEFT JOIN transformations tx ON ts.transformation_id = tx.id
