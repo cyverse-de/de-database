@@ -887,4 +887,12 @@ ALTER TABLE ONLY tool_requests
 ALTER TABLE ONLY tool_request_statuses
     ADD CONSTRAINT tool_request_statuses_updater_id_fkey
     FOREIGN KEY (updater_id)
-    REFERENCES users(id)
+    REFERENCES users(id);
+
+--
+-- Foreign key constraint for the user_id field of the logins table.
+--
+ALTER TABLE ONLY logins
+    ADD CONSTRAINT logins_user_id_fkey
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
