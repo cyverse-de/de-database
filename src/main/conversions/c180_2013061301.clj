@@ -12,13 +12,24 @@
              (fields :hid)
              (where {:name type})))
 
+(defn- rule-type-subselect
+  [type-name-pattern]
+  (subselect [:validator :v]
+             (join [:validator_rule :vr] {:v.hid :vr.validator_id})
+             (join [:rule :r] {:vr.rule_id :r.hid})
+             (join [:rule_type :rt] {:r.rule_type :rt.hid})
+             (where {:p.validator :v.hid
+                     :rt.name     [like type-name-pattern]})))
+
 (defn- double-property-subselect
   []
   (subselect [:property :p]
              (fields :p.hid)
              (join [:property_type :pt] {:p.property_type :pt.hid})
              (where (and {:pt.name "Number"}
-                         (or {:p.defalut_value nil}
+                         (sqlfn "NOT EXISTS " (rule-type-subselect "Int%"))
+                         (or (sqlfn "EXISTS " (rule-type-subselect "Double%"))
+                             {:p.defalut_value nil}
                              {:p.defalut_value ""}
                              {:p.defalut_value [like "%.%"]}
                              {:p.defalut_value [like "%e%"]}
