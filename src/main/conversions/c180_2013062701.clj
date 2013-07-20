@@ -37,14 +37,16 @@
    have an alias."
   [patterns]
   (letfn [(value-does-not-match [s]
-            (raw (str "ra.argument_value !~* '.*\"value\":\"" s "\".*'")))]
+            [(raw (str "ra.argument_value !~* '.*\"display\":\"" s "\".*'"))
+             (raw (str "ra.argument_value !~* '.*\"display\":" s ",.*'"))
+             (raw (str "ra.argument_value !~* '.*\"display\":" s "}.*'"))])]
     (subselect [:validator :v]
                (join [:validator_rule :vr] {:v.hid :vr.validator_id})
                (join [:rule :r] {:vr.rule_id :r.hid})
                (join [:rule_argument :ra] {:r.hid :ra.rule_id})
                (where (apply and
                              {:property.validator :v.hid}
-                             (map value-does-not-match patterns))))))
+                             (mapcat value-does-not-match patterns))))))
 
 (defn- convert-value-selection-props
   "Converts 'ValueSelection' properties that contain only values matching the given patterns to
