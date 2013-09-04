@@ -53,7 +53,15 @@
 
 (def ^:private tables-to-convert
   "The names of the tables to convert along with the names of their ID columns."
-  [["notification_set" "hid"]])
+  [["notification_set"        "hid"]
+   ["notification"            "hid"]
+   ["transformation_activity" "hid"]
+   ["input_output_mapping"    "hid"]
+   ["template"                "hid"]
+   ["property_group"          "hid"]
+   ["property"                "hid"]
+   ["property_type"           "hid"]
+   ["value_type"              "hid"]])
 
 (defn convert
   "Performs the conversion for database version 1.8.2:20130903.01."
