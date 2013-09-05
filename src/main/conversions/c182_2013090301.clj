@@ -65,7 +65,10 @@
    ["validator"               "hid"]
    ["rule"                    "hid"]
    ["rule_type"               "hid"]
-   ["rule_subtype"            "hid"]])
+   ["rule_subtype"            "hid"]
+   ["dataobjects"             "hid"]
+   ["multiplicity"            "hid"]
+   ["info_type"               "hid"]])
 
 (defn convert
   "Performs the conversion for database version 1.8.2:20130903.01."
