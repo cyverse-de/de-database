@@ -64,7 +64,8 @@
    ["value_type"              "hid"]
    ["validator"               "hid"]
    ["rule"                    "hid"]
-   ["rule_type"               "hid"]])
+   ["rule_type"               "hid"]
+   ["rule_subtype"            "hid"]])
 
 (defn convert
   "Performs the conversion for database version 1.8.2:20130903.01."
