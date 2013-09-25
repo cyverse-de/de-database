@@ -39,29 +39,39 @@
       (cheshire/decode json true)
       (catch Exception _ nil))))
 
-(defn determine-default-value
+(defn- get-selections-for-validator
+  "Gets the selection list element values for a validator."
+  [validator-hid]
+  (select [:validator :v]
+          (join [:validator_rule :vr]
+                {:v.hid :vr.validator_id})
+          (join [:rule :r]
+                {:vr.rule_id :r.hid})
+          (join [:rule_argument :ra]
+                {:r.hid :ra.rule_id})
+          (join [:rule_type :rt]
+                {:r.rule_type :rt.hid})
+          (order :ra.hid)
+          (fields :ra.argument_value)
+          (where {:v.hid   validator-hid
+                  :rt.name "MustContain"})))
+
+(defn- get-default-selection-for-validator
+  "Gets the default slelection list element value for a validator."
+  [validator-hid]
+  (->> (get-selections-for-validator validator-hid)
+       (map (comp parse-json :argument_value))
+       (remove nil?)
+       (filter map?)
+       (filter :isDefault)
+       (map (juxt :name :value))
+       (first)))
+
+(defn- determine-default-value
   "Determines the default value for the property associated with a validator."
   [validator-hid]
-  (-> (->> (select [:validator :v]
-                   (join [:validator_rule :vr]
-                         {:v.hid :vr.validator_id})
-                   (join [:rule :r]
-                         {:vr.rule_id :r.hid})
-                   (join [:rule_argument :ra]
-                         {:r.hid :ra.rule_id})
-                   (join [:rule_type :rt]
-                         {:r.rule_type :rt.hid})
-                   (order :ra.hid)
-                   (fields :ra.argument_value)
-                   (where {:v.hid   validator-hid
-                           :rt.name "MustContain"}))
-           (map (comp parse-json :argument_value))
-           (remove nil?)
-           (filter map?)
-           (filter :isDefault)
-           (map (juxt :name :value))
-           (first))
-      (or ["" ""])))
+  (or (get-default-selection-for-validator validator-hid)
+      ["" ""]))
 
 (defn- fix-default-value
   "Fixes the default value of a property with a null default value."
