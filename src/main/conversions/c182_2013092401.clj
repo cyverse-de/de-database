@@ -1,5 +1,7 @@
 (ns facepalm.c182-2013092401
-  (:use [korma.core]))
+  (:use [korma.core])
+  (:require [cheshire.core :as cheshire]
+            [clojure.string :as string]))
 
 (def ^:private version
   "The destination database version."
@@ -23,30 +25,55 @@
    to indicate whether or not properties of that type can be marked as hidden, and initialize
    the existing property types with the appropriate values for this flag."
   []
+  (println "\t* adding the hidable column to the property_type table")
   (exec-raw "ALTER TABLE property_type ADD COLUMN hidable boolean DEFAULT FALSE")
   (update :property_type
           (set-fields {:hidable true})
           (where {:name [in hidable-property-types]})))
 
-(defn- determine-default-value
+(defn- parse-json
+  "Attempts to parse an encoded JSON string, returning nil if parsing fails."
+  [json]
+  (when-not (nil? json)
+    (try
+      (cheshire/decode json true)
+      (catch Exception _ nil))))
+
+(defn determine-default-value
   "Determines the default value for the property associated with a validator."
   [validator-hid]
-  (select [:validator :v]
-          (join [:validator_rule :vr]
-                {:v.hid :vr.validator_id})
-          (join [:rule :r]
-                {:vr.rule_id :r.hid})
-          (join [:rule_argument :ra]
-                {:r.hid :ra.rule_id})
-          (order :ra.hid)
-          (fields :ra.argument_value)))
+  (-> (->> (select [:validator :v]
+                   (join [:validator_rule :vr]
+                         {:v.hid :vr.validator_id})
+                   (join [:rule :r]
+                         {:vr.rule_id :r.hid})
+                   (join [:rule_argument :ra]
+                         {:r.hid :ra.rule_id})
+                   (join [:rule_type :rt]
+                         {:r.rule_type :rt.hid})
+                   (order :ra.hid)
+                   (fields :ra.argument_value)
+                   (where {:v.hid   validator-hid
+                           :rt.name "MustContain"}))
+           (map (comp parse-json :argument_value))
+           (remove nil?)
+           (filter map?)
+           (filter :isDefault)
+           (map (juxt :name :value))
+           (first))
+      (or ["" ""])))
 
 (defn- fix-default-value
   "Fixes the default value of a property with a null default value."
   [{:keys [hid validator]}]
-  (update :property
-          (set-fields {:defalut_value (determine-default-value validator)})
-          (where {:hid hid})))
+  (let [[n v] (determine-default-value validator)
+        vals  (if-not (string/blank? n)
+                {:name          n
+                 :defalut_value v}
+                {:defalut_value v})]
+    (update :property
+            (set-fields vals)
+            (where {:hid hid}))))
 
 (defn- fix-hidden-props
   "Some existing properties in the database are hidden and have a null default value. This
@@ -55,6 +82,7 @@
    has a MustContain rule, however. In those cases, we can determine the correct default
    values from the rule arguments."
   []
+  (println "\t* ensuring that no hidden properties have null default values")
   (->> (select :property
                (fields :hid :validator)
                (where {:is_visible    false
@@ -73,4 +101,5 @@
   []
   (println "Performing conversion for" version)
   (add-hidable-flag-to-property-types)
-  (update-property-label-type))
+  (update-property-label-type)
+  (fix-hidden-props))
