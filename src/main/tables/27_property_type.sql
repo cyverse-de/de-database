@@ -20,6 +20,7 @@ CREATE TABLE property_type (
     description character varying(255),
     label character varying(255),
     deprecated boolean DEFAULT false,
+    hidable boolean DEFAULT false,
     display_order integer DEFAULT 999,
     value_type_id bigint
 );
