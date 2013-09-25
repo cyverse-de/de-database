@@ -62,8 +62,15 @@
        (map fix-default-value)
        (dorun)))
 
+(defn- update-property-label-type
+  "Updates the property table's label column to a text type."
+  []
+  (println "\t* updating property label field to TYPE text")
+  (exec-raw "ALTER TABLE property ALTER COLUMN label TYPE text"))
+
 (defn convert
   "Performs the conversion for database version 1.8.2:20130924.01."
   []
   (println "Performing conversion for" version)
-  (add-hidable-flag-to-property-types))
+  (add-hidable-flag-to-property-types)
+  (update-property-label-type))
