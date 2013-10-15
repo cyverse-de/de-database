@@ -896,3 +896,11 @@ ALTER TABLE ONLY logins
     ADD CONSTRAINT logins_user_id_fkey
     FOREIGN KEY (user_id)
     REFERENCES users(id);
+
+--
+-- Foreign key constraint for the user_id field of the jobs table.
+--
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT jobs_user_id_fkey
+    FOREIGN KEY (user_id)
+    REFERENCES users(id);
