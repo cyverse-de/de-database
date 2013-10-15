@@ -22,6 +22,6 @@ CREATE TABLE jobs (
     start_date timestamp,
     end_date timestamp,
     job_type_id bigint REFERENCES job_types(id) NOT NULL,
-    user_id bigint,
+    user_id bigint NOT NULL,
     PRIMARY KEY (id)
 );
