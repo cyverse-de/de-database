@@ -14,10 +14,9 @@
    "CREATE TABLE job_types (
         id bigint DEFAULT nextval('job_types_id_seq'::regclass) NOT NULL,
         name character varying(36) NOT NULL,
-        PRIMARY KEY (id)
-    )"))
-(
-defn- add-jobs-table
+        PRIMARY KEY (id))"))
+
+(defn- add-jobs-table
   "Adds the table that stores information about jobs that the DE has."
   []
   (println "\t* creating the jobs table")
@@ -30,10 +29,10 @@ defn- add-jobs-table
         app_name character varying(255),
         start_date timestamp,
         end_date timestamp,
+        status character varying(64) NOT NULL,
         job_type_id bigint REFERENCES job_types(id) NOT NULL,
         user_id bigint REFERENCES users(id) NOT NULL,
-        PRIMARY KEY (id)
-    )"))
+        PRIMARY KEY (id))"))
 
 (defn- populate-job-types-table
   "Adds the types of jobs that the DE can submit."
