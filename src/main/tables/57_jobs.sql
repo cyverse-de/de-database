@@ -16,7 +16,7 @@ CREATE SEQUENCE jobs_id_seq
 --
 CREATE TABLE jobs (
     id bigint DEFAULT nextval('jobs_id_seq'::regclass) NOT NULL,
-    external_id character varying(36) NOT NULL,
+    external_id character varying(40) NOT NULL,
     job_name character varying(255) NOT NULL,
     app_name character varying(255),
     start_date timestamp,

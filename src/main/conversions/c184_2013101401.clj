@@ -16,8 +16,8 @@
         name character varying(36) NOT NULL,
         PRIMARY KEY (id)
     )"))
-
-(defn- add-jobs-table
+(
+defn- add-jobs-table
   "Adds the table that stores information about jobs that the DE has."
   []
   (println "\t* creating the jobs table")
@@ -25,7 +25,7 @@
   (exec-raw
    "CREATE TABLE jobs (
         id bigint DEFAULT nextval('jobs_id_seq'::regclass) NOT NULL,
-        external_id character varying(36) NOT NULL,
+        external_id character varying(40) NOT NULL,
         job_name character varying(255) NOT NULL,
         app_name character varying(255),
         start_date timestamp,
