@@ -30,6 +30,7 @@
         start_date timestamp,
         end_date timestamp,
         status character varying(64) NOT NULL,
+        deleted boolean DEFAULT FALSE NOT NULL,
         job_type_id bigint REFERENCES job_types(id) NOT NULL,
         user_id bigint REFERENCES users(id) NOT NULL,
         PRIMARY KEY (id))"))
