@@ -27,3 +27,4 @@ INSERT INTO version (version) VALUES ('1.8.2:20130903.01');
 INSERT INTO version (version) VALUES ('1.8.2:20130904.01');
 INSERT INTO version (version) VALUES ('1.8.2:20130924.01');
 INSERT INTO version (version) VALUES ('1.8.4:20131014.01');
+INSERT INTO version (version) VALUES ('1.8.4:20131217.01');
