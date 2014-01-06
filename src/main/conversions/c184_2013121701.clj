@@ -52,7 +52,7 @@
 (defn- add-metadata-attributes-table
   "Adds the table that stores the metadata attributes that appear in a template."
   []
-  (println "\t* adding the metadata_attributes table.")
+  (println "\t* adding the metadata_attributes table")
   (exec-raw
    "CREATE TABLE metadata_attributes (
     template_id uuid NOT NULL REFERENCES metadata_templates(id),
@@ -249,7 +249,7 @@
 (defn- add-initial-templates
   "Adds the initial metadata templates to the database."
   []
-  (println "\t* adding the initial metadata templates.")
+  (println "\t* adding the initial metadata templates")
   (-> (insert* :metadata_templates)
       (values (map (fn [[id name]] {:id (uuid id) :name name}) initial-templates))
       (insert))
