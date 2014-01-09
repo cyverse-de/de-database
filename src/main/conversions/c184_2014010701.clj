@@ -7,7 +7,7 @@
   "1.8.4:20140107.01")
 
 (defn- str->uuid
-  "Converts a string representation of a UUID sto a UUID class."
+  "Converts a string representation of a UUID to a UUID class."
   [s]
   (UUID/fromString s))
 
