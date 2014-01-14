@@ -43,10 +43,26 @@
    "ALTER TABLE metadata_attributes
     DROP COLUMN display_order"))
 
+(defn- add-metadata-attr-synonyms-table
+  []
+  (println "\t* adding the metadata_attr_synonyms table")
+  (exec-raw
+   "CREATE TABLE metadata_attr_synonyms (
+    attribute_id uuid NOT NULL REFERENCES metadata_attributes(id),
+    synonym_id uuid NOT NULL REFERENCES metadata_attributes(id),
+    display_order integer NOT NULL)")
+  (exec-raw
+   "CREATE INDEX metadata_attr_synonyms_attribute_id
+    ON metadata_attr_synonyms(attribute_id)")
+  (exec-raw
+   "CREATE INDEX metadata_attr_synonyms_synonym_id
+    ON metadata_attr_synonyms(synonym_id)"))
+
 (defn convert
   "Performs the conversion for database version 1.8.4:20140114.01."
   []
   (println "Performing conversion for" version)
   (add-metadata-template-attrs-table)
   (populate-metadata-template-attrs-table)
-  (drop-unused-columns))
+  (drop-unused-columns)
+  (add-metadata-attr-synonyms-table))
