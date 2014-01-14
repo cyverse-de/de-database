@@ -460,7 +460,7 @@
   (dorun (map add-metadata-attributes [migs-attributes mims-attributes])))
 
 (defn convert
-  "Performs the conversion for database version 1.8.4:20131217.01."
+  "Performs the conversion for database version 1.8.4:20130107.01."
   []
   (println "Performing conversion for" version)
   (add-metadata-templates))
