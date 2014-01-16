@@ -5,8 +5,7 @@ SET search_path = public, pg_catalog;
 --
 CREATE TABLE metadata_attr_synonyms (
     attribute_id uuid NOT NULL REFERENCES metadata_attributes(id),
-    synonym_id uuid NOT NULL REFERENCES metadata_attributes(id),
-    display_order integer NOT NULL
+    synonym_id uuid NOT NULL REFERENCES metadata_attributes(id)
 );
 
 --

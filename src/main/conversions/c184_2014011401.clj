@@ -49,8 +49,7 @@
   (exec-raw
    "CREATE TABLE metadata_attr_synonyms (
     attribute_id uuid NOT NULL REFERENCES metadata_attributes(id),
-    synonym_id uuid NOT NULL REFERENCES metadata_attributes(id),
-    display_order integer NOT NULL)")
+    synonym_id uuid NOT NULL REFERENCES metadata_attributes(id))")
   (exec-raw
    "CREATE INDEX metadata_attr_synonyms_attribute_id
     ON metadata_attr_synonyms(attribute_id)")
