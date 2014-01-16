@@ -25,9 +25,11 @@ TABLE(
     FROM (
             SELECT synonym_id AS id FROM synonyms
             WHERE attribute_id = $1
+            AND synonym_id != $1
         UNION
             SELECT attribute_id AS id FROM synonyms
             WHERE synonym_id = $1
+            AND synonym_id != $1
     ) AS s
     JOIN metadata_attributes a ON s.id = a.id
 $$ LANGUAGE SQL;
