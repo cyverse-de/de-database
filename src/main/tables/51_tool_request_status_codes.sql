@@ -15,7 +15,7 @@ CREATE SEQUENCE tool_request_status_codes_id_seq
 --
 CREATE TABLE tool_request_status_codes (
     id BIGINT DEFAULT nextval('tool_request_status_codes_id_seq'::regclass) NOT NULL,
-    name VARCHAR(16) NOT NULL,
+    name VARCHAR(64) NOT NULL,
     description VARCHAR(128) NOT NULL,
     PRIMARY KEY(id)
 );
