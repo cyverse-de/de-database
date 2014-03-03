@@ -2,7 +2,7 @@
 
 -- iDS Genome Sequence
 insert into metadata_templates(id, name) VALUES
-    ('59BD3D26-34D5-4E75-99F5-840A20089CAF', 'iDS Genome Sequences');
+    ('59BD3D26-34D5-4E75-99F5-840A20089CAF', 'iPlant Data Store Genome Sequence');
 insert into metadata_attributes
     (id, name, description, required, value_type_id) VALUES
     ('33E3E3D8-CD48-4572-8B16-89207B1609EC',
