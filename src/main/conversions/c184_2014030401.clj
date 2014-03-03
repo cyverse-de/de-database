@@ -1,4 +1,4 @@
-(ns c184-2014030401
+(ns facepalm.c184-2014030401
  (:use [korma.core]))
 
 (def ^:private version
