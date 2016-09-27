@@ -58,12 +58,13 @@ INSERT INTO apps
    WHERE integrator_name = 'Default DE Tools'
    LIMIT 1;
 
-INSERT INTO tasks (id, "name", description, label, tool_id) VALUES
+INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('66b59035-6036-46c3-a30a-ee3bd4af47b6',
      'Run a Python 2.7 script',
      'Runs a Python 2.7 script against a data file',
      'Run a Python 2.7 script',
-     '4e3b1710-0f15-491f-aca9-812335356fdb');
+     '4e3b1710-0f15-491f-aca9-812335356fdb',
+     'AD069D9F-E38F-418C-84F6-21F620CADE77');
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('f252f7b2-5c27-4a27-bbbb-f4f2f2acf407',
@@ -72,7 +73,7 @@ INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
      'Parameters',
      '66b59035-6036-46c3-a30a-ee3bd4af47b6');
 
-INSERT INTO parameters 
+INSERT INTO parameters
       (id,
      "name",
      description,

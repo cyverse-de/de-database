@@ -58,12 +58,13 @@ INSERT INTO apps (id, "name", description, integration_data_id, wiki_url, integr
     WHERE integrator_name = 'Internal DE Tools'
     LIMIT 1;
 
-INSERT INTO tasks (id, "name", description, label, tool_id) VALUES
+INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('212C5980-9A56-417E-A8C6-394AC445CA4D',
      'Curl Wrapper',
      'curl wrapper for DE URL imports',
      'Curl Wrapper',
-     '681251EF-EE59-4FE9-9436-DC8A23FEB11A');
+     '681251EF-EE59-4FE9-9436-DC8A23FEB11A',
+     'AD069D9F-E38F-418C-84F6-21F620CADE77');
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('30345113-D3E5-406B-A4E8-170A685E7A8B',
@@ -152,12 +153,13 @@ INSERT INTO apps(id, "name", description, integration_data_id, wiki_url, integra
     WHERE integrator_name = 'Default DE Tools'
     LIMIT 1;
 
-INSERT INTO tasks (id, "name", description, label, tool_id) VALUES
+INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('1ac31629-231a-4090-b3b4-63ee078a0c37',
      'DE Word Count',
      'Counts the number of words in a file',
      'DE Word Count',
-     '85cf7a33-386b-46fe-87c7-8c9d59972624');
+     '85cf7a33-386b-46fe-87c7-8c9d59972624',
+     'AD069D9F-E38F-418C-84F6-21F620CADE77');
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('741711b0-0b95-4ac9-98b4-ca58225e76be',
