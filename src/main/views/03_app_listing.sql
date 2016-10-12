@@ -41,11 +41,29 @@ CREATE OR REPLACE VIEW app_listing AS
                 ELSE MAX(tt.name)
            END AS overall_job_type,
            integration.user_id AS integrator_id,
-           u.username AS integrator_username
+           u.username AS integrator_username,
+           COUNT(j.id) AS job_count,
+           MAX(j.start_date) AS last_used,
+           (   SELECT COUNT(id)
+               FROM jobs
+               WHERE apps.id::varchar = app_id
+                     AND status = 'Completed'
+           ) AS job_count_completed,
+           (   SELECT COUNT(id)
+               FROM jobs
+               WHERE apps.id::varchar = app_id
+                     AND status = 'Failed'
+           ) AS job_count_failed,
+           (   SELECT MAX(end_date)
+               FROM jobs
+               WHERE apps.id::varchar = app_id
+                     AND status = 'Completed'
+           ) AS job_last_completed
     FROM apps
          LEFT JOIN integration_data integration ON apps.integration_data_id = integration.id
          LEFT JOIN users u ON integration.user_id = u.id
          LEFT JOIN app_steps steps ON apps.id = steps.app_id
+         LEFT JOIN jobs j ON apps.id::varchar = j.app_id
          LEFT JOIN tasks t ON steps.task_id = t.id
          LEFT JOIN tools tool ON t.tool_id = tool.id
          LEFT JOIN tool_types tt ON tool.tool_type_id = tt.id
