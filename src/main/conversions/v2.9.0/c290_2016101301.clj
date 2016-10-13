@@ -1,9 +1,9 @@
-(ns facepalm.c290-2016092601
+(ns facepalm.c290-2016101301
   (:require [korma.core :as sql]))
 
 (def ^:private version
   "The destination database version"
-  "2.8.0:20160712.01")
+  "2.8.0:20161013.01")
 
 (defn- add-system-id-column
   "Adds the system ID to the job_types table."
