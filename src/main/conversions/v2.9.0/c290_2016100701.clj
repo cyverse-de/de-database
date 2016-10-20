@@ -14,15 +14,8 @@
   (exec-sql-statement "CREATE INDEX jobs_start_date_index ON jobs(start_date)")
   (exec-sql-statement "CREATE INDEX jobs_end_date_index ON jobs(end_date)"))
 
-(defn- update-app-listing-view
-  "Updates the app_listing view."
-  []
-  (println "\t* updating the app_listing view...")
-  (load-sql-file "views/03_app_listing.sql"))
-
 (defn convert
   "Performs the conversion for this database version"
   []
   (println "Performing the conversion for" version)
-  (add-jobs-indexes)
-  (update-app-listing-view))
+  (add-jobs-indexes))
