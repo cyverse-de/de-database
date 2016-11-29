@@ -1,6 +1,5 @@
 (ns facepalm.c182-2013090301
-  (:use [korma.core]
-        [kameleon.core])
+  (:use [korma.core])
   (:require [clojure.string :as string]))
 
 (def ^:private version
