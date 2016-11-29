@@ -1,7 +1,5 @@
 (ns facepalm.c144-2012092701
-  (:use [korma.core]
-        [kameleon.core])
-  (:require [clojure.string :as string]))
+  (:use [korma.core]))
 
 (def ^:private version
   "The destination database version."

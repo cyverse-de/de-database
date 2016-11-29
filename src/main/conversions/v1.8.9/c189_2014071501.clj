@@ -1,6 +1,5 @@
 (ns facepalm.c189-2014071501
-  (:use [korma.core]
-        [kameleon.core]))
+  (:use [korma.core]))
 
 (def ^:private version
   "The destination database version."
