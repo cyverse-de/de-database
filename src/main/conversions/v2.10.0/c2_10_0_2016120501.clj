@@ -1,10 +1,10 @@
-(ns facepalm.c290-2016101301
+(ns facepalm.c2-10-0-2016120501
   (:use [kameleon.sql-reader :only [load-sql-file]])
   (:require [korma.core :as sql]))
 
 (def ^:private version
   "The destination database version"
-  "2.8.0:20161013.01")
+  "2.10.0:20161205.01")
 
 (defn- add-system-id-column
   "Adds the system ID to the job_types table."
