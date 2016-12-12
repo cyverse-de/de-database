@@ -17,11 +17,9 @@ ALTER TABLE ONLY jobs
     REFERENCES jobs(id);
 
 --
--- Indices on the jobs table to speed up job listing queries.
+-- Foreign key constraint for the job_type_id field of the jobs table.
 --
-CREATE INDEX jobs_parent_id_index ON jobs(parent_id);
-CREATE INDEX jobs_user_id_index ON jobs(user_id);
-CREATE INDEX jobs_app_id_index ON jobs(app_id);
-CREATE INDEX jobs_status_index ON jobs(status);
-CREATE INDEX jobs_start_date_index ON jobs(start_date);
-CREATE INDEX jobs_end_date_index ON jobs(end_date);
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT jobs_job_type_id_fkey
+    FOREIGN KEY (job_type_id)
+    REFERENCES job_types(id);
