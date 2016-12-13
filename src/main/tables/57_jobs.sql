@@ -8,6 +8,7 @@ CREATE TABLE jobs (
     job_name character varying(255) NOT NULL,
     job_description text DEFAULT '',
     app_name character varying(255),
+    job_type_id uuid NOT NULL,
     app_id character varying(255),
     app_wiki_url text,
     app_description text,

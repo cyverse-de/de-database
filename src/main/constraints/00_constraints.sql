@@ -152,14 +152,6 @@ ALTER TABLE ONLY app_category_app
     PRIMARY KEY (app_category_id, app_id);
 
 --
--- Name: tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: de;
--- Tablespace:
---
-ALTER TABLE ONLY tasks
-    ADD CONSTRAINT tasks_pkey
-    PRIMARY KEY (id);
-
---
 -- Name: apps_pkey; Type: CONSTRAINT; Schema: public;
 -- Owner: de; Tablespace:
 --
@@ -646,14 +638,6 @@ ALTER TABLE ONLY file_parameters
     ADD CONSTRAINT file_parameters_data_source_id_fkey
     FOREIGN KEY (data_source_id)
     REFERENCES data_source(id);
-
---
--- Name: tasks_tool_id_fk; Type: CONSTRAINT; Schema: public; Owner: de;
---
-ALTER TABLE ONLY tasks
-    ADD CONSTRAINT tasks_tool_id_fk
-    FOREIGN KEY (tool_id)
-    REFERENCES tools(id);
 
 --
 -- Foreign key constraint for the tool_type_id field of the
