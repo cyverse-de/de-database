@@ -9,7 +9,7 @@ CREATE TABLE tools (
     location character varying(255),
     tool_type_id uuid NOT NULL,
     description text,
-    version character varying(255),
+    version character varying(255) NOT NULL,
     attribution text,
     integration_data_id uuid NOT NULL,
     container_images_id uuid,

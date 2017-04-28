@@ -17,3 +17,10 @@ ALTER TABLE ONLY tools
     ADD CONSTRAINT tools_container_image_fkey
     FOREIGN KEY(container_images_id)
     REFERENCES container_images(id);
+
+--
+-- tools table unique constraint.
+--
+ALTER TABLE ONLY tools
+    ADD CONSTRAINT tools_unique
+    UNIQUE (name,version);
