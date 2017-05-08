@@ -26,7 +26,7 @@ CREATE TABLE container_settings (
   -- to Docker with the --cpus command-line switch.
   min_cpu_cores integer,
 
-  -- The minimum about of disk space required to run the container. This does
+  -- The minimum amount of disk space required to run the container. This does
   -- not correspond to a docker option, it's purely used for Condor job
   -- matching with ClassAds.
   min_disk_space bigint,
