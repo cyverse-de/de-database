@@ -1,3 +1,7 @@
 #!groovy
 stage "Trigger Downstream Build"
-build job: "../facepalm/${env.BRANCH_NAME}", wait: false
+try {
+  build job: "../facepalm/${env.BRANCH_NAME}", wait: false
+} catch (e) {
+  // Ignoring
+}
