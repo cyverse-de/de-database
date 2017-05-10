@@ -212,8 +212,9 @@ INSERT INTO container_images (id, "name", tag, url) VALUES
      'latest',
      'https://registry.hub.docker.com/u/discoenv/curl-wrapper/');
 
-INSERT INTO container_images (id, "name", tag, url) VALUES
+INSERT INTO container_images (id, deprecated, "name", tag, url) VALUES
     ('fc210a84-f7cd-4067-939c-a68ec3e3bd2b',
+     TRUE,
      'docker.cyverse.org/backwards-compat',
      'latest',
      'https://registry.hub.docker.com/u/discoenv/backwards-compat');
