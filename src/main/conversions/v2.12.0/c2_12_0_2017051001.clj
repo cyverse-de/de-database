@@ -12,7 +12,7 @@
   (exec-sql-statement "ALTER TABLE ONLY container_images ADD COLUMN deprecated BOOLEAN NOT NULL DEFAULT FALSE")
   (sql/update :container_images
               (sql/set-fields {:deprecated true})
-              (sql/where {:name "docker.cyverse.org/backwards-compat"})))
+              (sql/where {:name [like "%/backwards-compat"]})))
 
 (defn convert
   "Performs the conversion for this database version"
