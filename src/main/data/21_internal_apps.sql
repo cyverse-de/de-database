@@ -212,9 +212,10 @@ INSERT INTO container_images (id, "name", tag, url) VALUES
      'latest',
      'https://registry.hub.docker.com/u/discoenv/curl-wrapper/');
 
-INSERT INTO container_images (id, "name", tag, url) VALUES
+INSERT INTO container_images (id, deprecated, "name", tag, url) VALUES
     ('fc210a84-f7cd-4067-939c-a68ec3e3bd2b',
-     'gims.iplantcollaborative.org:5000/backwards-compat',
+     TRUE,
+     'docker.cyverse.org/backwards-compat',
      'latest',
      'https://registry.hub.docker.com/u/discoenv/backwards-compat');
 
@@ -257,7 +258,7 @@ UPDATE ONLY tools
    SET container_images_id = '15959300-b972-4571-ace2-081af0909599'
  WHERE id = '85cf7a33-386b-46fe-87c7-8c9d59972624';
 
--- Everything else should use the discoenv/backwards-compat:latest container.
+-- Everything else should use the docker.cyverse.org/backwards-compat:latest container.
 UPDATE ONLY tools
    SET container_images_id = 'fc210a84-f7cd-4067-939c-a68ec3e3bd2b'
  WHERE container_images_id IS NULL;
