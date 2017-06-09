@@ -22,3 +22,10 @@ CREATE TABLE tool_requests (
     tool_id UUID
 );
 
+--
+-- Creates indexes on the requestor_id and tool_id columns
+--
+CREATE INDEX tool_requests_requestor_id_index
+    ON tool_requests(requestor_id);
+CREATE INDEX tool_requests_tool_id_index
+    ON tool_requests(tool_id);
