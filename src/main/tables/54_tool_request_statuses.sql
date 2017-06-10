@@ -12,3 +12,8 @@ CREATE TABLE tool_request_statuses (
     comments TEXT
 );
 
+--
+-- Creates an index on the tool_request_id
+--
+CREATE INDEX tool_request_statuses_tool_request_id_index
+    ON tool_request_statuses(tool_request_id);
