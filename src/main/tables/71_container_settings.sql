@@ -12,6 +12,9 @@ CREATE TABLE container_settings (
   -- Foreign key into the tools table
   tools_id uuid UNIQUE NOT NULL,
 
+  -- Tune container pids limit (set -1 for unlimited).
+  pids_limit integer,
+
   -- The 'shares' of the CPU that the container owns.
   cpu_shares integer,
 
