@@ -9,6 +9,7 @@ CREATE TABLE attributes (
     description text NOT NULL,
     required boolean NOT NULL DEFAULT FALSE,
     value_type_id uuid NOT NULL,
+    settings json,
     created_by varchar(512) NOT NULL,
     modified_by varchar(512) NOT NULL,
     created_on timestamp DEFAULT now() NOT NULL,
