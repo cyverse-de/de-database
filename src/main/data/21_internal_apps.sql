@@ -49,7 +49,7 @@ INSERT INTO tools (id, "name", location, description, version, tool_type_id, int
 --
 INSERT INTO apps (id, "name", description, integration_data_id, wiki_url, integration_date)
     SELECT '1E8F719B-0452-4D39-A2F3-8714793EE3E6',
-           'Urlimport',
+           'Url Import',
            'A Go tool for DE URL imports',
            integration_data.id,
            '',
