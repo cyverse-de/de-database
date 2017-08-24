@@ -17,9 +17,9 @@ INSERT INTO integration_data (integrator_name, integrator_email)
 --
 INSERT INTO tools (id, "name", location, description, version, tool_type_id, integration_data_id)
     SELECT '681251EF-EE59-4FE9-9436-DC8A23FEB11A',
-           'curl_wrapper.pl',
-           '/usr/local/bin',
-           'curl wrapper for DE URL imports',
+           'urlimport',
+           '',
+           'Go tool for DE URL imports',
            '1.0.0',
            tool_types.id,
            integration_data.id
@@ -49,8 +49,8 @@ INSERT INTO tools (id, "name", location, description, version, tool_type_id, int
 --
 INSERT INTO apps (id, "name", description, integration_data_id, wiki_url, integration_date)
     SELECT '1E8F719B-0452-4D39-A2F3-8714793EE3E6',
-           'Curl Wrapper',
-           'curl wrapper for DE URL imports',
+           'Urlimport',
+           'A Go tool for DE URL imports',
            integration_data.id,
            '',
            now()
@@ -76,7 +76,7 @@ INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
 INSERT INTO parameters (id, "name", description, label, ordering, parameter_group_id,
                         parameter_type, display_order, required)
     SELECT '1DD009B1-CE1E-4933-ABA8-66314757288B',
-           '-o',
+           '-filename',
            'The name of the uploaded file.',
            'Output Filename',
            0,
@@ -105,7 +105,7 @@ INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_sour
 INSERT INTO parameters (id, "name", description, label, ordering, parameter_group_id,
                         parameter_type, display_order, required)
     SELECT 'A0D6A102-8623-47B9-A57F-224D6A71F28D',
-           '',
+           '-url',
            'The URL to retrieve the file from.',
            'Source URL',
            1,
@@ -208,9 +208,9 @@ INSERT INTO app_steps (step, id, app_id, task_id) VALUES
 
 INSERT INTO container_images (id, "name", tag, url) VALUES
     ('15959300-b972-4571-ace2-081af0909599',
-     'discoenv/curl-wrapper',
+     'discoenv/url-import',
      'latest',
-     'https://registry.hub.docker.com/u/discoenv/curl-wrapper/');
+     'https://registry.hub.docker.com/u/discoenv/url-import/');
 
 INSERT INTO container_images (id, deprecated, "name", tag, url) VALUES
     ('fc210a84-f7cd-4067-939c-a68ec3e3bd2b',
