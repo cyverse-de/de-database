@@ -3,7 +3,7 @@
   (:require [korma.core :as sql]))
 
 (def ^:private version
-  "The destination databse version"
+  "The destination database version"
   "2.15.0:20170824.01")
 
 (defn- update-url-import-tool
