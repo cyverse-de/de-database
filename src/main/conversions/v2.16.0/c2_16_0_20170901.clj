@@ -9,8 +9,10 @@
   "Add the de-webhooks table"
   []
   (println "\t* add de-webhooks table...")
-  (load-sql-file "tables/78_webhooks.sql")
-  (load-sql-file "constraints/00_78_webhooks_pkey.sql")
+  (load-sql-file "tables/78_webhooks_type.sql")
+  (load-sql-file "tables/79_webhooks.sql")
+  (load-sql-file "constraints/00_78_webhooks_type_pkey.sql")
+  (load-sql-file "constraints/00_79_webhooks_pkey.sql")
   (load-sql-file "constraints/78_webhooks.sql"))
 
 (defn convert
