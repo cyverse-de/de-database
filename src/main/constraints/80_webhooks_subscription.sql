@@ -7,10 +7,12 @@ SET search_path = public, pg_catalog;
 ALTER TABLE ONLY webhooks_subscription
 ADD CONSTRAINT webhook_id_topic_fkey
 FOREIGN KEY (webhook_id)
-REFERENCES webhooks(id);
+REFERENCES webhooks(id)
+ON DELETE CASCADE;
 
 
 ALTER TABLE ONLY webhooks_subscription
 ADD CONSTRAINT topic_id_topic_fkey
 FOREIGN KEY (topic_id)
-REFERENCES webhooks_topic(id);
+REFERENCES webhooks_topic(id)
+ON DELETE CASCADE;
