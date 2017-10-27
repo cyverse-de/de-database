@@ -6,7 +6,7 @@ SET search_path = public, pg_catalog;
 ALTER TABLE ONLY template_attrs
 ADD CONSTRAINT template_attrs_template_id_fkey
 FOREIGN KEY (template_id)
-REFERENCES templates(id);
+REFERENCES templates(id) ON DELETE CASCADE;
 
 --
 -- Foreign key constraint for the attribute_id field of the template_attrs table.
@@ -14,4 +14,4 @@ REFERENCES templates(id);
 ALTER TABLE ONLY template_attrs
 ADD CONSTRAINT template_attrs_attribute_id_fkey
 FOREIGN KEY (attribute_id)
-REFERENCES attributes(id);
+REFERENCES attributes(id) ON DELETE CASCADE;
