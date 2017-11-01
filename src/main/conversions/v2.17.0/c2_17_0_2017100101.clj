@@ -9,7 +9,8 @@
   "Add zapier webhook type"
   []
   (println "\t* add zapier webhook type...")
-  (load-sql-file "data/80_webhooks_type.sql"))
+  (load-sql-file "data/80_webhooks_type.sql")
+  (load-sql-file "constraints/00_82_webhooks_type_ukey.sql"))
 
 (defn convert
   "Performs the conversion for this database version"
