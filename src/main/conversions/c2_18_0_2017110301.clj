@@ -7,9 +7,9 @@
   "2.18.0:20171103.01")
 
 (defn- add-cascading-deletions
-  "Adds cascading deletions to the template_attrs table."
+  "Adds cascading deletions to the attached_tags table."
   []
-  (println "\t* adding cascading deletions to several tables.")
+  (println "\t* adding cascading deletions to the attached_tags table.")
   (exec-raw "ALTER TABLE ONLY attached_tags DROP CONSTRAINT attached_tags_tag_id_fkey")
   (kameleon.sql-reader/load-sql-file "constraints/02_attached_tags.sql"))
 
