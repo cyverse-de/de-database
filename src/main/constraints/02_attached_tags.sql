@@ -7,4 +7,5 @@ SET search_path = public, pg_catalog;
 ALTER TABLE attached_tags
 ADD CONSTRAINT attached_tags_tag_id_fkey
 FOREIGN KEY (tag_id)
-REFERENCES tags(id);
+REFERENCES tags(id)
+ON DELETE CASCADE;
