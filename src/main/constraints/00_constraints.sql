@@ -700,7 +700,7 @@ ALTER TABLE ONLY tool_request_statuses
 ALTER TABLE ONLY tool_request_statuses
     ADD CONSTRAINT tool_request_statuses_tool_request_id_fkey
     FOREIGN KEY (tool_request_id)
-    REFERENCES tool_requests(id);
+    REFERENCES tool_requests(id) ON DELETE CASCADE;
 
 --
 -- Foreign key constraint for the tool_request_status_code_id field of the tool_request_statuses
