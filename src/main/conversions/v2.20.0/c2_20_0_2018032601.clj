@@ -11,7 +11,7 @@
   (println "\t* adding the osg_image_path column to the container_images table.")
   (exec-sql-statement
    "ALTER TABLE ONLY container_images
-    ADD COLUMN osg_image_path varchar(1024)"))
+    ADD COLUMN osg_image_path text"))
 
 (defn convert
   "Performs the conversion for this database version."

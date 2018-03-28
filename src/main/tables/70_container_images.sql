@@ -9,6 +9,6 @@ CREATE TABLE container_images (
   tag text NOT NULL,  -- tag used to pull down an image. We'll default it to 'latest'
   url text,           -- URL containing more information about the image (ex: docker hub URL)
   deprecated boolean NOT NULL DEFAULT FALSE,  -- flag indicating if tools using this image should be used in new apps.
-  osg_image_path varchar(1024), -- the path to the Singularity image in OSG's CVM-FS repository if available.
+  osg_image_path text, -- the path to the Singularity image in OSG's CVM-FS repository if available.
   unique (name, tag)
 );
