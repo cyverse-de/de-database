@@ -13,8 +13,26 @@
    "ALTER TABLE ONLY container_images
     ADD COLUMN osg_image_path text"))
 
+(defn- drop-container-images-name-tag-key
+  "Removes the container_images_name_tag_key index from the database."
+  []
+  (println "\t* dropping the uniqueness constraint for image name and tag in the container_images table.")
+  (exec-sql-statement
+   "ALTER TABLE ONLY container_images
+    DROP CONSTRAINT container_images_name_tag_key"))
+
+(defn- add-container-images-osg-image-path-key
+  "Adds the container_images_name_tag_osg_image_path_key index to the database."
+  []
+  (println "\t* adding a uniqueness constraint on image name, tag and OSG image path to the container_images table.")
+  (exec-sql-statement
+   "ALTER TABLE ONLY container_images
+    ADD CONSTRAINT container_images_name_tag_osg_image_path_key UNIQUE (name, tag, osg_image_path)"))
+
 (defn convert
   "Performs the conversion for this database version."
   []
   (println "Performing the conversion for" version)
-  (add-osg-image-path-column))
+  (add-osg-image-path-column)
+  (drop-container-images-name-tag-key)
+  (add-container-images-osg-image-path-key))
