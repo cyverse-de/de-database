@@ -5,7 +5,7 @@ SET search_path = public, pg_catalog;
 --
 CREATE TABLE job_tickets(
    job_id uuid NOT NULL,
-   ticket varchar(16) NOT NULL,
+   ticket varchar(100) NOT NULL,
    irods_path text NOT NULL,
    deleted boolean DEFAULT FALSE,
    primary key (job_id, ticket)
