@@ -10,7 +10,7 @@
   []
   (exec-sql-statement
    "ALTER TABLE ONLY tools
-    ADD COLUMN interactive NOT NULL DEFAULT FALSE"))
+    ADD COLUMN interactive boolean NOT NULL DEFAULT FALSE"))
 
 (defn- create-container-ports-table
   "Adds the container_ports table to the database"
@@ -22,4 +22,4 @@
   []
   (println "Performing the conversion for" version)
   (add-interactive-column)
-  (craete-container-ports-table))
+  (create-container-ports-table))
