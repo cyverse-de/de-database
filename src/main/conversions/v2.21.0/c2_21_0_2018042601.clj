@@ -16,13 +16,22 @@
   "Adds the container_ports table to the database"
   []
   (load-sql-file "tables/83_container_ports.sql")
+  (load-sql-file "constraints/00_83_container_ports.sql")
   (load-sql-file "constraints/83_container_ports.sql"))
 
 (defn- create-interapps-proxy-settings-table
   "Adds the interactive_apps_proxy_settings table to the database"
   []
   (load-sql-file "tables/84_interapps_proxy_settings.sql")
-  (load-sql-file "constraints/84_interapps_proxy_settings.sql"))
+  (load-sql-file "constraints/00_84_interapps_proxy_settings.sql"))
+
+(defn- add-container-settings-fkey
+  []
+  (exec-sql-statement
+   "ALTER TABLE ONLY container_settings
+    ADD CONSTRAINT container_settings_interactive_apps_proxy_settings_id_fkey
+    FOREIGN KEY(interactive_apps_proxy_settings_id)
+    REFERENCES interactive_apps_proxy_settings(id) ON DELETE CASCADE"))
 
 (defn convert
   "Performs the conversion for this database version."
