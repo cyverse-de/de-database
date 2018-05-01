@@ -12,6 +12,9 @@ CREATE TABLE container_settings (
   -- Foreign key into the tools table
   tools_id uuid UNIQUE NOT NULL,
 
+  -- Foreign key into the interactive_apps_proxy_settings table
+  interactive_apps_proxy_settings_id uuid UNIQUE,
+
   -- Tune container pids limit (set -1 for unlimited).
   pids_limit integer,
 
