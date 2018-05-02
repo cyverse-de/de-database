@@ -25,6 +25,12 @@
   (load-sql-file "tables/84_interapps_proxy_settings.sql")
   (load-sql-file "constraints/00_84_interapps_proxy_settings_pkey.sql"))
 
+(defn- add-proxy-settings-column
+  []
+  (exec-sql-statement
+   "ALTER TABLE ONLY container_settings
+    ADD COLUMN interactive_apps_proxy_settings_id uuid UNIQUE"))
+
 (defn- add-container-settings-fkey
   []
   (exec-sql-statement
@@ -39,4 +45,6 @@
   (println "Performing the conversion for" version)
   (add-interactive-column)
   (create-container-ports-table)
-  (create-interapps-proxy-settings-table))
+  (create-interapps-proxy-settings-table)
+  (add-proxy-settings-column)
+  (add-container-settings-fkey))
