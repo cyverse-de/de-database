@@ -23,7 +23,7 @@
   "Adds the interactive_apps_proxy_settings table to the database"
   []
   (load-sql-file "tables/84_interapps_proxy_settings.sql")
-  (load-sql-file "constraints/00_84_interapps_proxy_settings.sql"))
+  (load-sql-file "constraints/00_84_interapps_proxy_settings_pkey.sql"))
 
 (defn- add-container-settings-fkey
   []
