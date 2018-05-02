@@ -4,10 +4,7 @@ SET search_path = public, pg_catalog;
 
 CREATE TABLE interactive_apps_proxy_settings (
   -- primary key
-  id uuid NOT NULL DEFAULT uuid_generate_v1(),
-
-  -- foreign key into the container_settings table
-  container_settings_id uuid NOT NULL,
+  id uuid UNIQUE NOT NULL DEFAULT uuid_generate_v1(),
 
   -- Docker image to pull that contains the proxy.
   image text NOT NULL,
