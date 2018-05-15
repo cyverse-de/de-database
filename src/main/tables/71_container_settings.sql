@@ -53,5 +53,10 @@ CREATE TABLE container_settings (
 
   -- The entrypoint of the running container. This will let us override a
   -- container's default entrypoint, if it has one and it's necessary.
-  entrypoint text
+  entrypoint text,
+
+  -- Whether or not to mount the /tmp directory into the container. Defaults to
+  -- false because the majority of tools won't have a problem with this, it's
+  -- just a few outliers that cause issues.
+  skip_tmp_mount bool NOT NULL DEFAULT FALSE
 );
