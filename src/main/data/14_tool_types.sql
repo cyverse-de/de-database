@@ -8,3 +8,6 @@ INSERT INTO tool_types (id, name, label, description)
 
 INSERT INTO tool_types (id, name, label, description, hidden)
     VALUES ( '01E14110-1420-4DE0-8A70-B0DD420F6A84', 'internal', 'Internal DE tools.', 'Tools used internally by the Discovery Environment.', true );
+
+INSERT INTO tool_types (id, name, label, description)
+    VALUES ( '4166B913-EAFA-4731-881F-21C3751DFFBB', 'interactive', 'Interactive DE tools.', 'Interactive tools used by the Discovery Environment.' );
