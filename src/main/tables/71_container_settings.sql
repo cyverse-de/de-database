@@ -28,9 +28,13 @@ CREATE TABLE container_settings (
   -- in the Condor ClassAds and is not passed to the Docker container.
   min_memory_limit bigint,
 
-  -- The minimum number of cpu cores required to run the container. It's passed
-  -- to Docker with the --cpus command-line switch.
-  min_cpu_cores integer,
+  -- The minimum number of cpu cores required to run the container. This could
+  -- be used for job matching.
+  min_cpu_cores decimal(6,3),
+
+  -- The maximum number of cpu cores the container is allowed to use. This is
+  -- passed to the container runtime.
+  max_cpu_cores decimal(6,3),
 
   -- The minimum amount of disk space required to run the container. This does
   -- not correspond to a docker option, it's purely used for Condor job
