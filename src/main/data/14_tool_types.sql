@@ -11,3 +11,6 @@ INSERT INTO tool_types (id, name, label, description, hidden)
 
 INSERT INTO tool_types (id, name, label, description)
     VALUES ( '4166B913-EAFA-4731-881F-21C3751DFFBB', 'interactive', 'Interactive DE tools.', 'Interactive tools used by the Discovery Environment.' );
+
+INSERT INTO tool_types (id, name, label, description)
+    VALUES ( '7EC7063B-A96D-4AE5-9815-4548BA7D9C74', 'osg', 'OSG DE tools.', 'DE tools capable of running on the Open Science Grid.' );
