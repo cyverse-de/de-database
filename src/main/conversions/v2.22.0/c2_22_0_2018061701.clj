@@ -3,7 +3,7 @@
 
 (def ^:private version
   "The destination database version"
-  "2.22.0:20180614.01")
+  "2.22.0:20180617.01")
 
 (defn- add-planned-end-date-column
   "Adds the planned_end_date column to the jobs table."
