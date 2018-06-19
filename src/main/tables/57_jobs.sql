@@ -15,6 +15,7 @@ CREATE TABLE jobs (
     result_folder_path text,
     start_date timestamp,
     end_date timestamp,
+    planned_end_date timestamp,
     status character varying(64) NOT NULL,
     deleted boolean DEFAULT FALSE NOT NULL,
     notify boolean DEFAULT FALSE NOT NULL,
