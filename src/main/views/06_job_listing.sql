@@ -9,6 +9,7 @@ CREATE OR REPLACE VIEW job_listings AS
            j.app_name,
            j.start_date,
            j.end_date,
+           j.planned_end_date,
            j.status,
            j.deleted,
            j.notify,
