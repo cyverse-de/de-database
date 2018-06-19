@@ -21,7 +21,6 @@
               j.app_name,
               j.start_date,
               j.end_date,
-              j.planned_end_date,
               j.status,
               j.deleted,
               j.notify,
@@ -38,7 +37,8 @@
                   SELECT * FROM jobs child
                   WHERE child.parent_id = j.id
               ) AS is_batch,
-              t.system_id
+              t.system_id,
+              j.planned_end_date
        FROM jobs j
        JOIN users u ON j.user_id = u.id
        JOIN job_types t ON j.job_type_id = t.id"))
