@@ -62,5 +62,12 @@ CREATE TABLE container_settings (
   -- Whether or not to mount the /tmp directory into the container. Defaults to
   -- false because the majority of tools won't have a problem with this, it's
   -- just a few outliers that cause issues.
-  skip_tmp_mount bool NOT NULL DEFAULT FALSE
+  skip_tmp_mount bool NOT NULL DEFAULT FALSE,
+
+  -- The user ID that the contained process will run as. Needs to be the actual
+  -- UID of the user created by the Dockerfile, if it exists. This isn't passed
+  -- on the command-line, but is used to make sure permissions are correct for
+  -- the working directory in the container. If it's not set, the default of 0
+  -- will be used (but not stored in the database).
+  uid int
 );
