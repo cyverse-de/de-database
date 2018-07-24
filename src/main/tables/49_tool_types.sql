@@ -8,5 +8,6 @@ CREATE TABLE tool_types (
     name varchar(50) UNIQUE NOT NULL,
     label varchar(128) NOT NULL,
     description text,
-    hidden boolean NOT NULL DEFAULT FALSE
+    hidden boolean NOT NULL DEFAULT FALSE,
+    notification_type notification_types NOT NULL
 );
