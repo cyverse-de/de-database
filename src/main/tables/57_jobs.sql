@@ -20,6 +20,7 @@ CREATE TABLE jobs (
     deleted boolean DEFAULT FALSE NOT NULL,
     notify boolean DEFAULT FALSE NOT NULL,
     user_id uuid NOT NULL,
+    subdomain character varying(32),
     submission json,
     parent_id uuid
 );
