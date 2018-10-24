@@ -39,7 +39,6 @@ CREATE OR REPLACE VIEW vice_analyses AS
              s.step
       FROM jobs j
       JOIN users u ON j.user_id = u.id
-      JOIN job_types t ON j.job_type_id = t.id
       JOIN apps a ON j.app_id = CAST(a.id as character varying)
       JOIN app_steps s ON a.id = s.app_id
       JOIN job_steps o ON j.id = o.job_id
