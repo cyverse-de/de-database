@@ -41,8 +41,6 @@ CREATE OR REPLACE VIEW vice_analyses AS
       JOIN users u ON j.user_id = u.id
       JOIN apps a ON j.app_id = CAST(a.id as character varying)
       JOIN app_steps s ON a.id = s.app_id
-      JOIN job_steps o ON j.id = o.job_id
-       AND o.app_step_number = ( s.step + 1 )
       JOIN tasks k ON s.task_id = k.id
       JOIN tools l ON k.tool_id = l.id
       JOIN container_settings c ON l.id = c.tools_id
