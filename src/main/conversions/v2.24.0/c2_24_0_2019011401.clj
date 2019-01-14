@@ -9,7 +9,12 @@
   []
   (load-sql-file "tables/87_vice_sessions.sql"))
 
+(defn- add-constraints
+  []
+  (load-sql-file "constraints/87_vice_sessions.sql"))
+
 (defn convert
   []
   (println "Performing the conversion for" version)
-  (add-sessions-tables))
+  (add-sessions-tables)
+  (add-constraints))
