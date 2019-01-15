@@ -11,7 +11,7 @@
 
 (defn- add-constraints
   []
-  (load-sql-file "constraints/87_vice_sessions.sql"))
+  (load-sql-file "constraints/00_87_vice_sessions.sql"))
 
 (defn convert
   []
