@@ -588,29 +588,6 @@ ALTER TABLE ONLY genome_reference
     REFERENCES users(id);
 
 --
--- The primary key for the collaborators table.
---
-ALTER TABLE ONLY collaborators
-    ADD CONSTRAINT collaborators_pkey
-    PRIMARY KEY (user_id, collaborator_id);
-
---
--- Foreign key constraints for the user field of the collaborators table.
---
-ALTER TABLE ONLY collaborators
-    ADD CONSTRAINT collaborators_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
---
--- Foreign key constraints for the collaborator_id field of the collaborators
--- table.
---
-ALTER TABLE ONLY collaborators
-    ADD CONSTRAINT collaborators_collaborator_id_fkey
-    FOREIGN KEY (collaborator_id)
-    REFERENCES users(id);
-
---
 -- Add a uniqueness constraint for the integration_data table.
 --
 ALTER TABLE ONLY integration_data
