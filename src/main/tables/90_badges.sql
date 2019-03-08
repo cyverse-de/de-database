@@ -6,6 +6,9 @@ CREATE TABLE badges (
   -- Primary key
   id uuid NOT NULL,
 
+  -- The name of the badge. Same length as the name in the apps table.
+  name character varying(255) NOT NULL,
+
   -- Foreign key into the users table
   user_id uuid NOT NULL,
 
