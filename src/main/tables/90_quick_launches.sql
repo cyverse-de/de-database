@@ -18,6 +18,9 @@ CREATE TABLE quick_launches (
   -- Foreign key into the submissions table
   submission_id uuid NOT NULL,
 
+  -- Foreign key into the apps table
+  app_id uuid NOT NULL,
+
   -- Whether or not all users can see the quick launch
   public boolean NOT NULL DEFAULT false
 );
