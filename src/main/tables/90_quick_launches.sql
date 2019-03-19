@@ -21,6 +21,12 @@ CREATE TABLE quick_launches (
   -- Foreign key into the apps table
   app_id uuid NOT NULL,
 
+  -- Whether or not the quick launch is the default for the creator.
+  is_creator_default boolean NOT NULL DEFAULT false,
+
+  -- Whether or not the default quick launch for this app globally.
+  is_global_default boolean NOT NULL DEFAULT false,
+
   -- Whether or not all users can see the quick launch
-  public boolean NOT NULL DEFAULT false
+  is_public boolean NOT NULL DEFAULT false
 );

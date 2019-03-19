@@ -14,7 +14,9 @@
    "ALTER TABLE IF EXISTS ONLY badges
     ADD COLUMN description text,
     ADD COLUMN app_id uuid NOT NULL,
-    ADD COLUMN public boolean NOT NULL DEFAULT false;")
+    ADD COLUMN is_creator_default boolean NOT NULL DEFAULT false,
+    ADD COLUMN is_global_default boolean NOT NULL DEFAULT false,
+    ADD COLUMN is_public boolean NOT NULL DEFAULT false;")
   (exec-sql-statement
    "ALTER TABLE IF EXISTS ONLY badges
     RENAME CONSTRAINT badges_id_pkey TO quick_launches_id_pkey;")
@@ -26,7 +28,9 @@
     RENAME CONSTRAINT badges_user_id_fkey TO quick_launches_creator_fkey;")
   (exec-sql-statement
    "ALTER TABLE ONLY badges
-    ADD CONSTRAINT quick_launches_app_id_fkey FOREIGN KEY (app_id) REFERENCES apps(id);")
+    ADD CONSTRAINT quick_launches_app_id_fkey FOREIGN KEY (app_id) REFERENCES apps(id),
+    ADD CONSTRAINT quick_launches_app_id_creator_is_creator_default_unique UNIQUE (app_id, creator, is_creator_default),
+    ADD CONSTRAINT quick_launches_app_id_is_global_default_unique UNIQUE (app_id, is_global_default);")
   (exec-sql-statement
    "ALTER TABLE IF EXISTS ONLY badges RENAME TO quick_launches;"))
 
@@ -36,15 +40,9 @@
   (load-sql-file "constraints/00_91_quick_launch_favorites_pkey.sql")
   (load-sql-file "constraints/91_quick_launch_favorites.sql"))
 
-(defn- add-quick-launch-defaults
-  []
-  (load-sql-file "tables/92_quick_launch_defaults.sql")
-  (load-sql-file "constraints/00_92_quick_launch_defaults_pkey.sql")
-  (load-sql-file "constraints/92_quick_launch_defaults.sql"))
 
 (defn convert
   []
   (println "Performing the conversion to" version)
   (rename-badge-table)
-  (add-quick-launch-favorites)
-  (add-quick-launch-defaults))
+  (add-quick-launch-favorites))
