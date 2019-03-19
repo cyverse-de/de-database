@@ -19,5 +19,5 @@ CREATE TABLE quick_launches (
   submission_id uuid NOT NULL,
 
   -- Whether or not all users can see the quick launch
-  public boolean NOT NULL DEFAULT false,
+  public boolean NOT NULL DEFAULT false
 );
