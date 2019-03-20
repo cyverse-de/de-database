@@ -9,3 +9,7 @@ ALTER TABLE ONLY quick_launch_favorites
     ADD CONSTRAINT quick_launch_favorites_user_id_fkey
     FOREIGN KEY (user_id)
     REFERENCES users(id);
+
+ALTER TABLE ONLY quick_launch_favorites
+    ADD CONSTRAINT quick_launch_favorites_user_id_quick_launches_id_unique
+    UNIQUE (user_id, quick_launch_id);

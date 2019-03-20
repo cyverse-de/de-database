@@ -18,3 +18,7 @@ ALTER TABLE ONLY quick_launch_user_defaults
 ALTER TABLE ONLY quick_launch_user_defaults
     ADD CONSTRAINT quick_launch_user_defaults_user_id_app_id_unique
     UNIQUE (user_id, app_id);
+
+ALTER TABLE ONLY quick_launch_user_defaults
+    ADD CONSTRAINT quick_launch_user_defaults_user_id_quick_launch_id_unique
+    UNIQUE (user_id, quick_launch_id);

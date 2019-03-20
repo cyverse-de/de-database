@@ -13,3 +13,7 @@ ALTER TABLE quick_launch_global_defaults
 ALTER TABLE quick_launch_global_defaults
     ADD CONSTRAINT quick_launch_global_defaults_app_id_unique
     UNIQUE (app_id);
+
+ALTER TABLE quick_launch_global_defaults
+    ADD CONSTRAINT quick_launch_global_defaults_quick_launch_id_unique
+    UNIQUE (quick_launch_id);
