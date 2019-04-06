@@ -10,15 +10,15 @@
   (load-sql-file "tables/89_submissions.sql")
   (load-sql-file "constraints/00_89_submissions_pkey.sql"))
 
-(defn- create-badges-table
+(defn- create-quick-launches-table
   []
-  (load-sql-file "tables/90_badges.sql")
-  (load-sql-file "constraints/00_90_badges_pkey.sql")
-  (load-sql-file "constraints/90_badges.sql"))
+  (load-sql-file "tables/90_quick_launches.sql")
+  (load-sql-file "constraints/00_90_quick_launches_pkey.sql")
+  (load-sql-file "constraints/90_quick_launches.sql"))
 
 (defn convert
   "Performs the conversion for this database version"
   []
   (println "Performing the conversion for" version)
   (create-submissions-table)
-  (create-badges-table))
+  (create-quick-launches-table))
