@@ -25,7 +25,7 @@
    "ALTER TABLE IF EXISTS ONLY badges
     RENAME CONSTRAINT badges_user_id_fkey TO quick_launches_creator_fkey;")
   (exec-sql-statement
-   "ALTER TABLE ONLY badges
+   "ALTER TABLE IF EXISTS ONLY badges
     ADD CONSTRAINT quick_launches_app_id_fkey FOREIGN KEY (app_id) REFERENCES apps(id);")
   (exec-sql-statement
    "ALTER TABLE IF EXISTS ONLY badges RENAME TO quick_launches;"))
