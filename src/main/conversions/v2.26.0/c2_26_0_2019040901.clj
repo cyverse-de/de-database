@@ -3,7 +3,7 @@
 
 (def ^:private version
   "The destination database version"
-  "2.26.0:2019049.01")
+  "2.26.0:20190409.01")
 
 (defn- add-app-publication-request-tables
   []
