@@ -12,3 +12,5 @@ INSERT INTO webhooks_type (type, template)
   "text": "{{.Msg}}. {{if .Completed}} <{{.Link}}|{{.LinkText}}> {{- end}}"
 }
 ');
+INSERT INTO webhooks_type (type, template)
+        VALUES('Custom','');
