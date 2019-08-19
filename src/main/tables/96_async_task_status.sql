@@ -9,4 +9,7 @@ CREATE TABLE async_task_status (
 	created_date timestamp NOT NULL
 );
 
-
+--
+-- Index to speed up listing in sorted date order
+--
+CREATE INDEX async_task_status_id_date_index ON async_tasks(async_task_id, created_date);

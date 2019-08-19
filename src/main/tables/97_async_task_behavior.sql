@@ -8,5 +8,3 @@ CREATE TABLE async_task_behavior (
 	behavior_type text NOT NULL,
 	data json
 );
-
-
