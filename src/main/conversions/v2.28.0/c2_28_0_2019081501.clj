@@ -16,7 +16,8 @@
   (load-sql-file "tables/97_async_task_behavior.sql")
   (load-sql-file "constraints/00_97_async_task_behavior.sql")
 
-  (load-sql-file "constraints/95_async_tasks.sql"))
+  (load-sql-file "constraints/96_async_task_status.sql")
+  (load-sql-file "constraints/97_async_task_behavior.sql"))
 
 (defn convert
   []
