@@ -15,7 +15,7 @@ WHERE propagated = false;"))
 (defn- drop-old-test-index
   []
   (exec-sql-statement
-   "DROP INDEX mian_test IF EXISTS;"))
+   "DROP INDEX IF EXISTS mian_test;"))
 
 (defn convert
   []
