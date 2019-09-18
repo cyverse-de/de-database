@@ -55,3 +55,7 @@ ON job_status_updates (propagated, propagation_attempts);
 
 CREATE INDEX job_status_updates_external_id
 ON job_status_updates (external_id);
+
+CREATE INDEX job_status_updates_unpropagated_with_external_id
+ON job_status_updates (propagated, propagation_attempts, external_id)
+WHERE propagated = false;
