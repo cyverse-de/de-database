@@ -7,7 +7,7 @@
 
 (defn- update-vice-analyses-view
   []
-  (load-sql-file "views/08_vice_analyses.sql"))
+  (load-sql-file "views/008_vice_analyses.sql"))
 
 (defn- add-app-steps-indices
   []

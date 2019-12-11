@@ -375,19 +375,19 @@
 (defn- add-new-views
   []
   (println "\t* adding app_category_listing view...")
-  (load-sql-file "views/01_app_category_listing.sql")
+  (load-sql-file "views/001_app_category_listing.sql")
   (println "\t* adding app_job_types view...")
-  (load-sql-file "views/02_app_job_types.sql")
+  (load-sql-file "views/002_app_job_types.sql")
   (println "\t* adding app_listing view...")
-  (load-sql-file "views/03_app_listing.sql")
+  (load-sql-file "views/003_app_listing.sql")
   (println "\t* adding tool_listing view...")
-  (load-sql-file "views/04_tool_listing.sql")
+  (load-sql-file "views/004_tool_listing.sql")
   (println "\t* adding rating_listing view...")
-  (load-sql-file "views/05_rating_listing.sql")
+  (load-sql-file "views/005_rating_listing.sql")
   (println "\t* adding job_listing view...")
-  (load-sql-file "views/06_job_listing.sql")
+  (load-sql-file "views/006_job_listing.sql")
   (println "\t* adding task_param_listing view...")
-  (load-sql-file "views/07_task_param_listing.sql"))
+  (load-sql-file "views/007_task_param_listing.sql"))
 
 (defn- reload-functions
   []

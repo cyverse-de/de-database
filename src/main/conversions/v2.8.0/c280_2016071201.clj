@@ -28,7 +28,7 @@
   "Updates the app_listing view."
   []
   (println "\t* updating the app_listing view.")
-  (load-sql-file "views/03_app_listing.sql"))
+  (load-sql-file "views/003_app_listing.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

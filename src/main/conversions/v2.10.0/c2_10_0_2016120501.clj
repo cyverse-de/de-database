@@ -64,7 +64,7 @@
   []
   (println "\t* updating the job_listings view")
   (sql/exec-raw "DROP VIEW job_listings")
-  (load-sql-file "views/06_job_listing.sql"))
+  (load-sql-file "views/006_job_listing.sql"))
 
 (defn convert
   "Performs the conversion for this database version"
