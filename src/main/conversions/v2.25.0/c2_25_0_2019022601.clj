@@ -7,12 +7,12 @@
 
 (defn- create-submissions-table
   []
-  (load-sql-file "tables/89_submissions.sql")
+  (load-sql-file "tables/089_submissions.sql")
   (load-sql-file "constraints/00_89_submissions_pkey.sql"))
 
 (defn- create-quick-launches-table
   []
-  (load-sql-file "tables/90_quick_launches.sql")
+  (load-sql-file "tables/090_quick_launches.sql")
   (load-sql-file "constraints/00_90_quick_launches_pkey.sql")
   (load-sql-file "constraints/90_quick_launches.sql"))
 

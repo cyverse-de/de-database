@@ -9,10 +9,10 @@
   "Add the de-webhooks table"
   []
   (println "\t* add de-webhooks table...")
-  (load-sql-file "tables/78_webhooks_type.sql")
-  (load-sql-file "tables/79_webhooks_topic.sql")
-  (load-sql-file "tables/80_webhooks.sql")
-  (load-sql-file "tables/81_webhooks_subscription.sql")
+  (load-sql-file "tables/078_webhooks_type.sql")
+  (load-sql-file "tables/079_webhooks_topic.sql")
+  (load-sql-file "tables/080_webhooks.sql")
+  (load-sql-file "tables/081_webhooks_subscription.sql")
 
   (load-sql-file "constraints/00_78_webhooks_type_pkey.sql")
   (load-sql-file "constraints/00_79_webhooks_topic_pkey.sql")

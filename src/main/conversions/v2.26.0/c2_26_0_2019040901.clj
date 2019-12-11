@@ -7,7 +7,7 @@
 
 (defn- add-app-publication-request-tables
   []
-  (load-sql-file "tables/94_app_publication_requests.sql")
+  (load-sql-file "tables/094_app_publication_requests.sql")
   (load-sql-file "constraints/00_94_app_publication_requests_pkey.sql")
   (load-sql-file "constraints/94_app_publication_requests.sql")
   (load-sql-file "data/94_app_publication_request_status_codes.sql"))

@@ -9,7 +9,7 @@
 (defn- add-job-status-table
   []
   (println "\t* Adding job status table")
-  (load-sql-file "tables/76_job_status_updates.sql")
+  (load-sql-file "tables/076_job_status_updates.sql")
   (load-sql-file "constraints/76_job_status_updates.sql"))
 
 (defn convert

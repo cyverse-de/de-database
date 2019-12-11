@@ -235,7 +235,7 @@
   (println "\t* updating the property_group table to parameter_groups")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/tables/25_parameter_groups.sql")
   (println "\t* adding the parameter_values table")
-  (load-sql-file "tables/25_parameter_values.sql")
+  (load-sql-file "tables/025_parameter_values.sql")
   (println "\t* updating the property_type table to parameter_types")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/tables/27_parameter_types.sql")
   (println "\t* updating the users table")
@@ -370,7 +370,7 @@
 (defn- re-add-constraints
   []
   (println "\t* re-adding constraints")
-  (load-sql-file "tables/99_constraints.sql"))
+  (load-sql-file "tables/099_constraints.sql"))
 
 (defn- add-new-views
   []

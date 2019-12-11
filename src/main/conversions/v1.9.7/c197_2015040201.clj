@@ -14,7 +14,7 @@
   (insert :metadata_value_types (values {:id   (uuidify "B17ED53D-2B10-428F-B38A-C9DEC3DC5127")
                                          :name "Enum"}))
   (println "\t* adding metadata_attr_enum_values table")
-  (load-sql-file "tables/62_metadata_attr_enum_values.sql")
+  (load-sql-file "tables/062_metadata_attr_enum_values.sql")
   (println "\t* adding metadata_attr_enum_values table constraints")
   (load-sql-file "constraints/62_metadata_attr_enum_values.sql"))
 

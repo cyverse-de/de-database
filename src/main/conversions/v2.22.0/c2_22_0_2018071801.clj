@@ -8,8 +8,8 @@
 (defn- create-validation-rule-argument-definition-tables
   "Creates the tables used to store the definitions of validation rule arguments."
   []
-  (load-sql-file "tables/85_validation_rule_argument_types.sql")
-  (load-sql-file "tables/86_validation_rule_argument_definitions.sql")
+  (load-sql-file "tables/085_validation_rule_argument_types.sql")
+  (load-sql-file "tables/086_validation_rule_argument_definitions.sql")
   (load-sql-file "constraints/00_85_validation_rule_argument_types_pkey.sql")
   (load-sql-file "constraints/00_86_validation_rule_argument_definitions_pkey.sql")
   (load-sql-file "constraints/86_validation_rule_argument_definitions.sql"))

@@ -8,7 +8,7 @@
 (defn- add-job-tickets-table
   "Adds the job_tickets table to the database."
   []
-  (load-sql-file "tables/82_job_tickets.sql")
+  (load-sql-file "tables/082_job_tickets.sql")
   (load-sql-file "constraints/82_job_tickets.sql"))
 
 (defn convert

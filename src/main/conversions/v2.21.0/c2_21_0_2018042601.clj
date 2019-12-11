@@ -15,14 +15,14 @@
 (defn- create-container-ports-table
   "Adds the container_ports table to the database"
   []
-  (load-sql-file "tables/83_container_ports.sql")
+  (load-sql-file "tables/083_container_ports.sql")
   (load-sql-file "constraints/00_83_container_ports.sql")
   (load-sql-file "constraints/83_container_ports.sql"))
 
 (defn- create-interapps-proxy-settings-table
   "Adds the interactive_apps_proxy_settings table to the database"
   []
-  (load-sql-file "tables/84_interapps_proxy_settings.sql")
+  (load-sql-file "tables/084_interapps_proxy_settings.sql")
   (load-sql-file "constraints/00_84_interapps_proxy_settings_pkey.sql"))
 
 (defn- add-proxy-settings-column
