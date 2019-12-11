@@ -10,7 +10,7 @@
   []
   (println "\t* Adding job status table")
   (load-sql-file "tables/076_job_status_updates.sql")
-  (load-sql-file "constraints/76_job_status_updates.sql"))
+  (load-sql-file "constraints/076_job_status_updates.sql"))
 
 (defn convert
   "Performs the conversion for database version 2.6.0:20160222.01"

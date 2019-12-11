@@ -11,7 +11,7 @@
 
 (defn- add-app-steps-indices
   []
-  (load-sql-file "constraints/07_app_steps.sql"))
+  (load-sql-file "constraints/007_app_steps.sql"))
 
 (defn convert
   []

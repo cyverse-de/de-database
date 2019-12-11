@@ -16,7 +16,7 @@
   (println "\t* adding metadata_attr_enum_values table")
   (load-sql-file "tables/062_metadata_attr_enum_values.sql")
   (println "\t* adding metadata_attr_enum_values table constraints")
-  (load-sql-file "constraints/62_metadata_attr_enum_values.sql"))
+  (load-sql-file "constraints/062_metadata_attr_enum_values.sql"))
 
 (defn convert
   "Performs the conversion for this version of the database"

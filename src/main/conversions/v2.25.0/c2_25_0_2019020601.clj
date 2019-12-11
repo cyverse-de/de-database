@@ -8,8 +8,8 @@
 (defn- add-apps-htcondor-extra-table
   []
   (load-sql-file "tables/088_apps_htcondor_extra.sql")
-  (load-sql-file "constraints/00_88_apps_htcondor_extra.sql")
-  (load-sql-file "constraints/88_apps_htcondor_extra.sql"))
+  (load-sql-file "constraints/000_088_apps_htcondor_extra.sql")
+  (load-sql-file "constraints/088_apps_htcondor_extra.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

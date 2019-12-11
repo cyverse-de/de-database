@@ -10,9 +10,9 @@
   []
   (load-sql-file "tables/085_validation_rule_argument_types.sql")
   (load-sql-file "tables/086_validation_rule_argument_definitions.sql")
-  (load-sql-file "constraints/00_85_validation_rule_argument_types_pkey.sql")
-  (load-sql-file "constraints/00_86_validation_rule_argument_definitions_pkey.sql")
-  (load-sql-file "constraints/86_validation_rule_argument_definitions.sql"))
+  (load-sql-file "constraints/000_085_validation_rule_argument_types_pkey.sql")
+  (load-sql-file "constraints/000_086_validation_rule_argument_definitions_pkey.sql")
+  (load-sql-file "constraints/086_validation_rule_argument_definitions.sql"))
 
 (defn- load-validation-rule-argument-definitions
   "Loads the argument definitions for exisitng validation rules."

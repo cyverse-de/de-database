@@ -10,7 +10,7 @@
   []
   (println "\t* adding docker_registries table...")
   (load-sql-file "tables/077_docker_registries.sql")
-  (load-sql-file "constraints/00_77_docker_registries_pkey.sql"))
+  (load-sql-file "constraints/000_077_docker_registries_pkey.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

@@ -10,7 +10,7 @@
   []
   (println "\t* Adding a column to the tools table")
   (exec-raw "ALTER TABLE ONLY tools ADD COLUMN container_images_id uuid;")
-  (load-sql-file "constraints/03_tools.sql"))
+  (load-sql-file "constraints/003_tools.sql"))
 
 (defn convert
   "Performs the conversion for database version 1.9.9:20150530.02"

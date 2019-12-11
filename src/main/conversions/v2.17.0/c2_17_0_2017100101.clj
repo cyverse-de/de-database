@@ -10,7 +10,7 @@
        "Add zapier webhook type"
        []
        (println "\t* add zapier webhook type...")
-       (load-sql-file "constraints/00_82_webhooks_type_ukey.sql")
+       (load-sql-file "constraints/000_082_webhooks_type_ukey.sql")
        (sql/exec-raw "INSERT INTO webhooks_type (type, template) VALUES('Zapier', '{\"id\": \"{{.ID}}\",\"name\": \"{{.Name}}\",\"text\": \"{{.Msg}}. {{if .Completed}} <{{.Link}}|{{.LinkText}}> {{- end}}\"}')"))
 
 
