@@ -31,4 +31,7 @@
 (defn convert
   []
   (println "Performing the coversion for" version)
-  (load-sql-file "data/020~1_metadata_templates.sql"))
+
+  ;; This file doesn't exist in this repository anymore because the table has been moved to another
+  ;; database. I'm simply commenting out the line for the time being.
+  #_(load-sql-file "data/020~1_metadata_templates.sql"))

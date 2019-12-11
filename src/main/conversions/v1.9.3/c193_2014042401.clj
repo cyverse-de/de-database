@@ -370,7 +370,7 @@
 (defn- re-add-constraints
   []
   (println "\t* re-adding constraints")
-  (load-sql-file "tables/099_constraints.sql"))
+  (load-sql-file "constraints/000_constraints.sql"))
 
 (defn- add-new-views
   []

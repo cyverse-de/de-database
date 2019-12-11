@@ -10,7 +10,7 @@
   []
   (println "\t* adding container_images table")
   (load-sql-file "tables/070_container_images.sql")
-  (load-sql-file "constraints/070_container_images.sql"))
+  (load-sql-file "constraints/000_070_container_images_pkey.sql"))
 
 (defn- add-container-settings-table
   []

@@ -13,7 +13,9 @@
   (exec-sql-statement "ALTER TABLE ONLY metadata_attr_synonyms DROP CONSTRAINT metadata_attr_synonyms_attribute_id_fkey")
   (exec-sql-statement "ALTER TABLE ONLY metadata_attr_synonyms DROP CONSTRAINT metadata_attr_synonyms_synonym_id_fkey")
   (println "\t* re-adding metadata_attr_synonyms table constraints")
-  (load-sql-file "constraints/062_metadata_attr_synonyms.sql"))
+
+  ;; This file no longer exists because the table has been moved to a different database.
+  #_(load-sql-file "constraints/062_metadata_attr_synonyms.sql"))
 
 (defn- add-metadata-template-created-modified-columns
   "CORE-6635: Add created/modified columns to metadata_templates and metadata_attributes tables.
