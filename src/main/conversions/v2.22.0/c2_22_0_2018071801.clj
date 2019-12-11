@@ -17,8 +17,8 @@
 (defn- load-validation-rule-argument-definitions
   "Loads the argument definitions for exisitng validation rules."
   []
-  (load-sql-file "data/85_validation_rule_argument_types.sql")
-  (load-sql-file "data/86_validation_rule_argument_definitions.sql"))
+  (load-sql-file "data/085_validation_rule_argument_types.sql")
+  (load-sql-file "data/086_validation_rule_argument_definitions.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

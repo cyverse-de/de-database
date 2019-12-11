@@ -9,7 +9,7 @@
   (load-sql-file "tables/098_job_limits.sql")
   (load-sql-file "constraints/000_098_job_limits_pkey.sql")
   (load-sql-file "constraints/098_job_limits.sql")
-  (load-sql-file "data/98_job_limits.sql"))
+  (load-sql-file "data/098_job_limits.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

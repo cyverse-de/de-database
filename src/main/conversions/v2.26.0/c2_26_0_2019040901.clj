@@ -10,7 +10,7 @@
   (load-sql-file "tables/094_app_publication_requests.sql")
   (load-sql-file "constraints/000_094_app_publication_requests_pkey.sql")
   (load-sql-file "constraints/094_app_publication_requests.sql")
-  (load-sql-file "data/94_app_publication_request_status_codes.sql"))
+  (load-sql-file "data/094_app_publication_request_status_codes.sql"))
 
 (defn convert
   []

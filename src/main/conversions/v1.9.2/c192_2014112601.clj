@@ -31,4 +31,4 @@
 (defn convert
   []
   (println "Performing the coversion for" version)
-  (load-sql-file "data/20~1_metadata_templates.sql"))
+  (load-sql-file "data/020~1_metadata_templates.sql"))

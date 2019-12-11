@@ -21,8 +21,8 @@
   (load-sql-file "constraints/000_081_webhooks_subscriptions_ukey.sql")
   (load-sql-file "constraints/080_webhooks_subscription.sql")
 
-  (load-sql-file "data/78_webhooks_type.sql")
-  (load-sql-file "data/79_webhooks_topic.sql"))
+  (load-sql-file "data/078_webhooks_type.sql")
+  (load-sql-file "data/079_webhooks_topic.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

@@ -410,7 +410,7 @@
   (println "\t* adding new tool types...")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/data/02_tool_types.sql")
   (println "\t* adding internal apps...")
-  (load-sql-file "data/21_internal_apps.sql"))
+  (load-sql-file "data/021_internal_apps.sql"))
 
 (defn- param-type-subselect
   [param-type]
