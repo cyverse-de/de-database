@@ -32,21 +32,21 @@
 
 (defn- add-quick-launch-favorites
   []
-  (load-sql-file "tables/91_quick_launch_favorites.sql")
-  (load-sql-file "constraints/00_91_quick_launch_favorites_pkey.sql")
-  (load-sql-file "constraints/91_quick_launch_favorites.sql"))
+  (load-sql-file "tables/091_quick_launch_favorites.sql")
+  (load-sql-file "constraints/000_091_quick_launch_favorites_pkey.sql")
+  (load-sql-file "constraints/091_quick_launch_favorites.sql"))
 
 (defn- add-quick-launch-user-defaults
   []
-  (load-sql-file "tables/92_quick_launch_user_defaults.sql")
-  (load-sql-file "constraints/00_92_quick_launch_user_defaults_pkey.sql")
-  (load-sql-file "constraints/92_quick_launch_user_defaults.sql"))
+  (load-sql-file "tables/092_quick_launch_user_defaults.sql")
+  (load-sql-file "constraints/000_092_quick_launch_user_defaults_pkey.sql")
+  (load-sql-file "constraints/092_quick_launch_user_defaults.sql"))
 
 (defn- add-quick-launch-global-defaults
   []
-  (load-sql-file "tables/93_quick_launch_global_defaults.sql")
-  (load-sql-file "constraints/00_93_quick_launch_global_defaults_pkey.sql")
-  (load-sql-file "constraints/93_quick_launch_global_defaults.sql"))
+  (load-sql-file "tables/093_quick_launch_global_defaults.sql")
+  (load-sql-file "constraints/000_093_quick_launch_global_defaults_pkey.sql")
+  (load-sql-file "constraints/093_quick_launch_global_defaults.sql"))
 
 (defn convert
   []

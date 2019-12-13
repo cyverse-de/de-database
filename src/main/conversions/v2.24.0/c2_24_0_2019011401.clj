@@ -7,11 +7,11 @@
 
 (defn- add-sessions-tables
   []
-  (load-sql-file "tables/87_vice_sessions.sql"))
+  (load-sql-file "tables/087_vice_sessions.sql"))
 
 (defn- add-constraints
   []
-  (load-sql-file "constraints/00_87_vice_sessions.sql"))
+  (load-sql-file "constraints/000_087_vice_sessions.sql"))
 
 (defn convert
   []

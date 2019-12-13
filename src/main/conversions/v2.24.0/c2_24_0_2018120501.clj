@@ -7,11 +7,11 @@
 
 (defn- update-vice-analyses-view
   []
-  (load-sql-file "views/08_vice_analyses.sql"))
+  (load-sql-file "views/008_vice_analyses.sql"))
 
 (defn- add-app-steps-indices
   []
-  (load-sql-file "constraints/07_app_steps.sql"))
+  (load-sql-file "constraints/007_app_steps.sql"))
 
 (defn convert
   []

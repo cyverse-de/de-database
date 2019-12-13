@@ -11,7 +11,7 @@
   (println "\t* adding repeat_option_flag column to file_parameters table")
   (exec-sql-statement "ALTER TABLE ONLY file_parameters ADD COLUMN repeat_option_flag boolean DEFAULT true")
   (exec-sql-statement "DROP VIEW IF EXISTS task_param_listing")
-  (load-sql-file "views/07_task_param_listing.sql"))
+  (load-sql-file "views/007_task_param_listing.sql"))
 
 (defn convert
   "Performs the conversion for database version 1.9.5:20150212.01"

@@ -9,8 +9,8 @@
 (defn- add-app-documentation-table
   []
   (println "\t* adding app_documentation table")
-  (load-sql-file "tables/10_app_documentation.sql")
-  (load-sql-file "constraints/10_app_documentation.sql"))
+  (load-sql-file "tables/010_app_documentation.sql")
+  (load-sql-file "constraints/010_app_documentation.sql"))
 
 (defn convert
   "Performs the conversion for database version 1.9.5:20150202.01"

@@ -9,8 +9,8 @@
 (defn- add-app-hierarchy-version-table
   []
   (println "\t* Adding app_hierarchy_version table...")
-  (load-sql-file "tables/34_app_hierarchy_version.sql")
-  (load-sql-file "constraints/34_app_hierarchy_version.sql"))
+  (load-sql-file "tables/034_app_hierarchy_version.sql")
+  (load-sql-file "constraints/034_app_hierarchy_version.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

@@ -235,7 +235,7 @@
   (println "\t* updating the property_group table to parameter_groups")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/tables/25_parameter_groups.sql")
   (println "\t* adding the parameter_values table")
-  (load-sql-file "tables/25_parameter_values.sql")
+  (load-sql-file "tables/025_parameter_values.sql")
   (println "\t* updating the property_type table to parameter_types")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/tables/27_parameter_types.sql")
   (println "\t* updating the users table")
@@ -370,38 +370,38 @@
 (defn- re-add-constraints
   []
   (println "\t* re-adding constraints")
-  (load-sql-file "tables/99_constraints.sql"))
+  (load-sql-file "constraints/000_constraints.sql"))
 
 (defn- add-new-views
   []
   (println "\t* adding app_category_listing view...")
-  (load-sql-file "views/01_app_category_listing.sql")
+  (load-sql-file "views/001_app_category_listing.sql")
   (println "\t* adding app_job_types view...")
-  (load-sql-file "views/02_app_job_types.sql")
+  (load-sql-file "views/002_app_job_types.sql")
   (println "\t* adding app_listing view...")
-  (load-sql-file "views/03_app_listing.sql")
+  (load-sql-file "views/003_app_listing.sql")
   (println "\t* adding tool_listing view...")
-  (load-sql-file "views/04_tool_listing.sql")
+  (load-sql-file "views/004_tool_listing.sql")
   (println "\t* adding rating_listing view...")
-  (load-sql-file "views/05_rating_listing.sql")
+  (load-sql-file "views/005_rating_listing.sql")
   (println "\t* adding job_listing view...")
-  (load-sql-file "views/06_job_listing.sql")
+  (load-sql-file "views/006_job_listing.sql")
   (println "\t* adding task_param_listing view...")
-  (load-sql-file "views/07_task_param_listing.sql"))
+  (load-sql-file "views/007_task_param_listing.sql"))
 
 (defn- reload-functions
   []
   (println "\t* adding app_category_hierarchy_ids function...")
   (exec-raw "DROP FUNCTION IF EXISTS app_group_hierarchy_ids(bigint)")
-  (load-sql-file "functions/01_app_category_hierarchy_ids.sql")
+  (load-sql-file "functions/001_app_category_hierarchy_ids.sql")
   (println "\t* reloading app_count function...")
   (exec-raw "DROP FUNCTION IF EXISTS app_count(bigint)")
   (exec-raw "DROP FUNCTION IF EXISTS app_count(bigint, boolean)")
-  (load-sql-file "functions/02_app_count.sql")
+  (load-sql-file "functions/002_app_count.sql")
   (println "\t* adding app_category_hierarchy function...")
   (exec-raw "DROP FUNCTION IF EXISTS analysis_group_hierarchy(bigint)")
   (exec-raw "DROP FUNCTION IF EXISTS analysis_group_hierarchy(bigint, boolean)")
-  (load-sql-file "functions/03_app_category_hierarchy.sql"))
+  (load-sql-file "functions/003_app_category_hierarchy.sql"))
 
 (defn- add-new-data
   []
@@ -410,7 +410,7 @@
   (println "\t* adding new tool types...")
   (load-sql-file "conversions/v1.9.3/c193_2014042401/data/02_tool_types.sql")
   (println "\t* adding internal apps...")
-  (load-sql-file "data/21_internal_apps.sql"))
+  (load-sql-file "data/021_internal_apps.sql"))
 
 (defn- param-type-subselect
   [param-type]

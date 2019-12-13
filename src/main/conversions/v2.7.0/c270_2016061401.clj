@@ -9,7 +9,7 @@
 (defn- load-python-app
   []
   (println "\t* Adding Python 2.7 tool and app to the database")
-  (load-sql-file "data/22_python_app.sql"))
+  (load-sql-file "data/022_python_app.sql"))
 
 (defn convert
   "Performs the conversion for this database version"

@@ -6,7 +6,7 @@
   "2.22.0:20180724.01")
 
 (defn- add-notification-types-enum []
-  (load-sql-file "types/01_notification_types.sql"))
+  (load-sql-file "types/001_notification_types.sql"))
 
 (defn- add-notification-type-column []
   (exec-sql-statement "ALTER TABLE ONLY tool_types ADD COLUMN notification_type notification_types")

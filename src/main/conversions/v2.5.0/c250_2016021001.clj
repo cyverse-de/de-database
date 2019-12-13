@@ -10,7 +10,7 @@
   "Adds uniqueness constraints to the name and path columns of the genome_reference table."
   []
   (println "\t* Adding uniqueness constraints to the genome_reference table")
-  (load-sql-file "constraints/46_genome_ref.sql"))
+  (load-sql-file "constraints/046_genome_ref.sql"))
 
 (defn convert
   "Performs the conversion for this database version"
