@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS notif_statuses (
 	hour_warning_sent BOOL NOT NULL DEFAULT false,
 	day_warning_sent BOOL NOT NULL DEFAULT false,
 	kill_warning_sent BOOL NOT NULL DEFAULT false,
-    hour_warning_failure_count INT NOT NULL DEFAULT 0,
-    day_warning_failure_count INT NOT NULL DEFAULT 0,
-    kill_warning_failure_count INT NOT NULL DEFAULT 0
+	hour_warning_failure_count INT NOT NULL DEFAULT 0,
+	day_warning_failure_count INT NOT NULL DEFAULT 0,
+	kill_warning_failure_count INT NOT NULL DEFAULT 0
 );
