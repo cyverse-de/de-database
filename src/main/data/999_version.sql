@@ -118,3 +118,4 @@ INSERT INTO version (version) VALUES ('2.30.0:20191118.01');
 INSERT INTO version (version) VALUES ('2.30.0:20191121.01');
 INSERT INTO version (version) VALUES ('2.31.0:20191212.01');
 INSERT INTO version (version) VALUES ('2.32.0:20200319.01');
+INSERT INTO version (version) VALUES ('2.32.0:20200402.01');
