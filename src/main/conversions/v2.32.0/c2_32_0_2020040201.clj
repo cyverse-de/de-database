@@ -5,7 +5,7 @@
   "The destination database version"
   "2.32.0:20200402.01")
 
-(def- add-notif-statuses-table
+(defn- add-notif-statuses-table
   "Adds the notif_statuses table."
   []
   (load-sql-file "tables/103_notif_statuses.sql")
