@@ -6,6 +6,7 @@ SET search_path = public, pg_catalog;
 CREATE TABLE async_task_status (
 	async_task_id uuid NOT NULL,
 	status text NOT NULL,
+	detail text,
 	created_date timestamp NOT NULL
 );
 
