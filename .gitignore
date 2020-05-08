@@ -2,8 +2,7 @@
 *~
 \#*
 
-# Ignore generated files.
-notification-db.tar.gz
-
-# Ignore eclipse project crap
+# Ignore ecitors and IDE configuration files.
 .project
+.idea
+.vscode

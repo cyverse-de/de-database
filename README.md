@@ -1,13 +1,13 @@
 # Database Schema for Discovery Environment Notifications
 
-The schema definitions for the relational database used by the Discovery
-Environment to store notifications and related information.
+This repository contains the database migration files for the relational database used to by the CyVerse Discovery
+Environment to store notifications and other related information. This repository uses [golang-migrate/migrate][1] to
+perform migrations. This project allows us to write our migrations as simple SQL files. It also allows us to migrate in
+both directions, so that we can revert to a previous version of a database if necessary.
 
-## Layout of Schema Source Directory
+# Migration Files
 
-The relational database schema is defined in `*.sql` files under folders in the [src/main](src/main) directory.
+The migration files will be stored in the `/migrations` subdirectory and will follow the naming convention,
+`{version}_{description}.sql` See the [documentation for golang-migrate/migrate][1] for more information.
 
-See the [de-db documentation](https://github.com/cyverse-de/de-db) for a description of this directory layout.
-Except this repository does not contain as many conversions as
-[the de-db conversions directory](https://github.com/cyverse-de/de-db/blob/master/src/main/conversions),
-so this repo's [conversions](src/main/conversions) only contains files and no subdirectories.
+[1]: https://github.com/golang-migrate/migrate
