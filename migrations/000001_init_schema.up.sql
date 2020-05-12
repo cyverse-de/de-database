@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS notifications (
     PRIMARY KEY (id)
 );
 
-CREATE INDEX notifications_notification_type_id_index
+CREATE INDEX IF NOT EXISTS notifications_notification_type_id_index
 ON notifications (notification_type_id);
 
-CREATE INDEX notifications_user_id_index
+CREATE INDEX IF NOT EXISTS notifications_user_id_index
 ON notifications (user_id);
 
-CREATE INDEX notifications_time_created_index
+CREATE INDEX IF NOT EXISTS notifications_time_created_index
 ON notifications (time_created);
