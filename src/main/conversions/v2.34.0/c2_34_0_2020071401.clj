@@ -1,4 +1,4 @@
-(ns facepalm.c2-33-0-2020071401
+(ns facepalm.c2-34-0-2020071401
   (:use [kameleon.sql-reader :only [exec-sql-statement]]))
 
 (def ^:private version
