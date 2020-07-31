@@ -26,7 +26,8 @@ CREATE OR REPLACE VIEW job_listings AS
                WHERE child.parent_id = j.id
            ) AS is_batch,
            t.system_id,
-           j.planned_end_date
+           j.planned_end_date,
+           j.user_id
     FROM jobs j
     JOIN users u ON j.user_id = u.id
     JOIN job_types t ON j.job_type_id = t.id;
