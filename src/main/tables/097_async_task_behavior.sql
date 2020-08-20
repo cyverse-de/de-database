@@ -8,3 +8,8 @@ CREATE TABLE async_task_behavior (
 	behavior_type text NOT NULL,
 	data json
 );
+
+--
+-- Index to speed up listings by behavior type
+--
+CREATE INDEX async_task_behavior_behavior_type_index ON async_task_behavior(behavior_type);
