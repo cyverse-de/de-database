@@ -5,10 +5,6 @@
   "The destination database version"
   "2.35.0:20201106.01")
 
-(defn- add-function
-  []
-  (load-sql-file "functions/006_last_modified.sql"))
-
 (defn- add-instant-launch-tables
   []
   (load-sql-file "tables/106_instant_launches.sql")
@@ -28,6 +24,5 @@
   "Performs the conversion for this database version"
   []
   (println "Performing the conversion for" version)
-  (add-function)
   (add-instant-launch-tables)
   (add-instant-launch-constraints))

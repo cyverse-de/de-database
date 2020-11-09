@@ -9,13 +9,5 @@ CREATE TABLE IF NOT EXISTS default_instant_launches (
 
     added_by UUID NOT NULL,
 
-    added_on TIMESTAMP NOT NULL DEFAULT now(),
-
-    last_modified TIMESTAMPTZ NOT NULL DEFAULT now()
+    added_on TIMESTAMP NOT NULL DEFAULT now()
 );
-
-DROP TRIGGER IF EXISTS dil_last_mod_trigger
-    ON default_instant_launches;
-CREATE TRIGGER dil_last_mod_trigger
-    BEFORE UPDATE ON default_instant_launches
-    FOR EACH ROW EXECUTE FUNCTION trigger_last_modified();
