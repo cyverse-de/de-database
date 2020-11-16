@@ -7,4 +7,4 @@ ALTER TABLE default_instant_launches
 
 ALTER TABLE default_instant_launches
     ADD CONSTRAINT default_instant_launches_id_version_unique
-    UNIQUE (id, version);
+    UNIQUE (version);
