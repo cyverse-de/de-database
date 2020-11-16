@@ -6,5 +6,5 @@ ALTER TABLE default_instant_launches
     REFERENCES users(id);
 
 ALTER TABLE default_instant_launches
-    ADD CONSTRAINT default_instant_launches_id_version_unique
+    ADD CONSTRAINT default_instant_launches_version_unique
     UNIQUE (version);

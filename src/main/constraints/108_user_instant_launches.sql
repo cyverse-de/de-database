@@ -9,3 +9,7 @@ ALTER TABLE user_instant_launches
     ADD CONSTRAINT user_instant_launches_added_by_fkey
     FOREIGN KEY (added_by)
     REFERENCES users(id);
+
+ALTER TABLE user_instant_launches
+    ADD CONSTRAINT user_instant_launches_version_unique
+    UNIQUE (version);
