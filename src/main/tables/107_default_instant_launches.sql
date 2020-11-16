@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS default_instant_launches (
     --         ],
     --     },
 
-    --     "<info_type_uuid>" : {
+    --     "<info_type_name>" : {
     --         "kind" : "info-type",
     --         "default" : "<instant_launch_uuid>",
     --         "compatible" : [
