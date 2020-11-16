@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS user_instant_launches (
     --         ],
     --     },
 
-    --     "<info_type_uuid>" : {
+    --     "<info_type_name>" : {
     --         "kind" : "info-type",
     --         "default" : "<instant_launch_uuid>",
     --         "compatible" : [

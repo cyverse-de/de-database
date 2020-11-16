@@ -11,5 +11,5 @@ ALTER TABLE user_instant_launches
     REFERENCES users(id);
 
 ALTER TABLE user_instant_launches
-    ADD CONSTRAINT user_instant_launches_version_unique
-    UNIQUE (version);
+    ADD CONSTRAINT user_instant_launches_user_id_version_unique
+    UNIQUE (user_id, version);
