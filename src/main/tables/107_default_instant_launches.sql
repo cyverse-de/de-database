@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS default_instant_launches (
     -- without modifying the primary key. Most apps will only use the
     -- latest version of the defaults. This could also be useful for
     -- updating the database without disturbing the services.
-    version SERIAL NOT NULL,
+    version SERIAL,
 
     -- Here's an example of how the instant_launches field
     -- is supposed to map info types and glob patterns to 
