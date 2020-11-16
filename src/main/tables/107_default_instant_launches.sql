@@ -3,12 +3,10 @@ SET search_path = public, pg_catalog;
 CREATE TABLE IF NOT EXISTS default_instant_launches (
     id UUID UNIQUE NOT NULL DEFAULT uuid_generate_v1(),
 
-    -- This provides us with a linear history of what the default
-    -- instant launches have been set to and who set them. This can
-    -- also allow us to reorder the history (hopefully never needed)
-    -- without modifying the primary key. Most apps will only use the
-    -- latest version of the defaults. This could also be useful for
-    -- updating the database without disturbing the services.
+    -- Indicates the format version of the instant launch
+    -- JSON. Should help us put together conversions between
+    -- format versions without breaking currently running
+    -- services.
     version SERIAL,
 
     -- Here's an example of how the instant_launches field
