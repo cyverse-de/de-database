@@ -1,0 +1,12 @@
+SET search_path = public, pg_catalog;
+
+--
+-- A record of each login.
+--
+CREATE TABLE logins (
+    user_id uuid NOT NULL,
+    ip_address varchar(15),
+    user_agent text,
+    login_time timestamp NOT NULL DEFAULT now(),
+    logout_time timestamp
+);
