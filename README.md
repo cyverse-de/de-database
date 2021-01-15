@@ -10,7 +10,7 @@ Before migrations can be run, the following need to be met:
 
 - The database must exist.
 - The account being used to access must be the owner of the database and relevant schemas.
-- The `uuid-ossp` extension must already be installed.
+- The `uuid-ossp` extension must already be installed in the database by a superuser.
 
 ## Database URLs
 
