@@ -1,0 +1,11 @@
+# Ignore Emacs backup files.
+*~
+\#*
+
+# Ignore vim swapfiles
+*.swp
+
+# Ignore ecitors and IDE configuration files.
+.project
+.idea
+.vscode
