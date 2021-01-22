@@ -8,3 +8,5 @@ DROP TABLE IF EXISTS jobs;
 DROP TABLE IF EXISTS job_types;
 DROP TABLE IF EXISTS apps;
 DROP TABLE IF EXISTS integration_data;
+
+DROP TYPE IF EXISTS notification_types;
