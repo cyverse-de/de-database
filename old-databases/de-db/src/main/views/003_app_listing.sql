@@ -41,7 +41,8 @@ CREATE OR REPLACE VIEW app_listing AS
                 ELSE MAX(tt.name)
            END AS overall_job_type,
            integration.user_id AS integrator_id,
-           u.username AS integrator_username
+           u.username AS integrator_username,
+           array_agg(tt.name) as job_types
     FROM apps
          LEFT JOIN integration_data integration ON apps.integration_data_id = integration.id
          LEFT JOIN users u ON integration.user_id = u.id
