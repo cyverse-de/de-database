@@ -338,7 +338,7 @@ CREATE INDEX IF NOT EXISTS tool_request_statuses_tool_request_id_index
     ON tool_request_statuses(tool_request_id);
 
 -- tool_type_parameter_type
-CREATE TABLE tool_type_parameter_type (
+CREATE TABLE IF NOT EXISTS tool_type_parameter_type (
    tool_type_id uuid NOT NULL,
    parameter_type_id uuid NOT NULL
 );

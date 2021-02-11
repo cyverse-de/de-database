@@ -70,5 +70,5 @@ ALTER TABLE request_updates
 --
 -- Index on request ID and timestamp.
 --
-CREATE INDEX request_updates_request_id_created_date_index
+CREATE INDEX IF NOT EXISTS request_updates_request_id_created_date_index
     ON request_updates(request_id, created_date);

@@ -3,7 +3,7 @@ SET search_path = public, pg_catalog;
 -- quick launches
 
 -- submissions
-CREATE TABLE submissions (
+CREATE TABLE IF NOT EXISTS submissions (
   -- Primary Key
   id uuid NOT NULL,
   submission json NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE submissions (
 );
 
 -- quick_launches
-CREATE TABLE quick_launches (
+CREATE TABLE IF NOT EXISTS quick_launches (
   -- Primary key
   id uuid NOT NULL,
 
@@ -53,7 +53,7 @@ ALTER TABLE ONLY quick_launches
     REFERENCES apps(id);
 
 -- quick_launch_favorites
-CREATE TABLE quick_launch_favorites (
+CREATE TABLE IF NOT EXISTS quick_launch_favorites (
   -- Primary key
   id uuid NOT NULL,
 
@@ -78,7 +78,7 @@ ALTER TABLE ONLY quick_launch_favorites
     REFERENCES users(id);
 
 -- quick_launch_user_defaults
-CREATE TABLE quick_launch_user_defaults (
+CREATE TABLE IF NOT EXISTS quick_launch_user_defaults (
   -- Primary key
   id uuid NOT NULL,
 
@@ -114,7 +114,7 @@ ALTER TABLE ONLY quick_launch_user_defaults
     REFERENCES quick_launches(id);
 
 -- quick_launch_global_defaults
-CREATE TABLE quick_launch_global_defaults (
+CREATE TABLE IF NOT EXISTS quick_launch_global_defaults (
   -- Primary key
   id uuid NOT NULL,
 

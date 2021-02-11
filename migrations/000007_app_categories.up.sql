@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 -- workspace
-CREATE TABLE workspace (
+CREATE TABLE IF NOT EXISTS workspace (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
     root_category_id uuid,
     is_public boolean DEFAULT false,
@@ -20,7 +20,7 @@ ALTER TABLE ONLY workspace
     REFERENCES users(id) ON DELETE CASCADE;
 
 -- app_categories
-CREATE TABLE app_categories (
+CREATE TABLE IF NOT EXISTS app_categories (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
     name character varying(255),
     description text,
@@ -34,7 +34,7 @@ ALTER TABLE ONLY app_categories
     REFERENCES workspace(id) ON DELETE CASCADE;
 
 -- app_category_group
-CREATE TABLE app_category_group (
+CREATE TABLE IF NOT EXISTS app_category_group (
     parent_category_id uuid NOT NULL,
     child_category_id uuid NOT NULL,
     child_index integer NOT NULL,
@@ -52,7 +52,7 @@ ALTER TABLE ONLY app_category_group
     REFERENCES app_categories(id) ON DELETE CASCADE;
 
 -- app_category_app
-CREATE TABLE app_category_app (
+CREATE TABLE IF NOT EXISTS app_category_app (
     app_category_id uuid NOT NULL,
     app_id uuid NOT NULL,
     PRIMARY KEY (app_category_id, app_id)
@@ -69,7 +69,7 @@ ALTER TABLE ONLY app_category_app
     REFERENCES apps(id) ON DELETE CASCADE;
 
 -- suggested_groups
-CREATE TABLE suggested_groups (
+CREATE TABLE IF NOT EXISTS suggested_groups (
     app_id uuid NOT NULL,
     app_category_id uuid NOT NULL,
     PRIMARY KEY (app_id, app_category_id)

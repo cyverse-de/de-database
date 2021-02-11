@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 -- job_steps
-CREATE TABLE job_steps (
+CREATE TABLE IF NOT EXISTS job_steps (
     job_id uuid NOT NULL,
     step_number integer NOT NULL,
     external_id character varying(64),
@@ -24,7 +24,7 @@ ALTER TABLE ONLY job_steps
     REFERENCES job_types(id);
 
 -- job_tickets
-CREATE TABLE job_tickets(
+CREATE TABLE IF NOT EXISTS job_tickets(
    job_id uuid NOT NULL,
    ticket varchar(100) NOT NULL,
    irods_path text NOT NULL,
@@ -45,7 +45,7 @@ CREATE INDEX IF NOT EXISTS job_tickets_job_id_index
     ON job_tickets (job_id);
 
 -- job_status_updates
-CREATE TABLE job_status_updates (
+CREATE TABLE IF NOT EXISTS job_status_updates (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
 
     -- corresponds to the external_id field in the job_steps table
@@ -94,18 +94,18 @@ CREATE TABLE job_status_updates (
 ---
 --- Create some indices on the columns often referenced by queries in job-status-to-apps-adapter
 ---
-CREATE INDEX job_status_updates_propagated
+CREATE INDEX IF NOT EXISTS job_status_updates_propagated
 ON job_status_updates (propagated, propagation_attempts);
 
-CREATE INDEX job_status_updates_external_id
+CREATE INDEX IF NOT EXISTS job_status_updates_external_id
 ON job_status_updates (external_id);
 
-CREATE INDEX job_status_updates_unpropagated_with_external_id
+CREATE INDEX IF NOT EXISTS job_status_updates_unpropagated_with_external_id
 ON job_status_updates (propagated, propagation_attempts, external_id)
 WHERE propagated = false;
 
 -- job_limits
-CREATE TABLE job_limits (
+CREATE TABLE IF NOT EXISTS job_limits (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
     launcher text default NULL,
     concurrent_jobs int NOT NULL,

@@ -1,7 +1,7 @@
 SET search_path = public, pg_catalog;
 
 -- genome_reference
-CREATE TABLE genome_reference (
+CREATE TABLE IF NOT EXISTS genome_reference (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
     name varchar(512) NOT NULL,
     path varchar(1024) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS notif_statuses (
 --
 -- Contains details about docker registries & authentication information
 --
-CREATE TABLE docker_registries (
+CREATE TABLE IF NOT EXISTS docker_registries (
   name text NOT NULL, -- PRIMARY KEY; name of the registry; for image names with a slash or several in them, this is everything up to the last slash. For images without a slash, the registry "" is assumed (though this should need no authentication information)
   username text NOT NULL, -- username to use with this registry
   password text NOT NULL, -- password to use with this registry
@@ -59,7 +59,7 @@ CREATE TABLE docker_registries (
 --
 -- Taken from https://github.com/voxpelli/node-connect-pg-simple/blob/HEAD/table.sql
 --
-CREATE TABLE "session" (
+CREATE TABLE IF NOT EXISTS "session" (
   "sid" varchar NOT NULL COLLATE "default",
 	"sess" json NOT NULL,
 	"expire" timestamp(6) NOT NULL
