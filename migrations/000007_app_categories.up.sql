@@ -10,11 +10,6 @@ CREATE TABLE IF NOT EXISTS workspace (
 );
 
 ALTER TABLE ONLY workspace
-    ADD CONSTRAINT workspace_root_category_id_fkey
-    FOREIGN KEY (root_category_id)
-    REFERENCES app_categories(id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY workspace
     ADD CONSTRAINT workspace_users_fk
     FOREIGN KEY (user_id)
     REFERENCES users(id) ON DELETE CASCADE;
@@ -27,6 +22,12 @@ CREATE TABLE IF NOT EXISTS app_categories (
     workspace_id uuid NOT NULL,
     PRIMARY KEY (id)
 );
+
+-- circular dependency
+ALTER TABLE ONLY workspace
+    ADD CONSTRAINT workspace_root_category_id_fkey
+    FOREIGN KEY (root_category_id)
+    REFERENCES app_categories(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY app_categories
     ADD CONSTRAINT app_categories_workspace_id_fk
