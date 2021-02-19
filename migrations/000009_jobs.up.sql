@@ -23,6 +23,9 @@ ALTER TABLE ONLY job_steps
     FOREIGN KEY (job_type_id)
     REFERENCES job_types(id);
 
+CREATE INDEX IF NOT EXISTS job_steps_external_id_index
+    ON job_steps (external_id);
+
 -- job_tickets
 CREATE TABLE IF NOT EXISTS job_tickets(
    job_id uuid NOT NULL,
