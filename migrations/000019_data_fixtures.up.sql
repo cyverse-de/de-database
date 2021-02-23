@@ -28,7 +28,9 @@ INSERT INTO data_formats (id, name, label, display_order) VALUES
     ('6F7EEEC5-CEE5-4562-8515-2795C2399328', 'VCF-3.3', 'Variant call format (VCF)', '999'),
     ('70E56C3C-50EB-41A7-A98C-165A9CD55EE7', 'VCF-4.0', 'Variant call format (VCF)', '999'),
     ('FA730BA6-F6FA-479E-ABF4-E56F4D37D4E7', 'WIG-0', 'UCSC Wiggle', '999'),
-    ('E806880B-383D-4AD6-A4AB-8CDD88810A33', 'Unspecified', 'Unspecified Data Format', '1');
+    ('E806880B-383D-4AD6-A4AB-8CDD88810A33', 'Unspecified', 'Unspecified Data Format', '1')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, label=EXCLUDED.label, display_order=EXCLUDED.display_order;
 
 
 -- info_type
@@ -173,7 +175,9 @@ INSERT INTO value_type (id, name, description)
 INSERT INTO rule_subtype (id, name, description) VALUES
     ('B85DE8E1-7DDD-4F65-AD94-E896B74DC133', 'Integer', 'A whole number'),
     ('CE7C5AD2-5FCA-4611-843F-791EEE1F6E87', 'Double', 'A real number'),
-    ('6BF5E9DB-86CB-4E6A-A579-0F3819E4FD68', 'String', 'Arbitrary text');
+    ('6BF5E9DB-86CB-4E6A-A579-0F3819E4FD68', 'String', 'Arbitrary text')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description;
 
 -- rule_type
 
@@ -579,7 +583,9 @@ INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
 
 -- users
 
-INSERT INTO users (id, username) VALUES ('00000000-0000-0000-0000-000000000000', '<public>');
+INSERT INTO users (id, username) VALUES ('00000000-0000-0000-0000-000000000000', '<public>')
+    ON CONFLICT (id) DO UPDATE
+        SET username=EXCLUDED.username;
 
 -- workspace
 
@@ -587,6 +593,8 @@ INSERT INTO workspace (id, is_public, user_id)
        SELECT '00000000-0000-0000-0000-000000000000', TRUE, u.id
        FROM users u
        WHERE u.username = '<public>';
+    ON CONFLICT (id) DO UPDATE
+        SET is_public=EXCLUDED.is_public, user_id=EXCLUDED.user_id;
 
 -- app_categories
 
@@ -594,7 +602,9 @@ INSERT INTO app_categories (id, name, description, workspace_id) VALUES
     ('12c7a585-ec23-3352-e313-02e323112a7c',
      'Public Apps', '', '00000000-0000-0000-0000-000000000000'),
     ('5401bd146c144470aedd57b47ea1b979',
-     'Beta', '', '00000000-0000-0000-0000-000000000000');
+     'Beta', '', '00000000-0000-0000-0000-000000000000')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, workspace_id=EXCLUDED.workspace_id;
 
 INSERT INTO app_category_group (parent_category_id, child_category_id, child_index)
        SELECT parent.id, child.id, 0 AS child_index
@@ -726,7 +736,9 @@ INSERT INTO genome_reference (id, name, path, created_by, last_modified_by) VALU
  '00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000'),
     ('7e5eff7b-35fa-4635-806c-06ef5ef50db4', 'Oryza glaberrima (Ensembl 14)',
  '/data2/collections/genomeservices/0.2.1/Oryza_glaberrima.AGI1.1/de_support/',
- '00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+ '00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, path=EXCLUDED.path, created_by=EXCLUDED.created_by, last_modified_by=EXCLUDED.last_modified_by;
 
 -- Populates the data_source table.
 
@@ -736,7 +748,9 @@ INSERT INTO data_source (id, name, label, description, display_order) VALUES
     ('1EEECF26-367A-4038-8D19-93EA80741DF2', 'stdout', 'Standard Output',
      'Redirected standard output from a job.', 2),
     ('BC4CF23F-18B9-4466-AF54-9D40F0E2F6B5', 'stderr', 'Standard Error Output',
-     'Redirected error output from a job.', 3);
+     'Redirected error output from a job.', 3)
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, label=EXCLUDED.label, description=EXCLUDED.description, display_order=EXCLUDED.display_order;
 
 -- Populates the tool_types table.
 
@@ -806,7 +820,9 @@ INSERT INTO tool_request_status_codes ( id, name, description, email_template ) 
     ( '461F24EE-5521-461A-8C20-C400D912FB2D',
       'Failed',
       'The tool could not be installed.',
-      'tool_request_failed' );
+      'tool_request_failed' )
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, email_template=EXCLUDED.email_template;
 
 -- Populates the tool_architectures table.
 
@@ -814,7 +830,9 @@ INSERT INTO tool_architectures ( id, name, description ) VALUES
     ( 'A8220BBA-63FE-4139-B6C3-5E22B43E8413', '32-bit Generic', '32-bit executables on an unspecified architecture.' ),
     ( 'EF254514-6D9F-4869-8FB8-A719262EFCA3', '64-bit Generic', '64-bit executables on an unspecified architecture.' ),
     ( '44DF2E72-36C0-4753-99F7-10AF851BAE8F', 'Others', 'Another specific architecture.' ),
-    ( '6AF24F59-5DE7-4E43-A000-B8059DC80B0A', 'Don''t know', 'Used in cases where the user doesn''t know the architecture.' );
+    ( '6AF24F59-5DE7-4E43-A000-B8059DC80B0A', 'Don''t know', 'Used in cases where the user doesn''t know the architecture.' )
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description;
 
 -- Populates the job_types table.
 
@@ -822,15 +840,19 @@ INSERT INTO job_types(id, name, system_id) VALUES
     ( 'AD069D9F-E38F-418C-84F6-21F620CADE77', 'DE', 'de' ),
     ( '61433582-A271-4154-B3C5-F4C1D91DB2A4', 'Agave', 'agave' ),
     ( 'EAD7467A-67C1-4087-90E1-F29EBF2EA084', 'Interactive', 'interactive'),
-    ( '769AB85C-539C-4F08-A9E7-A565BCE9B009', 'OSG', 'osg');
+    ( '769AB85C-539C-4F08-A9E7-A565BCE9B009', 'OSG', 'osg')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, system_id=EXCLUDED.system_id;
 
 --
 -- The integration data information to be used for internal apps, and
 -- the integration data information to be used for default DE apps.
 --
-INSERT INTO integration_data (integrator_name, integrator_email) VALUES
-    ('Internal DE Tools', 'support@iplantcollaborative.org'),
-    ('Default DE Tools', 'support@iplantcollaborative.org');
+INSERT INTO integration_data (id, integrator_name, integrator_email) VALUES
+    ('11aa036c-854b-11e4-b945-6fcf37fdc1b6', 'Internal DE Tools', 'support@iplantcollaborative.org'),
+    ('16f23c00-3ac6-11e5-a192-c336c89e8b6a', 'Default DE Tools', 'support@iplantcollaborative.org')
+    ON CONFLICT (id) DO UPDATE
+        SET integrator_name=EXCLUDED.integrator_name, integrator_email=EXCLUDED.integrator_email;
 
 --
 -- The internal tool for the Go tool used for URL imports.
@@ -1240,37 +1262,43 @@ INSERT INTO app_steps (step, id, app_id, task_id) VALUES
 
 -- webhooks_type
 
-INSERT INTO webhooks_type (type, template) VALUES
-    ('Slack','
+INSERT INTO webhooks_type (id, type, template) VALUES
+    ('f4dbf5f4-c3f6-11e7-a333-008cfa5ae621', 'Slack','
 {
 	"text": "{{.Msg}}. {{if .Completed}} <{{.Link}}|{{.LinkText}}> {{- end}}"
 }
 '),
-    ('Zapier', '
+    ('c9cd5218-d9e0-11e7-ac79-008cfa5ae621', 'Zapier', '
 {
   "id": "{{.ID}}",
   "name": "{{.Name}}",
   "text": "{{.Msg}}. {{if .Completed}} <{{.Link}}|{{.LinkText}}> {{- end}}"
 }
 '),
-    ('Custom','');
+    ('32aaf1c4-91db-11e9-857c-008cfa5ae621', 'Custom','')
+    ON CONFLICT (id) DO UPDATE
+        SET type=EXCLUDED.type, template=EXCLUDED.template;
 
 -- webhooks_topic
 
-INSERT INTO webhooks_topic(topic) VALUES
-    ('data'),
-    ('apps'),
-    ('analysis'),
-    ('permanent_id_request'),
-    ('team'),
-    ('tool_request');
+INSERT INTO webhooks_topic (id, topic) VALUES
+    ('f4dcbf16-c3f6-11e7-a333-008cfa5ae621', 'data'),
+    ('f4dced88-c3f6-11e7-a333-008cfa5ae621', 'apps'),
+    ('f4dd14f2-c3f6-11e7-a333-008cfa5ae621', 'analysis'),
+    ('f4dd39fa-c3f6-11e7-a333-008cfa5ae621', 'permanent_id_request'),
+    ('f4dd6164-c3f6-11e7-a333-008cfa5ae621', 'team'),
+    ('f4dd834c-c3f6-11e7-a333-008cfa5ae621', 'tool_request')
+    ON CONFLICT (id) DO UPDATE
+        SET topic=EXCLUDED.topic;
 
 -- validation_rule_argument_types
 
 INSERT INTO validation_rule_argument_types (id, name) VALUES
     ('485d6288-9bf8-4f62-89da-eca90b0ca68b', 'String'),
     ('aabf8059-ae4f-454e-a791-434580530530', 'Integer'),
-    ('9049a4cd-3385-4a3d-8db2-a49ce69b091d', 'Double');
+    ('9049a4cd-3385-4a3d-8db2-a49ce69b091d', 'Double')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name;
 
 -- validation_rule_argument_definitions
 
@@ -1302,7 +1330,9 @@ VALUES
     ('d36c49c9-4a10-41b2-a796-7453fd26cfb4', '4b4ee99b-2cf2-4ff8-8474-73fc6a1effa7', 0, 'Regex',
      'The regular expression.', '485d6288-9bf8-4f62-89da-eca90b0ca68b'),
     ('7ce39813-e26a-479d-832c-755a024e41fa', '2D531048-A876-4B5D-8D21-54074910C721', 0, 'MaxLength',
-     'The maximum length of the field.', 'aabf8059-ae4f-454e-a791-434580530530');
+     'The maximum length of the field.', 'aabf8059-ae4f-454e-a791-434580530530')
+    ON CONFLICT (id) DO UPDATE
+        SET rule_type_id=EXCLUDED.rule_type_id, argument_index=EXCLUDED.argument_index, name=EXCLUDED.name, description=EXCLUDED.description, argument_type_id=EXCLUDED.argument_type_id;
 
 -- Populates the app_publication_request_status_codes table.
 
@@ -1314,12 +1344,16 @@ INSERT INTO app_publication_request_status_codes ( id, name, description, email_
     ( '046C9445-9070-4CCD-A2E9-66EE23124CE8',
       'Completion',
       'The app has been made available for public use.',
-      'app_publication_completion' );
+      'app_publication_completion' )
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, email_template=EXCLUDED.email_template;
 
 -- Populates the job_limits table.
 
 INSERT INTO job_limits (id, launcher, concurrent_jobs) VALUES
-    ('72DFEF9A-F6B1-482E-B2A0-16194247BE31', NULL, 8);
+    ('72DFEF9A-F6B1-482E-B2A0-16194247BE31', NULL, 8)
+    ON CONFLICT (id) DO UPDATE
+        SET launcher=EXCLUDED.launcher, concurrent_jobs=EXCLUDED.concurrent_jobs;
 
 -- Populates the request_status_codes table
 
@@ -1327,4 +1361,6 @@ INSERT INTO request_status_codes (id, name, display_name, email_template) VALUES
     ('dc983a80-5cd6-4c56-a9a6-7fbe8787fdd0', 'submitted', 'Submitted', 'request_submitted'),
     ('74c25fd8-5cdf-4a3d-89a2-c55e88277c6a', 'in-progress', 'In Progress', 'request_in_progress'),
     ('184029d3-7767-413e-82a0-4af68f2282b7', 'complete', 'Complete', 'request_complete'),
-    ('71c59a1b-f322-4114-9bbe-3aaa6c7c1942', 'rejected', 'Rejected', 'request_rejected');
+    ('71c59a1b-f322-4114-9bbe-3aaa6c7c1942', 'rejected', 'Rejected', 'request_rejected')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, display_name=EXCLUDED.display_name, email_template=EXCLUDED.email_template;
