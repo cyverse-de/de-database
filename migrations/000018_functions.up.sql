@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 --
@@ -201,3 +203,5 @@ CREATE OR REPLACE AGGREGATE public.last (
         basetype = anyelement,
         stype    = anyelement
 );
+
+COMMIT;

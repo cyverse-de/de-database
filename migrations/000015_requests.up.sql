@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- request_types
@@ -72,3 +74,5 @@ ALTER TABLE request_updates
 --
 CREATE INDEX IF NOT EXISTS request_updates_request_id_created_date_index
     ON request_updates(request_id, created_date);
+
+COMMIT;

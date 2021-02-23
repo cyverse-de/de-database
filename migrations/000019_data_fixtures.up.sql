@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- data_formats
@@ -1364,3 +1366,5 @@ INSERT INTO request_status_codes (id, name, display_name, email_template) VALUES
     ('71c59a1b-f322-4114-9bbe-3aaa6c7c1942', 'rejected', 'Rejected', 'request_rejected')
     ON CONFLICT (id) DO UPDATE
         SET name=EXCLUDED.name, display_name=EXCLUDED.display_name, email_template=EXCLUDED.email_template;
+
+COMMIT;

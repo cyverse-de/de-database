@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- webhooks_type
@@ -56,3 +58,5 @@ ALTER TABLE ONLY webhooks_subscription
     FOREIGN KEY (topic_id)
     REFERENCES webhooks_topic(id)
     ON DELETE CASCADE;
+
+COMMIT;

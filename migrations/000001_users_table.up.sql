@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -5,3 +7,5 @@ CREATE TABLE IF NOT EXISTS users (
     username character varying(512) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
+
+COMMIT;

@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- app_steps
@@ -193,3 +195,5 @@ ALTER TABLE app_publication_request_statuses
 --
 CREATE INDEX IF NOT EXISTS app_publication_request_statuses_app_publication_request_id_index
     ON app_publication_request_statuses(app_publication_request_id);
+
+COMMIT;

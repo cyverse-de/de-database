@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- genome_reference
@@ -69,3 +71,5 @@ WITH (OIDS=FALSE);
 ALTER TABLE ONLY "session"
     ADD CONSTRAINT "session_pkey"
     PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+COMMIT;

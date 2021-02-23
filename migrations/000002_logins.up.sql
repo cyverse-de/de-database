@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 CREATE TABLE IF NOT EXISTS logins (
@@ -14,3 +16,5 @@ ALTER TABLE ONLY logins
     ADD CONSTRAINT logins_user_id_fkey
     FOREIGN KEY (user_id)
     REFERENCES users(id);
+
+COMMIT;

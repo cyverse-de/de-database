@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 DROP AGGREGATE IF EXISTS public.last;
@@ -15,3 +17,5 @@ DROP FUNCTION IF EXISTS app_count(uuid, boolean);
 DROP FUNCTION IF EXISTS app_count(uuid);
 
 DROP FUNCTION IF EXISTS app_category_hierarchy_ids(uuid);
+
+COMMIT;

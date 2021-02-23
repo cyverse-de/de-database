@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 --
@@ -189,3 +191,5 @@ ALTER TABLE ONLY tasks
     ADD CONSTRAINT tasks_job_type_id_fk
     FOREIGN KEY (job_type_id)
     REFERENCES job_types(id);
+
+COMMIT;

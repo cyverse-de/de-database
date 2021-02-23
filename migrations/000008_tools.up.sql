@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- interactive_apps_proxy_settings
@@ -366,3 +368,5 @@ ALTER TABLE ONLY tool_test_data_files
     ADD CONSTRAINT tool_test_data_files_tool_id_fkey
     FOREIGN KEY (tool_id)
     REFERENCES tools(id) ON DELETE CASCADE;
+
+COMMIT;

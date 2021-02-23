@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 DROP TABLE IF EXISTS validation_rule_arguments;
@@ -20,3 +22,5 @@ DROP TABLE IF EXISTS parameters;
 DROP TABLE IF EXISTS parameter_groups;
 DROP TABLE IF EXISTS parameter_types;
 DROP TABLE IF EXISTS value_type;
+
+COMMIT;

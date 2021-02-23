@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- workspace
@@ -100,3 +102,5 @@ ALTER TABLE ONLY app_hierarchy_version
 
 CREATE INDEX IF NOT EXISTS app_hierarchy_version_applied
     ON app_hierarchy_version(applied);
+
+COMMIT;

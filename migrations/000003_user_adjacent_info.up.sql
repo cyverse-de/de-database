@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 --
@@ -89,3 +91,5 @@ CREATE INDEX IF NOT EXISTS user_preferences_user_id_idx ON user_preferences(user
 CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx ON user_sessions(user_id);
 
 CREATE INDEX IF NOT EXISTS user_saved_searches_user_id_idx ON user_sessions(user_id);
+
+COMMIT;

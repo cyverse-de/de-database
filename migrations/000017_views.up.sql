@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 --
@@ -242,3 +244,5 @@ CREATE OR REPLACE VIEW vice_analyses AS
      WHERE j.deleted = false
        AND l.interactive = true
   ORDER BY s.step ASC;
+
+COMMIT;

@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- job_steps
@@ -116,3 +118,5 @@ CREATE TABLE IF NOT EXISTS job_limits (
     PRIMARY KEY (id),
     UNIQUE (launcher)
 );
+
+COMMIT;

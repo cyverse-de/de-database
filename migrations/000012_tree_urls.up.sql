@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 ---
@@ -19,3 +21,5 @@ ON tree_urls(id);
 
 CREATE INDEX IF NOT EXISTS tree_urls_sha1
 ON tree_urls(sha1);
+
+COMMIT;

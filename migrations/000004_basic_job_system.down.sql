@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 DROP TABLE IF EXISTS tasks;
@@ -10,3 +12,5 @@ DROP TABLE IF EXISTS apps;
 DROP TABLE IF EXISTS integration_data;
 
 DROP TYPE IF EXISTS notification_types;
+
+COMMIT;

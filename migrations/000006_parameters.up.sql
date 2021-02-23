@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 -- value_type ()
@@ -286,3 +288,5 @@ ALTER TABLE ONLY validation_rule_arguments
     REFERENCES validation_rules(id) ON DELETE CASCADE;
 
 CREATE INDEX IF NOT EXISTS validation_rule_arguments_rule_id_idx ON validation_rule_arguments(rule_id);
+
+COMMIT;

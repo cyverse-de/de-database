@@ -1,3 +1,5 @@
+BEGIN;
+
 SET search_path = public, pg_catalog;
 
 DROP TABLE IF EXISTS tool_test_data_files;
@@ -16,3 +18,5 @@ DROP TABLE IF EXISTS container_volumes_from;
 DROP TABLE IF EXISTS data_containers;
 DROP TABLE IF EXISTS container_settings;
 DROP TABLE IF EXISTS interactive_apps_proxy_settings;
+
+COMMIT;
