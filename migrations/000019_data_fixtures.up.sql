@@ -857,14 +857,18 @@ INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
      'curl wrapper for DE URL imports',
      'Curl Wrapper',
      '681251EF-EE59-4FE9-9436-DC8A23FEB11A',
-     'AD069D9F-E38F-418C-84F6-21F620CADE77');
+     'AD069D9F-E38F-418C-84F6-21F620CADE77')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, tool_id=EXCLUDED.tool_id, job_type_id=EXCLUDED.job_type_id;
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('30345113-D3E5-406B-A4E8-170A685E7A8B',
      'Parameters',
      'URL upload parameters',
      'Parameters',
-     '212C5980-9A56-417E-A8C6-394AC445CA4D');
+     '212C5980-9A56-417E-A8C6-394AC445CA4D')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, task_id=EXCLUDED.task_id;
 
 INSERT INTO parameters (id, "name", description, label, ordering, parameter_group_id,
                         parameter_type, display_order, required)
@@ -879,7 +883,9 @@ INSERT INTO parameters (id, "name", description, label, ordering, parameter_grou
            TRUE
     FROM parameter_types pt
     WHERE pt."name" = 'FileOutput'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, ordering=EXCLUDED.ordering, parameter_group_id=EXCLUDED.parameter_group_id, parameter_type=EXCLUDED.parameter_type, display_order=EXCLUDED.display_order, required=EXCLUDED.required;
 
 
 INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_source_id, retain)
@@ -908,7 +914,9 @@ INSERT INTO parameters (id, "name", description, label, ordering, parameter_grou
            TRUE
     FROM parameter_types pt
     WHERE pt."name" = 'Text'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, ordering=EXCLUDED.ordering, parameter_group_id=EXCLUDED.parameter_group_id, parameter_type=EXCLUDED.parameter_type, display_order=EXCLUDED.display_order, required=EXCLUDED.required;
 
 INSERT INTO app_steps (step, id, app_id, task_id) VALUES
     (0,
