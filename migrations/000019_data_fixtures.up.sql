@@ -813,7 +813,9 @@ INSERT INTO tools (id, "name", location, description, version, tool_type_id, int
     FROM tool_types, integration_data
     WHERE tool_types."name" = 'internal'
     AND integration_data.integrator_name = 'Internal DE Tools'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, location=EXCLUDED.location, description=EXCLUDED.description, version=EXCLUDED.version, tool_type_id=EXCLUDED.tool_type_id, integration_data_id=EXCLUDED.integration_data_id;
 
 --
 -- A fake tool for testing.
@@ -829,7 +831,9 @@ INSERT INTO tools (id, "name", location, description, version, tool_type_id, int
       FROM tool_types, integration_data
      WHERE tool_types."name" = 'internal'
        AND integration_data.integrator_name = 'Internal DE Tools'
-     LIMIT 1;
+     LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, location=EXCLUDED.location, description=EXCLUDED.description, version=EXCLUDED.version, tool_type_id=EXCLUDED.tool_type_id, integration_data_id=EXCLUDED.integration_data_id;
 
 --
 -- The internal app for the Go tool used for URL imports.
@@ -924,7 +928,9 @@ INSERT INTO tools (id, "name", location, description, version, tool_type_id, int
     FROM tool_types, integration_data
    WHERE tool_types."name" = 'executable'
      AND integration_data.integrator_name = 'Default DE Tools'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, location=EXCLUDED.location, description=EXCLUDED.description, version=EXCLUDED.version, tool_type_id=EXCLUDED.tool_type_id, integration_data_id=EXCLUDED.integration_data_id;
 
 --
 -- The app for word count
@@ -1083,7 +1089,9 @@ INSERT INTO tools
     FROM tool_types, integration_data
    WHERE tool_types."name" = 'executable'
      AND integration_data.integrator_name = 'Default DE Tools'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, location=EXCLUDED.location, description=EXCLUDED.description, version=EXCLUDED.version, tool_type_id=EXCLUDED.tool_type_id, integration_data_id=EXCLUDED.integration_data_id, time_limit_seconds=EXCLUDED.time_limit_seconds, container_images_id=EXCLUDED.container_images_id;
 
 INSERT INTO container_settings (tools_id, network_mode, entrypoint, memory_limit, cpu_shares)
   VALUES ('4e3b1710-0f15-491f-aca9-812335356fdb', 'none', 'python', 1000000000, 102);
