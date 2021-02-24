@@ -506,95 +506,28 @@ INSERT INTO parameter_types
 
 -- rule_type_value_type
 
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
+WITH rule_value_name_pairs (rule_name, value_name) AS ( VALUES
+    ('IntBelow', 'Number'),
+    ('IntBelowField', 'Number'),
+    ('IntAbove', 'Number'),
+    ('IntAboveField', 'Number'),
+    ('IntRange', 'Number'),
+    ('DoubleRange', 'Number'),
+    ('DoubleBelow', 'Number'),
+    ('DoubleAbove', 'Number'),
+    ('MustContain', 'Number'),
+    ('MustContain', 'String'),
+    ('MustContain', 'EnvironmentVariable'),
+    ('Regex', 'String'),
+    ('Regex', 'EnvironmentVariable'),
+    ('CharacterLimit', 'String'),
+    ('CharacterLimit', 'EnvironmentVariable')
+) INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
     SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'IntBelowField'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'IntAbove'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'IntRange'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'IntAboveField'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'MustContain'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'MustContain'
-    AND vt.name = 'String';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'MustContain'
-    AND vt.name = 'EnvironmentVariable';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'DoubleRange'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'IntBelow'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'DoubleAbove'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'DoubleBelow'
-    AND vt.name = 'Number';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'Regex'
-    AND vt.name = 'String';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'Regex'
-    AND vt.name = 'EnvironmentVariable';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'CharacterLimit'
-    AND vt.name = 'EnvironmentVariable';
-
-INSERT INTO rule_type_value_type (rule_type_id, value_type_id)
-    SELECT rt.id, vt.id
-    FROM rule_type rt, value_type vt
-    WHERE rt.name = 'CharacterLimit'
-    AND vt.name = 'String';
+    FROM rule_value_name_pairs p
+    JOIN rule_type rt ON rt.name = p.rule_name
+    JOIN value_type vt ON vt.name = p.value_name
+    WHERE NOT EXISTS (SELECT * from rule_type_value_type WHERE rule_type_id = rt.id AND value_type_id = vt.id);
 
 -- users
 
