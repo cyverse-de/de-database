@@ -847,7 +847,9 @@ INSERT INTO apps (id, "name", description, integration_data_id, wiki_url, integr
            now()
     FROM integration_data
     WHERE integrator_name = 'Internal DE Tools'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, integration_data_id=EXCLUDED.integration_data_id, wiki_url=EXCLUDED.wiki_url, integration_date=EXCLUDED.integration_date;
 
 INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('212C5980-9A56-417E-A8C6-394AC445CA4D',
@@ -944,7 +946,9 @@ INSERT INTO apps(id, "name", description, integration_data_id, wiki_url, integra
           now()
      FROM integration_data
     WHERE integrator_name = 'Default DE Tools'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, integration_data_id=EXCLUDED.integration_data_id, wiki_url=EXCLUDED.wiki_url, integration_date=EXCLUDED.integration_date;
 
 INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('1ac31629-231a-4090-b3b4-63ee078a0c37',
@@ -1114,7 +1118,9 @@ INSERT INTO apps
          now()
     FROM integration_data
    WHERE integrator_name = 'Default DE Tools'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, integration_data_id=EXCLUDED.integration_data_id, wiki_url=EXCLUDED.wiki_url, integration_date=EXCLUDED.integration_date;
 
 INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
     ('66b59035-6036-46c3-a30a-ee3bd4af47b6',
