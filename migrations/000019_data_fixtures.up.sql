@@ -899,7 +899,9 @@ INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_sour
     WHERE info_type."name" = 'File'
     AND data_formats."name" = 'Unspecified'
     AND data_source."name" = 'file'
-    LIMIT 1;
+    LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET parameter_id=EXCLUDED.parameter_id, info_type=EXCLUDED.info_type, data_format=EXCLUDED.data_format, data_source_id=EXCLUDED.data_source_id, retain=EXCLUDED.retain;
 
 INSERT INTO parameters (id, "name", description, label, ordering, parameter_group_id,
                         parameter_type, display_order, required)
@@ -922,7 +924,9 @@ INSERT INTO app_steps (step, id, app_id, task_id) VALUES
     (0,
      'EE78DEB5-EBBB-4D9D-8DCF-8DFE457A7856',
      '1E8F719B-0452-4D39-A2F3-8714793EE3E6',
-     '212C5980-9A56-417E-A8C6-394AC445CA4D');
+     '212C5980-9A56-417E-A8C6-394AC445CA4D')
+    ON CONFLICT (id) DO UPDATE
+        SET step=EXCLUDED.step, app_id=EXCLUDED.app_id, task_id=EXCLUDED.task_id;
 
 --
 -- New containerized word count tool
@@ -964,14 +968,18 @@ INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
      'Counts the number of words in a file',
      'DE Word Count',
      '85cf7a33-386b-46fe-87c7-8c9d59972624',
-     'AD069D9F-E38F-418C-84F6-21F620CADE77');
+     'AD069D9F-E38F-418C-84F6-21F620CADE77')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, tool_id=EXCLUDED.tool_id, job_type_id=EXCLUDED.job_type_id;
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('741711b0-0b95-4ac9-98b4-ca58225e76be',
      'Parameters',
      'Word count parameters',
      'Parameters',
-     '1ac31629-231a-4090-b3b4-63ee078a0c37');
+     '1ac31629-231a-4090-b3b4-63ee078a0c37')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, task_id=EXCLUDED.task_id;
 
 INSERT INTO parameters (id, "name", description, label, ordering, parameter_group_id,
                      parameter_type, display_order, required)
@@ -986,7 +994,9 @@ INSERT INTO parameters (id, "name", description, label, ordering, parameter_grou
          TRUE
     FROM parameter_types pt
    WHERE pt."name" = 'FileInput'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, ordering=EXCLUDED.ordering, parameter_group_id=EXCLUDED.parameter_group_id, parameter_type=EXCLUDED.parameter_type, display_order=EXCLUDED.display_order, required=EXCLUDED.required;
 
 INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_source_id, retain)
     SELECT 'a350604d-48a0-4083-b6b3-425f3b1f7f51',
@@ -999,36 +1009,51 @@ INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_sour
      WHERE info_type."name" = 'File'
        AND data_formats."name" = 'Unspecified'
        AND data_source."name" = 'file'
-     LIMIT 1;
+     LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET parameter_id=EXCLUDED.parameter_id, info_type=EXCLUDED.info_type, data_format=EXCLUDED.data_format, data_source_id=EXCLUDED.data_source_id, retain=EXCLUDED.retain;
 
-INSERT INTO app_category_app (app_category_id, app_id) VALUES
-    ('5401bd146c144470aedd57b47ea1b979',
-     '67d15627-22c5-42bd-8daf-9af5deecceab');
+WITH to_insert (app_category_id, app_id) AS ( VALUES
+    ('5401bd146c144470aedd57b47ea1b979'::uuid,
+     '67d15627-22c5-42bd-8daf-9af5deecceab'::uuid))
+INSERT INTO app_category_app (app_category_id, app_id)
+    SELECT app_category_id, app_id FROM to_insert i
+    WHERE NOT EXISTS (SELECT * FROM app_category_app aca WHERE aca.app_category_id = i.app_category_id AND aca.app_id = i.app_id);
 
 INSERT INTO app_steps (step, id, app_id, task_id) VALUES
     (0,
      '089a61a0-23d9-4021-9354-a8498ef3ff19',
      '67d15627-22c5-42bd-8daf-9af5deecceab',
-     '1ac31629-231a-4090-b3b4-63ee078a0c37');
+     '1ac31629-231a-4090-b3b4-63ee078a0c37')
+    ON CONFLICT (id) DO UPDATE
+        SET step=EXCLUDED.step, app_id=EXCLUDED.app_id, task_id=EXCLUDED.task_id;
 
 INSERT INTO container_images (id, "name", tag, url) VALUES
     ('15959300-b972-4571-ace2-081af0909599',
      'discoenv/url-import',
      'latest',
-     'https://registry.hub.docker.com/u/discoenv/url-import/');
+     'https://registry.hub.docker.com/u/discoenv/url-import/')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, tag=EXCLUDED.tag, url=EXCLUDED.url;
 
 INSERT INTO container_images (id, deprecated, "name", tag, url) VALUES
     ('fc210a84-f7cd-4067-939c-a68ec3e3bd2b',
      TRUE,
      'docker.cyverse.org/backwards-compat',
      'latest',
-     'https://registry.hub.docker.com/u/discoenv/backwards-compat');
+     'https://registry.hub.docker.com/u/discoenv/backwards-compat')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, tag=EXCLUDED.tag, url=EXCLUDED.url;
 
 INSERT INTO container_settings (tools_id, network_mode)
-  VALUES ('681251EF-EE59-4FE9-9436-DC8A23FEB11A', 'bridge');
+  VALUES ('681251EF-EE59-4FE9-9436-DC8A23FEB11A', 'bridge')
+    ON CONFLICT (tools_id) DO UPDATE
+        SET network_mode=EXCLUDED.network_mode;
 
 INSERT INTO container_settings (tools_id, network_mode, entrypoint)
-  VALUES ('85cf7a33-386b-46fe-87c7-8c9d59972624', 'none', 'wc');
+  VALUES ('85cf7a33-386b-46fe-87c7-8c9d59972624', 'none', 'wc')
+    ON CONFLICT (tools_id) DO UPDATE
+        SET network_mode=EXCLUDED.network_mode, entrypoint=EXCLUDED.entrypoint;
 
 -- Insert default container settings for tools that don't already have them.
 INSERT INTO container_settings (tools_id)
@@ -1042,7 +1067,9 @@ INSERT INTO container_settings (tools_id)
    AND tools.name != 'notreal';
 
 INSERT INTO data_containers (id, name_prefix, container_images_id)
-  VALUES ('115584ad-7bc3-4601-89a2-85a4e5b5f6a4', 'wc-data', '15959300-b972-4571-ace2-081af0909599');
+  VALUES ('115584ad-7bc3-4601-89a2-85a4e5b5f6a4', 'wc-data', '15959300-b972-4571-ace2-081af0909599')
+    ON CONFLICT (id) DO UPDATE
+        SET name_prefix=EXCLUDED.name_prefix, container_images_id=EXCLUDED.container_images_id;
 
 INSERT INTO container_volumes_from (data_containers_id, container_settings_id)
   SELECT '115584ad-7bc3-4601-89a2-85a4e5b5f6a4',
@@ -1075,7 +1102,9 @@ INSERT INTO container_images (id, "name", tag, url) VALUES
     ('bad7e301-4442-4e82-8cc4-8db681cae364',
      'python',
      '2.7',
-     'https://hub.docker.com/_/python/');
+     'https://hub.docker.com/_/python/')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, tag=EXCLUDED.tag, url=EXCLUDED.url;
 --
 -- The internal tool for Python 2.7
 --
@@ -1106,7 +1135,9 @@ INSERT INTO tools
         SET name=EXCLUDED.name, location=EXCLUDED.location, description=EXCLUDED.description, version=EXCLUDED.version, tool_type_id=EXCLUDED.tool_type_id, integration_data_id=EXCLUDED.integration_data_id, time_limit_seconds=EXCLUDED.time_limit_seconds, container_images_id=EXCLUDED.container_images_id;
 
 INSERT INTO container_settings (tools_id, network_mode, entrypoint, memory_limit, cpu_shares)
-  VALUES ('4e3b1710-0f15-491f-aca9-812335356fdb', 'none', 'python', 1000000000, 102);
+  VALUES ('4e3b1710-0f15-491f-aca9-812335356fdb', 'none', 'python', 1000000000, 102)
+    ON CONFLICT (tools_id) DO UPDATE
+        SET network_mode=EXCLUDED.network_mode, entrypoint=EXCLUDED.entrypoint, memory_limit=EXCLUDED.memory_limit, cpu_shares=EXCLUDED.cpu_shares;
 
 --
 -- The app for Python 2.7
@@ -1136,14 +1167,18 @@ INSERT INTO tasks (id, "name", description, label, tool_id, job_type_id) VALUES
      'Runs a Python 2.7 script against a data file',
      'Run a Python 2.7 script',
      '4e3b1710-0f15-491f-aca9-812335356fdb',
-     'AD069D9F-E38F-418C-84F6-21F620CADE77');
+     'AD069D9F-E38F-418C-84F6-21F620CADE77')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, tool_id=EXCLUDED.tool_id, job_type_id=EXCLUDED.job_type_id;
 
 INSERT INTO parameter_groups (id, "name", description, label, task_id) VALUES
     ('f252f7b2-5c27-4a27-bbbb-f4f2f2acf407',
      'Parameters',
      'Python 2.7 parameters',
      'Parameters',
-     '66b59035-6036-46c3-a30a-ee3bd4af47b6');
+     '66b59035-6036-46c3-a30a-ee3bd4af47b6')
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, task_id=EXCLUDED.task_id;
 
 INSERT INTO parameters
       (id,
@@ -1166,7 +1201,9 @@ INSERT INTO parameters
          TRUE
     FROM parameter_types pt
    WHERE pt."name" = 'FileInput'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, ordering=EXCLUDED.ordering, parameter_group_id=EXCLUDED.parameter_group_id, parameter_type=EXCLUDED.parameter_type, display_order=EXCLUDED.display_order, required=EXCLUDED.required;
 
 INSERT INTO parameters
     (id,
@@ -1189,7 +1226,9 @@ INSERT INTO parameters
          TRUE
     FROM parameter_types pt
    WHERE pt."name" = 'FileInput'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, ordering=EXCLUDED.ordering, parameter_group_id=EXCLUDED.parameter_group_id, parameter_type=EXCLUDED.parameter_type, display_order=EXCLUDED.display_order, required=EXCLUDED.required;
 
 INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_source_id, retain)
   SELECT '78244fb8-d5bb-479b-b73e-a12c20dbb774',
@@ -1202,7 +1241,9 @@ INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_sour
    WHERE info_type."name" = 'File'
      AND data_formats."name" = 'Unspecified'
      AND data_source."name" = 'file'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET parameter_id=EXCLUDED.parameter_id, info_type=EXCLUDED.info_type, data_format=EXCLUDED.data_format, data_source_id=EXCLUDED.data_source_id, retain=EXCLUDED.retain;
 
 INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_source_id, retain)
   SELECT '73ec6e74-d5e6-4977-b999-620b4e79ebda',
@@ -1215,17 +1256,24 @@ INSERT INTO file_parameters (id, parameter_id, info_type, data_format, data_sour
    WHERE info_type."name" = 'File'
      AND data_formats."name" = 'Unspecified'
      AND data_source."name" = 'file'
-   LIMIT 1;
+   LIMIT 1
+    ON CONFLICT (id) DO UPDATE
+        SET parameter_id=EXCLUDED.parameter_id, info_type=EXCLUDED.info_type, data_format=EXCLUDED.data_format, data_source_id=EXCLUDED.data_source_id, retain=EXCLUDED.retain;
 
-INSERT INTO app_category_app (app_category_id, app_id) VALUES
-    ('5401bd146c144470aedd57b47ea1b979',
-     '336bbfb3-7899-493a-b4a2-ed3bc353ead8');
+WITH to_insert (app_category_id, app_id) AS ( VALUES
+    ('5401bd146c144470aedd57b47ea1b979'::uuid,
+     '336bbfb3-7899-493a-b4a2-ed3bc353ead8'::uuid))
+INSERT INTO app_category_app (app_category_id, app_id)
+    SELECT app_category_id, app_id FROM to_insert i
+    WHERE NOT EXISTS (SELECT * FROM app_category_app aca WHERE aca.app_category_id = i.app_category_id AND aca.app_id = i.app_id);
 
 INSERT INTO app_steps (step, id, app_id, task_id) VALUES
     (0,
      'b34736a8-aa68-4845-803d-c0d1942ccdff',
      '336bbfb3-7899-493a-b4a2-ed3bc353ead8',
-     '66b59035-6036-46c3-a30a-ee3bd4af47b6');
+     '66b59035-6036-46c3-a30a-ee3bd4af47b6')
+    ON CONFLICT (id) DO UPDATE
+        SET step=EXCLUDED.step, app_id=EXCLUDED.app_id, task_id=EXCLUDED.task_id;
 
 -- webhooks_type
 
