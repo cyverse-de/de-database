@@ -13,19 +13,12 @@ CREATE TABLE IF NOT EXISTS genome_reference (
     last_modified_by uuid NOT NULL,
     last_modified_on timestamp DEFAULT now() NOT NULL,
 
-    PRIMARY KEY (id),
+    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (last_modified_by) REFERENCES users(id),
     UNIQUE (name),
-    UNIQUE (path)
+    UNIQUE (path),
+    PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY genome_reference
-    ADD CONSTRAINT genome_reference_created_by_fkey
-    FOREIGN KEY (created_by)
-    REFERENCES users(id);
-ALTER TABLE ONLY genome_reference
-    ADD CONSTRAINT genome_reference_last_modified_by_fkey
-    FOREIGN KEY (last_modified_by)
-    REFERENCES users(id);
 
 -- notif_statuses
 --
@@ -63,13 +56,11 @@ CREATE TABLE IF NOT EXISTS docker_registries (
 --
 CREATE TABLE IF NOT EXISTS "session" (
   "sid" varchar NOT NULL COLLATE "default",
-	"sess" json NOT NULL,
-	"expire" timestamp(6) NOT NULL
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL,
+
+  PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE
 )
 WITH (OIDS=FALSE);
-
-ALTER TABLE ONLY "session"
-    ADD CONSTRAINT "session_pkey"
-    PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 COMMIT;
