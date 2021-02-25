@@ -240,7 +240,7 @@ INSERT INTO rule_type
 -- parameter_types
 
 INSERT INTO parameter_types
-    (id, name, description, label, deprecated, hidable, display_order, value_type_id)
+    (id, name, description, label, deprecated, hidable, display_order, value_type_id) VALUES
     ('2cf37b0d-5463-4aef-98a2-4db63d2f3dbc', 'ClipperSelector', '',
             NULL, TRUE, FALSE, '999', NULL),
     ('bea4f078-6296-4511-834a-27b6bc3c88ab', 'Script', '', NULL,
@@ -251,7 +251,7 @@ INSERT INTO parameter_types
             '', NULL, TRUE, FALSE, '999', NULL),
     ('8d7dfb62-2ba4-4ad1-b38e-068318200d9b', 'TNRSFileSelector',
             '', NULL, TRUE, FALSE, '999', NULL)
-    ON CONFLICT (id)
+    ON CONFLICT (id) DO UPDATE
         SET name=EXCLUDED.name, description=EXCLUDED.description, label=EXCLUDED.label, deprecated=EXCLUDED.deprecated, hidable=EXCLUDED.hidable, display_order=EXCLUDED.display_order, value_type_id=EXCLUDED.value_type_id;
 
 INSERT INTO parameter_types
@@ -540,7 +540,7 @@ INSERT INTO users (id, username) VALUES ('00000000-0000-0000-0000-000000000000',
 INSERT INTO workspace (id, is_public, user_id)
        SELECT '00000000-0000-0000-0000-000000000000', TRUE, u.id
        FROM users u
-       WHERE u.username = '<public>';
+       WHERE u.username = '<public>'
     ON CONFLICT (id) DO UPDATE
         SET is_public=EXCLUDED.is_public, user_id=EXCLUDED.user_id;
 
@@ -558,7 +558,7 @@ INSERT INTO app_category_group (parent_category_id, child_category_id, child_ind
        SELECT parent.id, child.id, 0 AS child_index
        FROM app_categories parent, app_categories child
        WHERE parent.id = '12c7a585-ec23-3352-e313-02e323112a7c'
-       AND child.id = '5401bd146c144470aedd57b47ea1b979';
+       AND child.id = '5401bd146c144470aedd57b47ea1b979'
     ON CONFLICT (parent_category_id, child_category_id) DO UPDATE SET child_index=EXCLUDED.child_index;
 
 UPDATE workspace SET root_category_id = '12c7a585-ec23-3352-e313-02e323112a7c'

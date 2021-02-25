@@ -2,8 +2,8 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
-DROP AGGREGATE IF EXISTS public.last;
-DROP AGGREGATE IF EXISTS public.first;
+DROP AGGREGATE IF EXISTS public.last ( anyelement );
+DROP AGGREGATE IF EXISTS public.first ( anyelement );
 
 DROP FUNCTION IF EXISTS public.last_agg ( anyelement, anyelement );
 DROP FUNCTION IF EXISTS public.first_agg ( anyelement, anyelement );
