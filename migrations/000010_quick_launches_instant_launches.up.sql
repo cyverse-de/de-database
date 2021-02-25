@@ -36,23 +36,11 @@ CREATE TABLE IF NOT EXISTS quick_launches (
   -- Whether or not all users can see the quick launch
   is_public boolean NOT NULL DEFAULT false,
 
+  FOREIGN KEY (creator) REFERENCES users(id),
+  FOREIGN KEY (submission_id) REFERENCES submissions(id),
+  FOREIGN KEY (app_id) REFERENCES apps(id),
   PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY quick_launches
-    ADD CONSTRAINT quick_launches_creator_fkey
-    FOREIGN KEY (creator)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY quick_launches
-    ADD CONSTRAINT quick_launches_submission_id_fkey
-    FOREIGN KEY (submission_id)
-    REFERENCES submissions(id);
-
-ALTER TABLE ONLY quick_launches
-    ADD CONSTRAINT quick_launches_app_id_fkey
-    FOREIGN KEY (app_id)
-    REFERENCES apps(id);
 
 -- quick_launch_favorites
 CREATE TABLE IF NOT EXISTS quick_launch_favorites (
@@ -65,19 +53,12 @@ CREATE TABLE IF NOT EXISTS quick_launch_favorites (
   -- Foreign key into the users table
   user_id uuid NOT NULL,
 
-  PRIMARY KEY (id),
-  UNIQUE (user_id, quick_launch_id)
+  FOREIGN KEY (quick_launch_id) REFERENCES quick_launches(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  UNIQUE (user_id, quick_launch_id),
+  PRIMARY KEY (id)
 );
 
-ALTER TABLE ONLY quick_launch_favorites
-    ADD CONSTRAINT quick_launch_favorites_quick_launch_id_fkey
-    FOREIGN KEY (quick_launch_id)
-    REFERENCES quick_launches(id);
-
-ALTER TABLE ONLY quick_launch_favorites
-    ADD CONSTRAINT quick_launch_favorites_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
 
 -- quick_launch_user_defaults
 CREATE TABLE IF NOT EXISTS quick_launch_user_defaults (
@@ -95,25 +76,13 @@ CREATE TABLE IF NOT EXISTS quick_launch_user_defaults (
   -- Foreign key into the quick_launches table.
   quick_launch_id uuid NOT NULL,
 
-  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (app_id) REFERENCES apps(id),
+  FOREIGN KEY (quick_launch_id) REFERENCES quick_launches(id),
   UNIQUE (user_id, app_id),
-  UNIQUE (user_id, quick_launch_id)
+  UNIQUE (user_id, quick_launch_id),
+  PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY quick_launch_user_defaults
-    ADD CONSTRAINT quick_launch_user_defaults_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY quick_launch_user_defaults
-    ADD CONSTRAINT quick_launch_user_defaults_app_id_fkey
-    FOREIGN KEY (app_id)
-    REFERENCES apps(id);
-
-ALTER TABLE ONLY quick_launch_user_defaults
-    ADD CONSTRAINT quick_launch_user_defaults_quick_launch_id_fkey
-    FOREIGN KEY (quick_launch_id)
-    REFERENCES quick_launches(id);
 
 -- quick_launch_global_defaults
 CREATE TABLE IF NOT EXISTS quick_launch_global_defaults (
@@ -127,20 +96,12 @@ CREATE TABLE IF NOT EXISTS quick_launch_global_defaults (
   -- Foreign key into the quick_launches table.
   quick_launch_id uuid NOT NULL,
 
-  PRIMARY KEY (id),
+  FOREIGN KEY (app_id) REFERENCES apps(id),
+  FOREIGN KEY (quick_launch_id) REFERENCES quick_launches(id),
   UNIQUE (app_id),
-  UNIQUE (quick_launch_id)
+  UNIQUE (quick_launch_id),
+  PRIMARY KEY (id)
 );
-
-ALTER TABLE quick_launch_global_defaults
-    ADD CONSTRAINT quick_launch_global_defaults_app_id_fkey
-    FOREIGN KEY (app_id)
-    REFERENCES apps(id);
-
-ALTER TABLE quick_launch_global_defaults
-    ADD CONSTRAINT quick_launch_global_defaults_quick_launch_id_fkey
-    FOREIGN KEY (quick_launch_id)
-    REFERENCES quick_launches(id);
 
 -- instant launches
 
@@ -154,18 +115,10 @@ CREATE TABLE IF NOT EXISTS instant_launches (
 
     added_on TIMESTAMP NOT NULL DEFAULT now(),
 
+    FOREIGN KEY (quick_launch_id) REFERENCES quick_launches(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE instant_launches
-    ADD CONSTRAINT instant_launches_quick_launch_id_fkey
-    FOREIGN KEY (quick_launch_id)
-    REFERENCES quick_launches(id) ON DELETE CASCADE;
-
-ALTER TABLE instant_launches
-    ADD CONSTRAINT instant_launches_added_by_fkey
-    FOREIGN KEY (added_by)
-    REFERENCES users(id);
 
 -- user_instant_launches
 CREATE TABLE IF NOT EXISTS user_instant_launches (
@@ -214,19 +167,11 @@ CREATE TABLE IF NOT EXISTS user_instant_launches (
     -- Could be useful for support issues.
     added_on TIMESTAMP NOT NULL DEFAULT now(),
 
-    PRIMARY KEY (id),
-    UNIQUE (user_id, version)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (added_by) REFERENCES users(id),
+    UNIQUE (user_id, version),
+    PRIMARY KEY (id)
 );
-
-ALTER TABLE user_instant_launches
-    ADD CONSTRAINT user_instant_launches_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id) ON DELETE CASCADE;
-
-ALTER TABLE user_instant_launches
-    ADD CONSTRAINT user_instant_launches_added_by_fkey
-    FOREIGN KEY (added_by)
-    REFERENCES users(id);
 
 -- default_instant_launches
 CREATE TABLE IF NOT EXISTS default_instant_launches (
@@ -272,13 +217,9 @@ CREATE TABLE IF NOT EXISTS default_instant_launches (
 
     added_on TIMESTAMP NOT NULL DEFAULT now(),
 
-    PRIMARY KEY (id),
-    UNIQUE (version)
+    FOREIGN KEY (added_by) REFERENCES users(id),
+    UNIQUE (version),
+    PRIMARY KEY (id)
 );
-
-ALTER TABLE default_instant_launches
-    ADD CONSTRAINT default_instant_launches_added_by_fkey
-    FOREIGN KEY (added_by)
-    REFERENCES users(id);
 
 COMMIT;
