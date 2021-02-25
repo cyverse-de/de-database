@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS async_task_status (
 	detail text,
 	created_date timestamp NOT NULL,
 
+        FOREIGN KEY (async_task_id) REFERENCES async_tasks(id) ON DELETE CASCADE,
 	PRIMARY KEY (async_task_id, status, created_date)
 );
 
@@ -37,17 +38,13 @@ CREATE TABLE IF NOT EXISTS async_task_status (
 --
 CREATE INDEX IF NOT EXISTS async_task_status_id_date_index ON async_task_status(async_task_id, created_date);
 
-ALTER TABLE async_task_status
-    ADD CONSTRAINT async_task_status_async_task_id_fkey
-    FOREIGN KEY (async_task_id)
-    REFERENCES async_tasks(id) ON DELETE CASCADE;
-
 -- async_task_behavior
 CREATE TABLE IF NOT EXISTS async_task_behavior (
 	async_task_id uuid NOT NULL,
 	behavior_type text NOT NULL,
 	data json,
 
+        FOREIGN KEY (async_task_id) REFERENCES async_tasks(id) ON DELETE CASCADE,
 	PRIMARY KEY (async_task_id, behavior_type)
 );
 
@@ -55,10 +52,5 @@ CREATE TABLE IF NOT EXISTS async_task_behavior (
 -- Index to speed up listings by behavior type
 --
 CREATE INDEX IF NOT EXISTS async_task_behavior_behavior_type_index ON async_task_behavior(behavior_type);
-
-ALTER TABLE async_task_behavior
-    ADD CONSTRAINT async_task_behavior_async_task_id_fkey
-    FOREIGN KEY (async_task_id)
-    REFERENCES async_tasks(id) ON DELETE CASCADE;
 
 COMMIT;
