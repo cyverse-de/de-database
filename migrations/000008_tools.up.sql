@@ -109,18 +109,10 @@ CREATE TABLE IF NOT EXISTS container_settings (
   -- will be used (but not stored in the database).
   uid int,
 
+  FOREIGN KEY(tools_id) REFERENCES tools(id) ON DELETE CASCADE,
+  FOREIGN KEY(interactive_apps_proxy_settings_id) REFERENCES interactive_apps_proxy_settings(id) ON DELETE CASCADE,
   PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY container_settings
-    ADD CONSTRAINT container_settings_tools_id_fkey
-    FOREIGN KEY(tools_id)
-    REFERENCES tools(id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY container_settings
-    ADD CONSTRAINT container_settings_interactive_apps_proxy_settings_id_fkey
-    FOREIGN KEY(interactive_apps_proxy_settings_id)
-    REFERENCES interactive_apps_proxy_settings(id) ON DELETE CASCADE;
 
 -- data_containers
 CREATE TABLE IF NOT EXISTS data_containers (
@@ -137,16 +129,10 @@ CREATE TABLE IF NOT EXISTS data_containers (
   -- Whether the container is mounted read-only
   read_only BOOLEAN NOT NULL DEFAULT TRUE,
 
+  FOREIGN KEY (container_images_id) REFERENCES container_images(id),
+  UNIQUE(container_images_id, name_prefix, read_only),
   PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY data_containers
-    ADD CONSTRAINT data_containers_container_images_id_fkey
-    FOREIGN KEY (container_images_id)
-    REFERENCES container_images(id);
-ALTER TABLE ONLY data_containers
-    ADD CONSTRAINT data_containers_unique
-    UNIQUE(container_images_id, name_prefix, read_only);
 
 -- container_volumes_from
 CREATE TABLE IF NOT EXISTS container_volumes_from (
@@ -159,17 +145,10 @@ CREATE TABLE IF NOT EXISTS container_volumes_from (
   -- foreign key into the container_settings_table.
   container_settings_id uuid NOT NULL,
 
+  FOREIGN KEY(container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE,
+  FOREIGN KEY(data_containers_id) REFERENCES data_containers(id) ON DELETE CASCADE,
   PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY container_volumes_from
-    ADD CONSTRAINT container_volumes_from_container_settings_id_fkey
-    FOREIGN KEY(container_settings_id)
-    REFERENCES container_settings(id) ON DELETE CASCADE;
-ALTER TABLE ONLY container_volumes_from
-   ADD CONSTRAINT container_volumes_from_data_containers_id_fkey
-   FOREIGN KEY(data_containers_id)
-   REFERENCES data_containers(id) ON DELETE CASCADE;
 
 -- container_ports
 CREATE TABLE IF NOT EXISTS container_ports (
@@ -188,13 +167,9 @@ CREATE TABLE IF NOT EXISTS container_ports (
 
   bind_to_host boolean NOT NULL DEFAULT FALSE,
 
+  FOREIGN KEY(container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE,
   PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY container_ports
-    ADD CONSTRAINT container_ports_container_settings_id_fkey
-    FOREIGN KEY(container_settings_id)
-    REFERENCES container_settings(id) ON DELETE CASCADE;
 
 -- container_devices
 CREATE TABLE IF NOT EXISTS container_devices(
@@ -210,15 +185,10 @@ CREATE TABLE IF NOT EXISTS container_devices(
   -- The path in the container to map the device to.
   container_path text NOT NULL,
 
-  PRIMARY KEY (id),
-
-  UNIQUE (container_settings_id, host_path, container_path)
+  FOREIGN KEY(container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE,
+  UNIQUE (container_settings_id, host_path, container_path),
+  PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY container_devices
-    ADD CONSTRAINT container_devices_container_settings_id_fkey
-    FOREIGN KEY(container_settings_id)
-    REFERENCES container_settings(id) ON DELETE CASCADE;
 
 -- container_volumes
 CREATE TABLE IF NOT EXISTS container_volumes (
@@ -235,15 +205,10 @@ CREATE TABLE IF NOT EXISTS container_volumes (
   -- The path in the container that the host_path will be mounted to.
   container_path text NOT NULL,
 
-  PRIMARY KEY (id),
-
-  UNIQUE (container_settings_id, host_path, container_path)
+  FOREIGN KEY(container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE,
+  UNIQUE (container_settings_id, host_path, container_path),
+  PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY container_volumes
-    ADD CONSTRAINT container_volumes_container_settings_id_fkey
-    FOREIGN KEY(container_settings_id)
-    REFERENCES container_settings(id) ON DELETE CASCADE;
 
 -- tool_architectures
 CREATE TABLE IF NOT EXISTS tool_architectures (
@@ -276,21 +241,11 @@ CREATE TABLE IF NOT EXISTS tool_requests (
     additional_data_file TEXT,
     tool_id UUID,
 
+    FOREIGN KEY (requestor_id) REFERENCES users(id),
+    FOREIGN KEY (tool_architecture_id) REFERENCES tool_architectures(id),
+    FOREIGN KEY (tool_id) REFERENCES tools(id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY tool_requests
-    ADD CONSTRAINT tool_requests_requestor_id_fkey
-    FOREIGN KEY (requestor_id)
-    REFERENCES users(id);
-ALTER TABLE ONLY tool_requests
-    ADD CONSTRAINT tool_requests_tool_architecture_id_fkey
-    FOREIGN KEY (tool_architecture_id)
-    REFERENCES tool_architectures(id);
-ALTER TABLE ONLY tool_requests
-    ADD CONSTRAINT tool_requests_tool_id_fkey
-    FOREIGN KEY (tool_id)
-    REFERENCES tools(id);
 
 CREATE INDEX IF NOT EXISTS tool_requests_requestor_id_index
     ON tool_requests(requestor_id);
@@ -320,21 +275,11 @@ CREATE TABLE IF NOT EXISTS tool_request_statuses (
     updater_id UUID NOT NULL,
     comments TEXT,
 
+    FOREIGN KEY (updater_id) REFERENCES users(id),
+    FOREIGN KEY (tool_request_id) REFERENCES tool_requests(id) ON DELETE CASCADE,
+    FOREIGN KEY (tool_request_status_code_id) REFERENCES tool_request_status_codes(id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY tool_request_statuses
-    ADD CONSTRAINT tool_request_statuses_updater_id_fkey
-    FOREIGN KEY (updater_id)
-    REFERENCES users(id);
-ALTER TABLE ONLY tool_request_statuses
-    ADD CONSTRAINT tool_request_statuses_tool_request_id_fkey
-    FOREIGN KEY (tool_request_id)
-    REFERENCES tool_requests(id) ON DELETE CASCADE;
-ALTER TABLE ONLY tool_request_statuses
-    ADD CONSTRAINT tool_request_statuses_tool_request_status_code_id_fkey
-    FOREIGN KEY (tool_request_status_code_id)
-    REFERENCES tool_request_status_codes(id);
 
 CREATE INDEX IF NOT EXISTS tool_request_statuses_tool_request_id_index
     ON tool_request_statuses(tool_request_id);
@@ -342,17 +287,12 @@ CREATE INDEX IF NOT EXISTS tool_request_statuses_tool_request_id_index
 -- tool_type_parameter_type
 CREATE TABLE IF NOT EXISTS tool_type_parameter_type (
    tool_type_id uuid NOT NULL,
-   parameter_type_id uuid NOT NULL
+   parameter_type_id uuid NOT NULL,
+
+   FOREIGN KEY (tool_type_id) REFERENCES tool_types(id),
+   FOREIGN KEY (parameter_type_id) REFERENCES parameter_types(id)
 );
 
-ALTER TABLE ONLY tool_type_parameter_type
-    ADD CONSTRAINT tool_type_parameter_type_tool_type_id_fkey
-    FOREIGN KEY (tool_type_id)
-    REFERENCES tool_types(id);
-ALTER TABLE ONLY tool_type_parameter_type
-    ADD CONSTRAINT tool_type_parameter_type_parameter_types_fkey
-    FOREIGN KEY (parameter_type_id)
-    REFERENCES parameter_types(id);
 
 -- tool_test_data_files
 CREATE TABLE IF NOT EXISTS tool_test_data_files (
@@ -361,12 +301,8 @@ CREATE TABLE IF NOT EXISTS tool_test_data_files (
     input_file boolean DEFAULT true,
     tool_id uuid NOT NULL,
 
+    FOREIGN KEY (tool_id) REFERENCES tools(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY tool_test_data_files
-    ADD CONSTRAINT tool_test_data_files_tool_id_fkey
-    FOREIGN KEY (tool_id)
-    REFERENCES tools(id) ON DELETE CASCADE;
 
 COMMIT;
