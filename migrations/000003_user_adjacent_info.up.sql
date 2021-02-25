@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS user_preferences (
     id UUID NOT NULL DEFAULT uuid_generate_v1(),
     user_id UUID NOT NULL,
     preferences TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
 );
 
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS user_sessions (
     id UUID DEFAULT uuid_generate_v1(),
     user_id UUID NOT NULL,
     session TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
 );
 
@@ -29,6 +31,7 @@ CREATE TABLE IF NOT EXISTS user_saved_searches (
     id UUID DEFAULT uuid_generate_v1(),
     user_id UUID NOT NULL,
     saved_searches TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
 );
 
@@ -41,6 +44,7 @@ CREATE TABLE IF NOT EXISTS access_tokens (
     token BYTEA NOT NULL,
     expires_at TIMESTAMP,
     refresh_token BYTEA,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (webapp, user_id)
 );
 
@@ -51,37 +55,9 @@ CREATE TABLE IF NOT EXISTS authorization_requests (
     id UUID NOT NULL,
     user_id UUID UNIQUE NOT NULL,
     state_info TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
 );
-
----
---- foreign keys
----
-
-ALTER TABLE ONLY user_preferences
-    ADD CONSTRAINT user_preferences_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY user_sessions
-    ADD CONSTRAINT user_sessions_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY user_saved_searches
-    ADD CONSTRAINT user_saved_searches_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY access_tokens
-    ADD CONSTRAINT access_tokens_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY authorization_requests
-    ADD CONSTRAINT authorization_requests_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
 
 ---
 --- indices
