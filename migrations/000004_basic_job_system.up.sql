@@ -10,17 +10,10 @@ CREATE TABLE IF NOT EXISTS integration_data (
     integrator_name character varying(255) NOT NULL CHECK (integrator_name ~ '\S'),
     integrator_email character varying(255) NOT NULL CHECK (integrator_email ~ '\S'),
     user_id uuid,
+    UNIQUE (integrator_name, integrator_email),
+    FOREIGN KEY (user_id) REFERENCES users (id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY integration_data
-    ADD CONSTRAINT integration_data_name_email_unique
-    UNIQUE (integrator_name, integrator_email);
-
-ALTER TABLE ONLY integration_data
-    ADD CONSTRAINT integration_data_user_id_fk
-    FOREIGN KEY (user_id)
-    REFERENCES users (id);
 
 --
 -- basic table for apps
@@ -35,13 +28,9 @@ CREATE TABLE IF NOT EXISTS apps (
     wiki_url character varying(1024),
     integration_date timestamp without time zone,
     edited_date timestamp without time zone,
+    FOREIGN KEY (integration_data_id) REFERENCES integration_data(id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY apps
-    ADD CONSTRAINT app_integration_data_id_fk
-    FOREIGN KEY (integration_data_id)
-    REFERENCES integration_data(id);
 
 --
 -- basic tables for jobs
@@ -74,6 +63,9 @@ CREATE TABLE IF NOT EXISTS jobs (
     subdomain character varying(32),
     submission json,
     parent_id uuid,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (parent_id) REFERENCES jobs(id),
+    FOREIGN KEY (job_type_id) REFERENCES job_types(id),
     PRIMARY KEY (id)
 );
 
@@ -85,34 +77,25 @@ CREATE INDEX IF NOT EXISTS jobs_start_date_index ON jobs(start_date);
 CREATE INDEX IF NOT EXISTS jobs_end_date_index ON jobs(end_date);
 CREATE INDEX IF NOT EXISTS jobs_app_id_start_date ON jobs(app_id, start_date);
 
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT jobs_user_id_fkey
-    FOREIGN KEY (user_id)
-    REFERENCES users(id);
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT jobs_parent_id_fkey
-    FOREIGN KEY (parent_id)
-    REFERENCES jobs(id);
-
-ALTER TABLE ONLY jobs
-    ADD CONSTRAINT jobs_job_type_id_fkey
-    FOREIGN KEY (job_type_id)
-    REFERENCES job_types(id);
-
 --
 -- basic tables for tools
 --
 
-CREATE TYPE notification_types AS ENUM (
-    'apps',
-    'tool_request',
-    'team',
-    'data',
-    'analysis',
-    'tools',
-    'permanent_id_request'
-);
+DO $$
+BEGIN
+    CREATE TYPE notification_types AS ENUM (
+        'apps',
+        'tool_request',
+        'team',
+        'data',
+        'analysis',
+        'tools',
+        'permanent_id_request'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN
+        RAISE NOTICE 'notification_types type already exists, moving on';
+END$$;
 
 CREATE TABLE IF NOT EXISTS tool_types (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
@@ -150,23 +133,11 @@ CREATE TABLE IF NOT EXISTS tools (
     interactive boolean NOT NULL DEFAULT FALSE,
     gpu_enabled boolean NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),
+    FOREIGN KEY (integration_data_id) REFERENCES integration_data(id),
+    FOREIGN KEY (tool_type_id) REFERENCES tool_types(id),
+    FOREIGN KEY(container_images_id) REFERENCES container_images(id),
     UNIQUE (name, version)
 );
-
-ALTER TABLE ONLY tools
-    ADD CONSTRAINT deployed_comp_integration_data_id_fk
-    FOREIGN KEY (integration_data_id)
-    REFERENCES integration_data(id);
-
-ALTER TABLE ONLY tools
-    ADD CONSTRAINT tools_tool_type_id_fkey
-    FOREIGN KEY (tool_type_id)
-    REFERENCES tool_types(id);
-
-ALTER TABLE ONLY tools
-    ADD CONSTRAINT tools_container_image_fkey
-    FOREIGN KEY(container_images_id)
-    REFERENCES container_images(id);
 
 --
 -- basic tasks table (links apps, tools, etc. by FKs in future migrations)
@@ -179,17 +150,9 @@ CREATE TABLE IF NOT EXISTS tasks (
     description text,
     label character varying(255),
     tool_id uuid,
+    FOREIGN KEY (tool_id) REFERENCES tools(id),
+    FOREIGN KEY (job_type_id) REFERENCES job_types(id),
     PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY tasks
-    ADD CONSTRAINT tasks_tool_id_fk
-    FOREIGN KEY (tool_id)
-    REFERENCES tools(id);
-
-ALTER TABLE ONLY tasks
-    ADD CONSTRAINT tasks_job_type_id_fk
-    FOREIGN KEY (job_type_id)
-    REFERENCES job_types(id);
 
 COMMIT;
