@@ -13,17 +13,10 @@ CREATE TABLE IF NOT EXISTS job_steps (
     job_type_id uuid NOT NULL,
     app_step_number integer NOT NULL,
 
+    FOREIGN KEY (job_id) REFERENCES jobs(id),
+    FOREIGN KEY (job_type_id) REFERENCES job_types(id),
     PRIMARY KEY (job_id, step_number)
 );
-
-ALTER TABLE ONLY job_steps
-    ADD CONSTRAINT job_steps_job_id_fkey
-    FOREIGN KEY (job_id)
-    REFERENCES jobs(id);
-ALTER TABLE ONLY job_steps
-    ADD CONSTRAINT job_steps_job_type_id_fkey
-    FOREIGN KEY (job_type_id)
-    REFERENCES job_types(id);
 
 CREATE INDEX IF NOT EXISTS job_steps_external_id_index
     ON job_steps (external_id);
@@ -34,14 +27,10 @@ CREATE TABLE IF NOT EXISTS job_tickets(
    ticket varchar(100) NOT NULL,
    irods_path text NOT NULL,
    deleted boolean DEFAULT FALSE,
-   primary key (job_id, ticket)
-);
 
-ALTER TABLE ONLY job_tickets
-    ADD CONSTRAINT job_tickets_job_id_fkey
-    FOREIGN KEY (job_id)
-    REFERENCES jobs(id)
-    ON DELETE CASCADE;
+  FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
+  PRIMARY KEY (job_id, ticket)
+);
 
 --
 -- An index on the job_id field of the job_tickets table.
