@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS access_tokens (
 ---
 CREATE TABLE IF NOT EXISTS authorization_requests (
     id UUID NOT NULL,
-    user_id UUID UNIQUE NOT NULL,
+    user_id UUID NOT NULL,
     state_info TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)

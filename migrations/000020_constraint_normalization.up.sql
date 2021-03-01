@@ -10,23 +10,50 @@ ALTER TABLE ONLY apps_htcondor_extra
     ADD PRIMARY KEY (apps_id);
 
 ALTER TABLE ONLY authorization_requests
-    DROP CONSTRAINT IF EXISTS authorization_requests_user_id_key,
-    ADD UNIQUE (user_id);
+    DROP CONSTRAINT IF EXISTS authorization_requests_user_id_key;
 
+ALTER TABLE ONLY default_bags
+    DROP CONSTRAINT IF EXISTS default_bags_bag_id_fkey;
 ALTER TABLE ONLY bags
     DROP CONSTRAINT IF EXISTS bags_id_key; -- duplicated by bags_pkey
+ALTER TABLE ONLY default_bags
+    ADD FOREIGN KEY (bag_id) REFERENCES bags(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY container_devices
     DROP CONSTRAINT IF EXISTS container_devices_id_key; -- duplicated by container_devices_pkey
 
+ALTER TABLE ONLY data_containers
+    DROP CONSTRAINT IF EXISTS data_containers_container_images_id_fkey,
+    DROP CONSTRAINT IF EXISTS data_containers_container_images_fkey;
+ALTER TABLE ONLY tools
+    DROP CONSTRAINT IF EXISTS tools_container_images_id_fkey,
+    DROP CONSTRAINT IF EXISTS tools_container_image_fkey; -- both recreated below
 ALTER TABLE ONLY container_images
     DROP CONSTRAINT IF EXISTS container_images_id_key; -- duplicated by container_images_pkey
+ALTER TABLE ONLY data_containers
+    ADD FOREIGN KEY (container_images_id) REFERENCES container_images(id);
 
 ALTER TABLE ONLY container_ports
     DROP CONSTRAINT IF EXISTS container_ports_id_key; -- duplicated by container_ports_pkey
 
+ALTER TABLE ONLY container_devices
+    DROP CONSTRAINT IF EXISTS container_devices_container_settings_id_fkey;
+ALTER TABLE ONLY container_ports
+    DROP CONSTRAINT IF EXISTS container_ports_container_settings_id_fkey;
+ALTER TABLE ONLY container_volumes
+    DROP CONSTRAINT IF EXISTS container_volumes_container_settings_id_fkey;
+ALTER TABLE ONLY container_volumes_from
+    DROP CONSTRAINT IF EXISTS container_volumes_from_container_settings_id_fkey;
 ALTER TABLE ONLY container_settings
     DROP CONSTRAINT IF EXISTS container_settings_id_key; -- duplicated by container_settings_pkey
+ALTER TABLE ONLY container_devices
+    ADD FOREIGN KEY (container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE;
+ALTER TABLE ONLY container_ports
+    ADD FOREIGN KEY (container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE;
+ALTER TABLE ONLY container_volumes
+    ADD FOREIGN KEY (container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE;
+ALTER TABLE ONLY container_volumes_from
+    ADD FOREIGN KEY (container_settings_id) REFERENCES container_settings(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY container_volumes_from
     DROP CONSTRAINT IF EXISTS container_volumes_from_id_key; -- duplicated by container_volumes_from_pkey
@@ -34,11 +61,15 @@ ALTER TABLE ONLY container_volumes_from
 ALTER TABLE ONLY container_volumes
     DROP CONSTRAINT IF EXISTS container_volumes_id_key; -- duplicated by container_volumes_pkey
 
+ALTER TABLE ONLY container_volumes_from
+    DROP CONSTRAINT IF EXISTS container_volumes_from_data_containers_id_fkey;
 ALTER TABLE ONLY data_containers
     DROP CONSTRAINT IF EXISTS data_containers_id_key, -- duplicated by data_containers_pkey
     DROP CONSTRAINT IF EXISTS data_containers_container_images_id_name_prefix_read_only_key,
     DROP CONSTRAINT IF EXISTS data_containers_unique,
     ADD UNIQUE (container_images_id, name_prefix, read_only);
+ALTER TABLE ONLY container_volumes_from
+    ADD FOREIGN KEY (data_containers_id) REFERENCES data_containers(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY data_source
     DROP CONSTRAINT IF EXISTS data_source_name_key,
@@ -47,7 +78,7 @@ ALTER TABLE ONLY data_source
 
 ALTER TABLE ONLY default_instant_launches
     DROP CONSTRAINT IF EXISTS default_instant_launches_id_key, -- duplicated by primary key
-    DROP CONSTRAINT IF EXISTS default_instant_launches_id_pky,
+    DROP CONSTRAINT IF EXISTS default_instant_launches_pky,
     DROP CONSTRAINT IF EXISTS default_instant_launches_pkey,
     ADD PRIMARY KEY (id),
     DROP CONSTRAINT IF EXISTS default_instant_launches_version_key,
@@ -70,8 +101,12 @@ ALTER TABLE ONLY integration_data
     DROP CONSTRAINT IF EXISTS integration_data_name_email_unique,
     ADD UNIQUE (integrator_name, integrator_email);
 
+ALTER TABLE ONLY container_settings
+    DROP CONSTRAINT IF EXISTS container_settings_interactive_apps_proxy_settings_id_fkey;
 ALTER TABLE ONLY interactive_apps_proxy_settings
     DROP CONSTRAINT IF EXISTS interactive_apps_proxy_settings_id_key; -- duplicated by primary key
+ALTER TABLE ONLY container_settings
+    ADD FOREIGN KEY (interactive_apps_proxy_settings_id) REFERENCES interactive_apps_proxy_settings(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY job_limits
     DROP CONSTRAINT IF EXISTS job_limits_launcher_key,
@@ -143,8 +178,7 @@ ALTER TABLE ONLY tools
     ADD UNIQUE (name, version);
 
 ALTER TABLE ONLY tree_urls
-    DROP CONSTRAINT IF EXISTS tree_urls_sha1_key,
-    ADD UNIQUE (sha1);
+    DROP CONSTRAINT IF EXISTS tree_urls_sha1_key; -- meh
 
 ALTER TABLE ONLY user_instant_launches
     DROP CONSTRAINT IF EXISTS user_instant_launches_id_key, -- duplicated by primary key
@@ -269,8 +303,7 @@ ALTER TABLE ONLY tool_type_parameter_type
     ADD FOREIGN KEY (parameter_type_id) REFERENCES parameter_types(id);
 
 ALTER TABLE ONLY tools
-    DROP CONSTRAINT IF EXISTS tools_container_images_id_fkey,
-    DROP CONSTRAINT IF EXISTS tools_container_image_fkey,
+    -- dropped earlier
     ADD FOREIGN KEY (container_images_id) REFERENCES container_images(id),
     DROP CONSTRAINT IF EXISTS tools_integration_data_id_fkey,
     DROP CONSTRAINT IF EXISTS deployed_comp_integration_data_id_fk,
@@ -313,4 +346,7 @@ ALTER TABLE ONLY workspace
     DROP CONSTRAINT IF EXISTS workspace_users_fk,
     ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
+DROP INDEX IF EXISTS user_preferences_id; -- duplicated by pkey
+DROP INDEX IF EXISTS user_saved_searches_id; -- duplicated by pkey
+DROP INDEX IF EXISTS user_sessions_id; -- duplicated by pkey
 COMMIT;
