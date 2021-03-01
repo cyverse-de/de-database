@@ -114,11 +114,6 @@ ALTER TABLE ONLY quick_launch_user_defaults
     DROP CONSTRAINT IF EXISTS quick_launch_user_defaults_user_id_quick_launch_id_unique,
     ADD UNIQUE (user_id, quick_launch_id);
 
---ALTER TABLE ONLY quick_launches
---    DROP CONSTRAINT IF EXISTS quick_launches_pkey, -- stuff depends on this
---    DROP CONSTRAINT IF EXISTS quick_launches_id_pkey,
---    ADD PRIMARY KEY (id);
-
 ALTER TABLE ONLY ratings
     DROP CONSTRAINT IF EXISTS ratings_user_id_app_id_key,
     DROP CONSTRAINT IF EXISTS votes_unique,
@@ -137,10 +132,6 @@ ALTER TABLE ONLY request_types
     DROP CONSTRAINT IF EXISTS request_types_name_unique,
     ADD UNIQUE (name);
 
---ALTER TABLE ONLY submissions
---    DROP CONSTRAINT IF EXISTS submissions_pkey, -- stuff depends on this
---    DROP CONSTRAINT IF EXISTS submissions_id_pkey,
---    ADD PRIMARY KEY (id);
 
 ALTER TABLE ONLY tool_types
     DROP CONSTRAINT IF EXISTS tool_types_name_key,
@@ -171,10 +162,6 @@ ALTER TABLE ONLY validation_rule_argument_definitions
     DROP CONSTRAINT IF EXISTS validation_rule_argument_definitions_id_pkey,
     ADD PRIMARY KEY (id);
 
---ALTER TABLE ONLY validation_rule_argument_types
---    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_pkey, -- stuff depends on this
---    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_id_pkey,
---    ADD PRIMARY KEY (id);
 
 ALTER TABLE ONLY webhooks_subscription
     DROP CONSTRAINT IF EXISTS webhooks_subscription_webhook_id_topic_id_key,
@@ -195,6 +182,35 @@ ALTER TABLE ONLY workflow_io_maps
     DROP CONSTRAINT IF EXISTS workflow_io_maps_app_id_target_step_source_step_key,
     DROP CONSTRAINT IF EXISTS workflow_io_maps_unique,
     ADD UNIQUE (app_id, target_step, source_step);
+
+-- depended-on primary keys
+-- we have to do this the annoying way because stuff depends on these primary keys
+DO $$
+BEGIN
+    ALTER TABLE ONLY quick_launches
+        RENAME CONSTRAINT quick_launches_id_pkey TO quick_launches_pkey;
+EXCEPTION
+    WHEN undefined_object THEN
+        RAISE NOTICE 'quick_launches_id_pkey does not exist, continuing';
+END$$;
+
+DO $$
+BEGIN
+    ALTER TABLE ONLY submissions
+        RENAME CONSTRAINT submissions_id_pkey TO submissions_pkey;
+EXCEPTION
+    WHEN undefined_object THEN
+        RAISE NOTICE 'submissions_id_pkey does not exist, continuing';
+END$$;
+
+DO $$
+BEGIN
+    ALTER TABLE ONLY validation_rule_argument_types
+        RENAME CONSTRAINT validation_rule_argument_types_id_pkey TO validation_rule_argument_types_pkey;
+EXCEPTION
+    WHEN undefined_object THEN
+        RAISE NOTICE 'validation_rule_argument_types_id_pkey does not exist, continuing';
+END$$;
 
 -- Foreign Keys
 
