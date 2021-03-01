@@ -76,7 +76,7 @@ ALTER TABLE ONLY interactive_apps_proxy_settings
 ALTER TABLE ONLY job_limits
     DROP CONSTRAINT IF EXISTS job_limits_launcher_key,
     DROP CONSTRAINT IF EXISTS job_limits_launcher_unique,
-    UNIQUE (launcher);
+    ADD UNIQUE (launcher);
 
 ALTER TABLE ONLY notif_statuses
     DROP CONSTRAINT IF EXISTS notif_statuses_analysis_id_key,
@@ -87,7 +87,7 @@ ALTER TABLE ONLY notif_statuses
 ALTER TABLE ONLY quick_launch_favorites
     DROP CONSTRAINT IF EXISTS quick_launch_favorites_pkey,
     DROP CONSTRAINT IF EXISTS quick_launch_favorites_id_pkey,
-    ADD PRIMARY KEY (id)
+    ADD PRIMARY KEY (id),
     DROP CONSTRAINT IF EXISTS quick_launch_favorites_user_id_quick_launch_id_key,
     DROP CONSTRAINT IF EXISTS quick_launch_favorites_user_id_quick_launches_id_unique,
     ADD UNIQUE (user_id, quick_launch_id);
@@ -114,14 +114,14 @@ ALTER TABLE ONLY quick_launch_user_defaults
     DROP CONSTRAINT IF EXISTS quick_launch_user_defaults_user_id_quick_launch_id_unique,
     ADD UNIQUE (user_id, quick_launch_id);
 
-ALTER TABLE ONLY quick_launches
-    DROP CONSTRAINT IF EXISTS quick_launches_pkey,
-    DROP CONSTRAINT IF EXISTS quick_launches_id_pkey,
-    ADD PRIMARY KEY (id);
+--ALTER TABLE ONLY quick_launches
+--    DROP CONSTRAINT IF EXISTS quick_launches_pkey, -- stuff depends on this
+--    DROP CONSTRAINT IF EXISTS quick_launches_id_pkey,
+--    ADD PRIMARY KEY (id);
 
 ALTER TABLE ONLY ratings
     DROP CONSTRAINT IF EXISTS ratings_user_id_app_id_key,
-    DROP CONSTRAINT IF EXISTS votes_unique;
+    DROP CONSTRAINT IF EXISTS votes_unique,
     ADD UNIQUE (user_id, app_id);
 
 ALTER TABLE ONLY request_status_codes
@@ -137,10 +137,10 @@ ALTER TABLE ONLY request_types
     DROP CONSTRAINT IF EXISTS request_types_name_unique,
     ADD UNIQUE (name);
 
-ALTER TABLE ONLY submissions
-    DROP CONSTRAINT IF EXISTS submissions_pkey,
-    DROP CONSTRAINT IF EXISTS submissions_id_pkey,
-    ADD PRIMARY KEY (id);
+--ALTER TABLE ONLY submissions
+--    DROP CONSTRAINT IF EXISTS submissions_pkey, -- stuff depends on this
+--    DROP CONSTRAINT IF EXISTS submissions_id_pkey,
+--    ADD PRIMARY KEY (id);
 
 ALTER TABLE ONLY tool_types
     DROP CONSTRAINT IF EXISTS tool_types_name_key,
@@ -171,10 +171,10 @@ ALTER TABLE ONLY validation_rule_argument_definitions
     DROP CONSTRAINT IF EXISTS validation_rule_argument_definitions_id_pkey,
     ADD PRIMARY KEY (id);
 
-ALTER TABLE ONLY validation_rule_argument_types
-    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_pkey,
-    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_id_pkey,
-    ADD PRIMARY KEY (id);
+--ALTER TABLE ONLY validation_rule_argument_types
+--    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_pkey, -- stuff depends on this
+--    DROP CONSTRAINT IF EXISTS validation_rule_argument_types_id_pkey,
+--    ADD PRIMARY KEY (id);
 
 ALTER TABLE ONLY webhooks_subscription
     DROP CONSTRAINT IF EXISTS webhooks_subscription_webhook_id_topic_id_key,
@@ -219,7 +219,7 @@ ALTER TABLE ONLY apps
 ALTER TABLE ONLY input_output_mapping
     DROP CONSTRAINT IF EXISTS input_output_mapping_mapping_id_fkey,
     DROP CONSTRAINT IF EXISTS input_output_mapping_mapping_id_fk,
-    ADD FOREIGN KEY (mapping_id) REFERENCES workflow_io_maps(id);
+    ADD FOREIGN KEY (mapping_id) REFERENCES workflow_io_maps(id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY integration_data
     DROP CONSTRAINT IF EXISTS integration_data_user_id_fkey,
@@ -255,7 +255,7 @@ ALTER TABLE ONLY tool_type_parameter_type
 ALTER TABLE ONLY tools
     DROP CONSTRAINT IF EXISTS tools_container_images_id_fkey,
     DROP CONSTRAINT IF EXISTS tools_container_image_fkey,
-    ADD FOREIGN KEY (container_images_id) REFERENCES container_images(id)
+    ADD FOREIGN KEY (container_images_id) REFERENCES container_images(id),
     DROP CONSTRAINT IF EXISTS tools_integration_data_id_fkey,
     DROP CONSTRAINT IF EXISTS deployed_comp_integration_data_id_fk,
     ADD FOREIGN KEY (integration_data_id) REFERENCES integration_data(id);
