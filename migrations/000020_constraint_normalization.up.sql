@@ -34,6 +34,9 @@ ALTER TABLE ONLY data_containers
     ADD FOREIGN KEY (container_images_id) REFERENCES container_images(id);
 
 ALTER TABLE ONLY container_ports
+    DROP CONSTRAINT IF EXISTS container_ports_pkey,
+    DROP CONSTRAINT IF EXISTS container_ports_id_pkey,
+    ADD PRIMARY KEY (id),
     DROP CONSTRAINT IF EXISTS container_ports_id_key; -- duplicated by container_ports_pkey
 
 ALTER TABLE ONLY container_devices
@@ -104,6 +107,9 @@ ALTER TABLE ONLY integration_data
 ALTER TABLE ONLY container_settings
     DROP CONSTRAINT IF EXISTS container_settings_interactive_apps_proxy_settings_id_fkey;
 ALTER TABLE ONLY interactive_apps_proxy_settings
+    DROP CONSTRAINT IF EXISTS interactive_apps_proxy_settings_id_pkey,
+    DROP CONSTRAINT IF EXISTS interactive_apps_proxy_settings_pkey,
+    ADD PRIMARY KEY (id),
     DROP CONSTRAINT IF EXISTS interactive_apps_proxy_settings_id_key; -- duplicated by primary key
 ALTER TABLE ONLY container_settings
     ADD FOREIGN KEY (interactive_apps_proxy_settings_id) REFERENCES interactive_apps_proxy_settings(id) ON DELETE CASCADE;
@@ -190,7 +196,7 @@ ALTER TABLE ONLY users
     DROP CONSTRAINT IF EXISTS users_username_key,
     DROP CONSTRAINT IF EXISTS username_unique,
     ADD UNIQUE (username);
-    
+
 ALTER TABLE ONLY validation_rule_argument_definitions
     DROP CONSTRAINT IF EXISTS validation_rule_argument_definitions_pkey,
     DROP CONSTRAINT IF EXISTS validation_rule_argument_definitions_id_pkey,
@@ -349,4 +355,321 @@ ALTER TABLE ONLY workspace
 DROP INDEX IF EXISTS user_preferences_id; -- duplicated by pkey
 DROP INDEX IF EXISTS user_saved_searches_id; -- duplicated by pkey
 DROP INDEX IF EXISTS user_sessions_id; -- duplicated by pkey
+
+-- Delete old _v192 stuff
+
+ALTER TABLE ONLY access_tokens
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY app_categories
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS workspace_id_v192 CASCADE;
+
+ALTER TABLE ONLY app_category_app
+    DROP COLUMN IF EXISTS template_group_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS template_id_v192 CASCADE;
+
+ALTER TABLE ONLY app_category_group
+    DROP COLUMN IF EXISTS parent_group_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS subgroup_id_v192 CASCADE;
+
+ALTER TABLE ONLY app_references
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS transformation_activity_id_v192 CASCADE;
+
+ALTER TABLE ONLY authorization_requests
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY data_formats
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY file_parameters
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS name_v192 CASCADE,
+    DROP COLUMN IF EXISTS label_v192 CASCADE,
+    DROP COLUMN IF EXISTS orderd_v192 CASCADE,
+    DROP COLUMN IF EXISTS switch_v192 CASCADE,
+    DROP COLUMN IF EXISTS info_type_v192 CASCADE,
+    DROP COLUMN IF EXISTS data_format_v192 CASCADE,
+    DROP COLUMN IF EXISTS description_v192 CASCADE,
+    DROP COLUMN IF EXISTS required_v192 CASCADE,
+    DROP COLUMN IF EXISTS multiplicity_v192 CASCADE,
+    DROP COLUMN IF EXISTS data_source_id_v192 CASCADE;
+
+ALTER TABLE ONLY genome_reference
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS created_by_v192 CASCADE,
+    DROP COLUMN IF EXISTS last_modified_by_v192 CASCADE;
+
+DROP TABLE IF EXISTS hibernate_sequence_v192;
+
+ALTER TABLE ONLY info_type
+    DROP COLUMN IF EXISTS hid_v192 CASCADE;
+
+ALTER TABLE ONLY input_output_mapping
+    DROP COLUMN IF EXISTS mapping_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS input_v192 CASCADE,
+    DROP COLUMN IF EXISTS output_v192 CASCADE;
+
+ALTER TABLE ONLY job_types
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY jobs
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY job_steps
+    DROP COLUMN IF EXISTS job_type_id_v192 CASCADE;
+
+ALTER TABLE ONLY logins
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+DROP TABLE IF EXISTS multiplicity_v192 CASCADE;
+
+ALTER TABLE ONLY parameter_groups
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS group_type_v192 CASCADE;
+
+ALTER TABLE ONLY parameter_types
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS value_type_id_v192 CASCADE;
+
+ALTER TABLE ONLY parameters
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS defalut_value_v192 CASCADE, -- RIP
+    DROP COLUMN IF EXISTS property_type_v192 CASCADE,
+    DROP COLUMN IF EXISTS validator_v192 CASCADE,
+    DROP COLUMN IF EXISTS dataobject_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+DROP TABLE IF EXISTS property_group_property_v192 CASCADE;
+
+ALTER TABLE ONLY rule_subtype
+    DROP COLUMN IF EXISTS hid_v192 CASCADE;
+
+ALTER TABLE ONLY rule_type
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS rule_subtype_id_v192 CASCADE;
+
+ALTER TABLE ONLY rule_type_value_type
+    DROP COLUMN IF EXISTS rule_type_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS value_type_id_v192 CASCADE;
+
+ALTER TABLE ONLY suggested_groups
+    DROP COLUMN IF EXISTS transformation_activity_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS template_group_id_v192 CASCADE;
+
+DROP TABLE IF EXISTS template_input_v192 CASCADE;
+DROP TABLE IF EXISTS template_output_v192 CASCADE;
+DROP TABLE IF EXISTS template_property_group_v192 CASCADE;
+
+ALTER TABLE ONLY tool_architectures
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY tool_request_statuses
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS tool_request_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS updater_id_v192 CASCADE;
+
+ALTER TABLE ONLY tool_requests
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS requestor_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS tool_architecture_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS deployed_component_id_v192 CASCADE;
+
+ALTER TABLE ONLY tool_test_data_files
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS deployed_component_id_v192 CASCADE;
+
+ALTER TABLE ONLY tool_type_parameter_type
+    DROP COLUMN IF EXISTS tool_type_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS property_type_id_v192 CASCADE;
+
+DROP TABLE IF EXISTS transformation_activity_mappings_v192 CASCADE;
+DROP TABLE IF EXISTS transformation_steps_v192 CASCADE;
+DROP TABLE IF EXISTS transformation_values_v192 CASCADE;
+DROP TABLE IF EXISTS transformations_v192 CASCADE;
+
+ALTER TABLE ONLY user_preferences
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY user_saved_searches
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY user_sessions
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY validation_rule_arguments
+    DROP COLUMN IF EXISTS rule_id_v192 CASCADE;
+
+ALTER TABLE ONLY validation_rules
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS name_v192 CASCADE,
+    DROP COLUMN IF EXISTS description_v192 CASCADE,
+    DROP COLUMN IF EXISTS label_v192 CASCADE,
+    DROP COLUMN IF EXISTS rule_type_v192 CASCADE;
+
+DROP TABLE IF EXISTS validator_rule_v192 CASCADE;
+DROP TABLE IF EXISTS validator_v192 CASCADE;
+
+ALTER TABLE ONLY value_type
+    DROP COLUMN IF EXISTS hid_v192 CASCADE;
+
+ALTER TABLE ONLY workflow_io_maps
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS source_v192 CASCADE,
+    DROP COLUMN IF EXISTS target_v192 CASCADE;
+
+ALTER TABLE ONLY workspace
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS home_folder_v192 CASCADE,
+    DROP COLUMN IF EXISTS root_analysis_group_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE;
+
+ALTER TABLE ONLY app_steps
+    DROP COLUMN IF EXISTS transformation_task_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS transformation_step_id_v192 CASCADE;
+
+ALTER TABLE ONLY apps
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS workspace_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS type_v192 CASCADE,
+    DROP COLUMN IF EXISTS integration_data_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY tasks
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS type_v192 CASCADE,
+    DROP COLUMN IF EXISTS component_id_v192 CASCADE;
+
+ALTER TABLE ONLY tool_types
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY tools
+    DROP COLUMN IF EXISTS hid_v192 CASCADE,
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS integration_data_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS tool_type_id_v192 CASCADE;
+
+ALTER TABLE ONLY integration_data
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+ALTER TABLE ONLY ratings
+    DROP COLUMN IF EXISTS id_v192 CASCADE,
+    DROP COLUMN IF EXISTS user_id_v192 CASCADE,
+    DROP COLUMN IF EXISTS transformation_activity_id_v192 CASCADE;
+
+ALTER TABLE ONLY users
+    DROP COLUMN IF EXISTS id_v192 CASCADE;
+
+-- Now, recreate views that may reference these columns
+CREATE OR REPLACE VIEW app_listing AS
+    SELECT apps.id,
+           apps."name",
+           lower(apps."name") AS lower_case_name,
+           apps.description,
+           integration.integrator_name,
+           integration.integrator_email,
+           apps.integration_date,
+           apps.edited_date,
+           apps.wiki_url,
+           (   SELECT CAST(COALESCE(AVG(rating), 0.0) AS DOUBLE PRECISION)
+               FROM ratings
+               WHERE app_id = apps.id
+           ) AS average_rating,
+           (   SELECT COUNT(rating)
+               FROM ratings
+               WHERE app_id = apps.id
+           ) AS total_ratings,
+           EXISTS (
+               SELECT *
+               FROM app_category_app aca
+               JOIN app_categories ac ON aca.app_category_id = ac.id
+               JOIN workspace w ON ac.workspace_id = w.id
+               WHERE apps.id = aca.app_id
+               AND w.is_public IS TRUE
+           ) AS is_public,
+           COUNT(steps.*) AS step_count,
+           COUNT(t.tool_id) AS tool_count,
+           COUNT(t.external_app_id) AS external_app_count,
+           COUNT(t.id) AS task_count,
+           apps.deleted,
+           apps.disabled,
+           CASE WHEN COUNT(DISTINCT tt.name) = 0 THEN 'unknown'
+                WHEN COUNT(DISTINCT tt.name) > 1 THEN 'mixed'
+                ELSE MAX(tt.name)
+           END AS overall_job_type,
+           integration.user_id AS integrator_id,
+           u.username AS integrator_username,
+           array_agg(tt.name) as job_types
+    FROM apps
+         LEFT JOIN integration_data integration ON apps.integration_data_id = integration.id
+         LEFT JOIN users u ON integration.user_id = u.id
+         LEFT JOIN app_steps steps ON apps.id = steps.app_id
+         LEFT JOIN tasks t ON steps.task_id = t.id
+         LEFT JOIN tools tool ON t.tool_id = tool.id
+         LEFT JOIN tool_types tt ON tool.tool_type_id = tt.id
+    GROUP BY apps.id,
+             apps."name",
+             apps.description,
+             integration.integrator_name,
+             integration.integrator_email,
+             integration.user_id,
+             u.username,
+             apps.integration_date,
+             apps.edited_date,
+             apps.wiki_url,
+             apps.deleted,
+             apps.disabled;
+
+CREATE OR REPLACE VIEW job_listings AS
+    SELECT j.id,
+           j.job_name,
+           j.app_name,
+           j.start_date,
+           j.end_date,
+           j.status,
+           j.deleted,
+           j.notify,
+           u.username,
+           j.job_description,
+           j.app_id,
+           j.app_wiki_url,
+           j.app_description,
+           j.result_folder_path,
+           j.submission,
+           t.name AS job_type,
+           j.parent_id,
+           EXISTS (
+               SELECT * FROM jobs child
+               WHERE child.parent_id = j.id
+           ) AS is_batch,
+           t.system_id,
+           j.planned_end_date,
+           j.user_id
+    FROM jobs j
+    JOIN users u ON j.user_id = u.id
+    JOIN job_types t ON j.job_type_id = t.id;
+
+CREATE OR REPLACE VIEW tool_listing AS
+    SELECT row_number() OVER (ORDER BY apps.id, steps.step) AS id,
+           apps.id AS app_id,
+           apps.is_public,
+           steps.step AS execution_order,
+           tool.id AS tool_id,
+           tool."name",
+           tool.description,
+           tool.location,
+           tt."name" AS "type",
+           tt.hidden,
+           tool.version,
+           tool.attribution,
+           tool.container_images_id
+    FROM app_listing AS apps
+         JOIN app_steps steps ON apps.id = steps.app_id
+         JOIN tasks t ON steps.task_id = t.id
+         JOIN tools tool ON t.tool_id = tool.id
+         JOIN tool_types tt ON tool.tool_type_id = tt.id;
+
 COMMIT;
