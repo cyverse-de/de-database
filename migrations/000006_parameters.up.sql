@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS data_formats (
 -- file_parameters (data_source, info_type, data_formats, parameters)
 CREATE TABLE IF NOT EXISTS file_parameters (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
-    parameter_id uuid,
+    parameter_id uuid NOT NULL,
     retain boolean DEFAULT false,
     is_implicit boolean DEFAULT false,
     repeat_option_flag boolean DEFAULT true,
@@ -207,7 +207,7 @@ CREATE INDEX IF NOT EXISTS validation_rules_parameters_id_idx ON validation_rule
 CREATE TABLE IF NOT EXISTS validation_rule_arguments (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
     rule_id uuid NOT NULL,
-    ordering integer DEFAULT 0,
+    ordering integer NOT NULL DEFAULT 0,
     argument_value text,
     FOREIGN KEY (rule_id) REFERENCES validation_rules(id) ON DELETE CASCADE,
     PRIMARY KEY (id)
