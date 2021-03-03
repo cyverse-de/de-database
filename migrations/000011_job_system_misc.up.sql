@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS genome_reference (
 --
 CREATE TABLE IF NOT EXISTS notif_statuses (
 	id UUID UNIQUE NOT NULL DEFAULT uuid_generate_v1(),
-	analysis_id UUID UNIQUE NOT NULL,
-	external_id UUID UNIQUE NOT NULL,
+	analysis_id UUID NOT NULL,
+	external_id UUID NOT NULL,
 	hour_warning_sent BOOL NOT NULL DEFAULT false,
 	day_warning_sent BOOL NOT NULL DEFAULT false,
 	kill_warning_sent BOOL NOT NULL DEFAULT false,
