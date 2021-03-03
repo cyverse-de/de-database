@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS workspace (
 -- app_categories
 CREATE TABLE IF NOT EXISTS app_categories (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
-    name character varying(255),
+    name character varying(255) NOT NULL,
     description text,
     workspace_id uuid NOT NULL,
     FOREIGN KEY (workspace_id) REFERENCES workspace(id) ON DELETE CASCADE,
