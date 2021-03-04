@@ -702,14 +702,18 @@ INSERT INTO data_source (id, name, label, description, display_order) VALUES
 
 -- Populates the tool_types table.
 
+-- make sure the constraint is here first
+ALTER TABLE ONLY tool_types
+    DROP CONSTRAINT IF EXISTS tool_types_name_key,
+    ADD UNIQUE (name);
+
 INSERT INTO tool_types (id, name, label, description, hidden, notification_type) VALUES
     ( 'DE1DBE6A-A2BB-4219-986B-D878C6A9E3E4', 'executable', 'UA', 'Run at the University of Arizona', false, 'analysis' ),
     ( 'FA713BB8-2838-4B63-AB3A-265DBB1D719C', 'fAPI', 'TACC', 'Run at the Texas Advanced Computing Center', false, 'analysis' ),
     ( '01E14110-1420-4DE0-8A70-B0DD420F6A84', 'internal', 'Internal DE tools.', 'Tools used internally by the Discovery Environment.', true, 'data' ),
     ( '4166B913-EAFA-4731-881F-21C3751DFFBB', 'interactive', 'Interactive DE tools.', 'Interactive tools used by the Discovery Environment.', false, 'analysis' ),
     ( '7EC7063B-A96D-4AE5-9815-4548BA7D9C74', 'osg', 'OSG DE tools.', 'DE tools capable of running on the Open Science Grid.', false, 'analysis' )
-    ON CONFLICT (id) DO UPDATE
-        SET name=EXCLUDED.name, label=EXCLUDED.label, description=EXCLUDED.description, hidden=EXCLUDED.hidden, notification_type=EXCLUDED.notification_type;
+    ON CONFLICT DO NOTHING;
 
 -- Populates the tool_type_parameter_type table.
 
@@ -776,8 +780,7 @@ INSERT INTO tool_architectures ( id, name, description ) VALUES
     ( 'EF254514-6D9F-4869-8FB8-A719262EFCA3', '64-bit Generic', '64-bit executables on an unspecified architecture.' ),
     ( '44DF2E72-36C0-4753-99F7-10AF851BAE8F', 'Others', 'Another specific architecture.' ),
     ( '6AF24F59-5DE7-4E43-A000-B8059DC80B0A', 'Don''t know', 'Used in cases where the user doesn''t know the architecture.' )
-    ON CONFLICT (id) DO UPDATE
-        SET name=EXCLUDED.name, description=EXCLUDED.description;
+    ON CONFLICT DO NOTHING;
 
 -- Populates the job_types table.
 
