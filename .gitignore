@@ -9,3 +9,7 @@
 .project
 .idea
 .vscode
+
+# ignore golang-migrate/migrate binaries
+migrate
+migrate.linux-amd64
