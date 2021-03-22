@@ -1,6 +1,6 @@
 # Database Schema for the Discovery Environment
 
-This repository contains the database migration files for the relational database used by the CyVerse Discovery Environment. This is the successor to the former four databases for assorted Discovery Environment services ([de][1], [metadata][2], [permissions][3], and [notifications][4]), now in schemas within one database. For reference, these older DB schemas and migrations are available in the `old-databases` folder. `notifications-db-v2` refers to the `v2` branch of the old notifications DB schema; all others refer to the `master` branch of their respective databases.
+This repository contains the database migration files for the relational database used by the CyVerse Discovery Environment. This is the successor to the former four databases for assorted Discovery Environment services ([de][1], [metadata][2], [permissions][3], and [notifications][4]), now in schemas within one database. For reference, these older DB schemas and migrations are available in the `old-databases` folder. `notifications-db-v2` refers to the `v2` branch of the old notifications DB schema; all others refer to the primary branch of their respective databases.
 
 The migrations use the [golang-migrate/migrate][5] system and are stored within the `migrations` folder. They're written as pairs of simple SQL files, one each for applying and reverting each migration.
 
