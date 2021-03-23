@@ -1,0 +1,5 @@
+BEGIN;
+
+DROP SCHEMA permissions CASCADE;
+
+COMMIT;
