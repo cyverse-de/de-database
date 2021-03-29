@@ -77,4 +77,17 @@ BEGIN;
         FOREIGN KEY (permission_level_id) REFERENCES permission_levels(id)
     );
 
+INSERT INTO resource_types (id, name, description) VALUES
+    ('de6e3a52-3d51-11e6-ba3c-008cfa5ae621', 'app', 'A Discovery Environment application.'),
+    ('de6e50aa-3d51-11e6-ba3c-008cfa5ae621', 'analysis', 'The results of running a Discovery Environment application.'),
+    ('f968f35c-13d8-11e7-82d3-008cfa5ae621', 'tool', 'A Discovery Environment tool run by an application.')
+    ON CONFLICT DO NOTHING;
+
+INSERT INTO permission_levels (id, name, description, precedence) VALUES
+    ('de6d5498-3d51-11e6-ba3c-008cfa5ae621', 'own', 'Implies that the user can assign permissions to, read, and modify a resource.', 0),
+    ('de6d6172-3d51-11e6-ba3c-008cfa5ae621', 'write', 'Implies that the user can read and modify a resource.', 1),
+    ('de6d63b6-3d51-11e6-ba3c-008cfa5ae621', 'admin', 'Implies that a user can read and make limited motifications to a resource.', 2),
+    ('de6d6514-3d51-11e6-ba3c-008cfa5ae621', 'read', 'Implies that a user can read a resource.', 3)
+    ON CONFLICT DO NOTHING;
+
 COMMIT;
