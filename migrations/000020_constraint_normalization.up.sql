@@ -119,6 +119,12 @@ ALTER TABLE ONLY job_limits
     DROP CONSTRAINT IF EXISTS job_limits_launcher_unique,
     ADD UNIQUE (launcher);
 
+-- There was a duplicate entry in the production data set that was preventing the unique indices from
+-- being created. The two rows were identical except for the primary key.
+DELETE FROM notif_statuses a USING notif_statuses b
+    WHERE b.id > a.id
+    AND b.analysis_id = a.analysis_id;
+
 ALTER TABLE ONLY notif_statuses
     DROP CONSTRAINT IF EXISTS notif_statuses_analysis_id_key,
     DROP CONSTRAINT IF EXISTS notif_statuses_external_id_key,
