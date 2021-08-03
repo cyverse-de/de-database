@@ -4,11 +4,11 @@ timestamps {
     node('docker') {
         checkout scm
         
-        docker.withRegistry('https://registry.hub.docker.com', 'jenkins-docker-credentials') {
+        docker.withRegistry('https://harbor.cyverse.org', 'jenkins-harbor-credentials') {
 
             // Build and push the Docker image.
             stage('Build Docker Image') {
-                dockerImage = docker.build("discoenv/de-database:${env.BUILD_TAG}")
+                dockerImage = docker.build("harbor.cyverse.org/de/de-database:${env.BUILD_TAG}")
                 dockerImage.push();
                 dockerImage.push('dev');
             }
