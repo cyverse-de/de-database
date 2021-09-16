@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS cpu_usage_events (
     value bigint NOT NULL,
     created_by uuid NOT NULL,
     last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
+    UNIQUE (created_by, event_type_id, record_date, effective_date),
 
     FOREIGN KEY (event_type_id) REFERENCES cpu_usage_event_types(id),
     FOREIGN KEY (created_by) REFERENCES users(id),
@@ -44,6 +46,8 @@ CREATE TABLE IF NOT EXISTS cpu_usage_totals (
     effective_start_date timestamp NOT NULL,
     effective_end_date timestamp NOT NULL,
     last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE (user_id, effective_start_date, effective_end_date),
 
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
