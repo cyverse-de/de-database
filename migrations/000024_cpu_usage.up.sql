@@ -43,11 +43,10 @@ CREATE TABLE IF NOT EXISTS cpu_usage_totals (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     user_id uuid NOT NULL,
     total bigint NOT NULL DEFAULT 0,
-    effective_start_date timestamp NOT NULL,
-    effective_end_date timestamp NOT NULL,
+    effective_range tsrange NOT NULL,
     last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    UNIQUE (user_id, effective_start_date, effective_end_date),
+    CONSTRAINT effective_range_exclusion EXCLUDE USING GIST (user_id WITH =, effective_range WITH &&),
 
     FOREIGN KEY (user_id) REFERENCES users(id),
     PRIMARY KEY (id)
