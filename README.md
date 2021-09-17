@@ -24,6 +24,8 @@ Before migrations can be run, the following need to be met:
   superuser.
 - The `moddatetime` extension must already be installed in the database by a
   superuser.
+- The `btree_gist` extension must already be installed in the database by a
+  superuser.
 
 ## Database URLs
 
