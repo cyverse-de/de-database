@@ -15,5 +15,7 @@ ALTER TABLE IF EXISTS ONLY cpu_usage_events
 
 DROP TRIGGER IF EXISTS cpu_usage_events_claimed_on_trigger ON cpu_usage_events CASCADE;
 DROP TRIGGER IF EXISTS cpu_usage_events_processed_on_trigger ON cpu_usage_events CASCADE;
+DROP TRIGGER IF EXISTS cpu_usage_workers_last_modified_trigger ON cpu_usage_workers CASCADE;
+DROP TABLE IF EXISTS cpu_usage_workers;
 
 COMMIT;

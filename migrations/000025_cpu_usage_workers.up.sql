@@ -4,7 +4,7 @@ SET search_path = public, pg_catalog;
 
 ALTER TABLE IF EXISTS ONLY cpu_usage_events 
     ADD IF NOT EXISTS claimed boolean NOT NULL DEFAULT false,
-    ADD IF NOT EXISTS claimed_by character varying)32),
+    ADD IF NOT EXISTS claimed_by character varying(32),
     ADD IF NOT EXISTS claimed_on timestamp,
     ADD IF NOT EXISTS claim_expires_on timestamp,
     ADD IF NOT EXISTS processed boolean NOT NULL DEFAULT false,
@@ -26,5 +26,25 @@ CREATE TRIGGER cpu_usage_events_processed_on_trigger
     FOR EACH ROW
     WHEN (NOT OLD.processed AND NEW.processed)
     EXECUTE PROCEDURE moddatetime (processed_on);
+
+
+CREATE TABLE IF NOT EXISTS cpu_usage_workers (
+    id uuid NOT NULL DEFAULT uuid_generate_v1(),
+    added_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    name character varying(32) NOT NULL,
+    active bool NOT NULL DEFAULT true,
+    deactivated_on timestamp,
+    activated_on timestamp,
+    getting_work bool NOT NULL DEFAULT false,
+    getting_work_expires_on timestamp,
+    last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TRIGGER IF EXISTS cpu_usage_workers_last_modified_trigger ON cpu_usage_workers CASCADE;
+CREATE TRIGGER cpu_usage_workers_last_modified_trigger
+    BEFORE UPDATE ON cpu_usage_workers
+    FOR EACH ROW
+    EXECUTE PROCEDURE moddatetime (last_modified);
+
 
 COMMIT;
