@@ -8,6 +8,7 @@ ALTER TABLE IF EXISTS ONLY cpu_usage_events
     DROP IF EXISTS claimed_on CASCADE,
     DROP IF EXISTS claim_expires_on CASCADE,
     DROP IF EXISTS processed CASCADE,
+    DROP IF EXISTS processing CASCADE,
     DROP IF EXISTS processed_on CASCADE,
     DROP IF EXISTS max_processing_attempts CASCADE,
     DROP IF EXISTS attempts CASCADE;

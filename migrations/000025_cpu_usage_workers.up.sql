@@ -8,6 +8,7 @@ ALTER TABLE IF EXISTS ONLY cpu_usage_events
     ADD IF NOT EXISTS claimed_on timestamp,
     ADD IF NOT EXISTS claim_expires_on timestamp,
     ADD IF NOT EXISTS processed boolean NOT NULL DEFAULT false,
+    ADD IF NOT EXISTS processing boolean NOT NULL DEFAULT false,
     ADD IF NOT EXISTS processed_on timestamp,
     ADD IF NOT EXISTS max_processing_attempts int NOT NULL DEFAULT 3,
     ADD IF NOT EXISTS attempts int NOT NULL DEFAULT 0;
