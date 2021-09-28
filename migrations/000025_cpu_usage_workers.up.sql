@@ -33,10 +33,14 @@ CREATE TABLE IF NOT EXISTS cpu_usage_workers (
     added_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name character varying(32) NOT NULL,
     active bool NOT NULL DEFAULT true,
+    activation_expires_on timestamp,
     deactivated_on timestamp,
     activated_on timestamp,
     getting_work bool NOT NULL DEFAULT false,
+    getting_work_on timestamp,
     getting_work_expires_on timestamp,
+    working bool NOT NULL DEFAULT false,
+    working_on timestamp,
     last_modified timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -46,5 +50,25 @@ CREATE TRIGGER cpu_usage_workers_last_modified_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE moddatetime (last_modified);
 
+DROP TRIGGER IF EXISTS cpu_usage_workers_activated_on_trigger ON cpu_usage_workers CASCADE;
+CREATE TRIGGER cpu_usage_workers_activated_on_trigger
+    BEFORE UPDATE ON cpu_usage_workers
+    FOR EACH ROW
+    WHEN (NOT OLD.active AND NEW.active)
+    EXECUTE PROCEDURE moddatetime (activated_on);
+
+DROP TRIGGER IF EXISTS cpu_usage_workers_deactivated_on_trigger ON cpu_usage_workers CASCADE;
+CREATE TRIGGER cpu_usage_workers_deactivated_on_trigger
+    BEFORE UPDATE ON cpu_usage_workers
+    FOR EACH ROW
+    WHEN (OLD.active AND NOT NEW.active)
+    EXECUTE PROCEDURE moddatetime (deactivated_on);
+
+DROP TRIGGER IF EXISTS cpu_usage_workers_getting_work_on_trigger ON cpu_usage_workers CASCADE;
+CREATE TRIGGER cpu_usage_workers_getting_work_on_trigger
+    BEFORE UPDATE ON cpu_usage_workers
+    FOR EACH ROW
+    WHEN (NOT OLD.getting_work AND NEW.getting_work)
+    EXECUTE PROCEDURE moddatetime (getting_work_on);
 
 COMMIT;
