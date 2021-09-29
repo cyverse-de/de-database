@@ -2,6 +2,14 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
+INSERT INTO cpu_usage_event_types 
+    (name, description) 
+VALUES
+    ('cpu.hours.add', 'Add more CPU hours to the total for a user.'),
+    ('cpu.hours.subtract', 'Remove CPU hours from the total for a user.'),
+    ('cpu.hours.reset', 'Reset the CPU hours total for a user to a new value.'),
+    ('cpu.hours.calculate', '(Re)Calculate the CPU hours total for a user.');
+
 CREATE TABLE IF NOT EXISTS cpu_usage_workers (
     id uuid UNIQUE NOT NULL DEFAULT uuid_generate_v1(),
     added_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
