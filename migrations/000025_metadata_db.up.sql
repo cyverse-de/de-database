@@ -36,7 +36,7 @@ BEGIN;
         target_type target_enum NOT NULL,
         owner_id varchar(512) NOT NULL,
 
-	PRIMARY KEY (id)
+        PRIMARY KEY (id)
     );
     
     CREATE INDEX comments_target_id_idx ON comments(target_id);
@@ -49,7 +49,7 @@ BEGIN;
         owner_id varchar(512) NOT NULL,
         created_on timestamp DEFAULT now() NOT NULL,
 
-	PRIMARY KEY (id)
+        PRIMARY KEY (id)
     );
     
     CREATE INDEX ratings_target_id_idx ON ratings(target_id);
@@ -61,7 +61,7 @@ BEGIN;
         owner_id varchar(512) NOT NULL,
         created_on timestamp DEFAULT now() NOT NULL,
 
-	PRIMARY KEY (owner_id, target_id)
+        PRIMARY KEY (owner_id, target_id)
     );
 
     CREATE TABLE file_links (
@@ -71,7 +71,7 @@ BEGIN;
         owner_id varchar(512) NOT NULL,
         created_on timestamp DEFAULT now() NOT NULL,
 
-	PRIMARY KEY (file_id, target_id, owner_id)
+        PRIMARY KEY (file_id, target_id, owner_id)
     );
     
     CREATE INDEX file_links_target_id_idx ON file_links(target_id);
@@ -86,8 +86,8 @@ BEGIN;
         created_on timestamp DEFAULT now() NOT NULL,
         modified_on timestamp DEFAULT now() NOT NULL,
 
-	UNIQUE (value, owner_id),
-	PRIMARY KEY (id)
+        UNIQUE (value, owner_id),
+        PRIMARY KEY (id)
     );
     
     CREATE INDEX tags_owner_id_idx ON tags(owner_id);
@@ -101,7 +101,7 @@ BEGIN;
         detacher_id VARCHAR (512) DEFAULT NULL,
         detached_on TIMESTAMP DEFAULT NULL,
 
-	FOREIGN KEY (tag_id) REFERENCES tags(id)
+        FOREIGN KEY (tag_id) REFERENCES tags(id)
     );
     
     CREATE INDEX attached_tags_target_id_idx ON attached_tags(target_id);
@@ -113,8 +113,8 @@ BEGIN;
         id uuid NOT NULL DEFAULT uuid_generate_v1(),
         name varchar(64) NOT NULL,
 
-	UNIQUE (name),
-	PRIMARY KEY (id)
+        UNIQUE (name),
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE attributes (
@@ -129,16 +129,16 @@ BEGIN;
         created_on timestamp DEFAULT now() NOT NULL,
         modified_on timestamp DEFAULT now() NOT NULL,
 
-	FOREIGN KEY (value_type_id) REFERENCES value_types(id),
-	PRIMARY KEY (id)
+        FOREIGN KEY (value_type_id) REFERENCES value_types(id),
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE attr_synonyms (
         attribute_id uuid NOT NULL,
         synonym_id uuid NOT NULL,
 
-	FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE,
-	FOREIGN KEY (synonym_id) REFERENCES attributes(id) ON DELETE CASCADE
+        FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE,
+        FOREIGN KEY (synonym_id) REFERENCES attributes(id) ON DELETE CASCADE
     );
 
     CREATE INDEX attr_synonyms_attribute_id ON attr_synonyms(attribute_id);
@@ -151,9 +151,9 @@ BEGIN;
         is_default boolean NOT NULL DEFAULT false,
         display_order integer NOT NULL DEFAULT 0,
 
-	FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE,
-	UNIQUE (attribute_id, value),
-	PRIMARY KEY (id)
+        FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE,
+        UNIQUE (attribute_id, value),
+        PRIMARY KEY (id)
     );
 
     CREATE INDEX attr_enum_values_attribute_id ON attr_enum_values(attribute_id);
@@ -163,9 +163,9 @@ BEGIN;
         child_id uuid NOT NULL,
         display_order integer NOT NULL,
 
-	FOREIGN KEY (parent_id) REFERENCES attributes(id) ON DELETE CASCADE,
-	FOREIGN KEY (child_id) REFERENCES attributes(id) ON DELETE CASCADE,
-	CHECK (parent_id != child_id)
+        FOREIGN KEY (parent_id) REFERENCES attributes(id) ON DELETE CASCADE,
+        FOREIGN KEY (child_id) REFERENCES attributes(id) ON DELETE CASCADE,
+        CHECK (parent_id != child_id)
     );
 
     CREATE INDEX attr_attrs_parent_id ON attr_attrs(parent_id);
@@ -214,7 +214,7 @@ BEGIN;
         created_on timestamp DEFAULT now() NOT NULL,
         modified_on timestamp DEFAULT now() NOT NULL,
 
-	PRIMARY KEY (id)
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE template_attrs (
@@ -222,8 +222,8 @@ BEGIN;
         attribute_id uuid NOT NULL,
         display_order integer NOT NULL,
 
-	FOREIGN KEY (template_id) REFERENCES templates(id) ON DELETE CASCADE,
-	FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE
+        FOREIGN KEY (template_id) REFERENCES templates(id) ON DELETE CASCADE,
+        FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE
     );
 
     CREATE INDEX template_attrs_template_id ON template_attrs(template_id);
@@ -236,8 +236,8 @@ BEGIN;
         type VARCHAR NOT NULL,
         description TEXT NOT NULL,
 
-	UNIQUE (type),
-	PRIMARY KEY (id)
+        UNIQUE (type),
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE permanent_id_requests (
@@ -249,9 +249,9 @@ BEGIN;
         original_path TEXT,
         permanent_id TEXT,
 
-	UNIQUE (target_id, type),
-	FOREIGN KEY (type) REFERENCES permanent_id_request_types(id),
-	PRIMARY KEY (id)
+        UNIQUE (target_id, type),
+        FOREIGN KEY (type) REFERENCES permanent_id_request_types(id),
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE permanent_id_request_status_codes (
@@ -259,8 +259,8 @@ BEGIN;
         name VARCHAR(64) NOT NULL,
         description TEXT NOT NULL,
 
-	UNIQUE (name),
-	PRIMARY KEY (id)
+        UNIQUE (name),
+        PRIMARY KEY (id)
     );
 
     CREATE TABLE permanent_id_request_statuses (
@@ -271,9 +271,9 @@ BEGIN;
         updated_by varchar(512) NOT NULL,
         comments TEXT,
 
-	FOREIGN KEY (permanent_id_request) REFERENCES permanent_id_requests(id) ON DELETE CASCADE,
-	FOREIGN KEY (permanent_id_request_status_code) REFERENCES permanent_id_request_status_codes(id),
-	PRIMARY KEY (id)
+        FOREIGN KEY (permanent_id_request) REFERENCES permanent_id_requests(id) ON DELETE CASCADE,
+        FOREIGN KEY (permanent_id_request_status_code) REFERENCES permanent_id_request_status_codes(id),
+        PRIMARY KEY (id)
     );
 
     -- ontologies
