@@ -2,6 +2,9 @@ BEGIN;
     CREATE SCHEMA IF NOT EXISTS metadata;
     SET search_path = metadata, public, pg_catalog;
 
+    -- target_enum type
+    CREATE TYPE target_enum AS enum ('analysis', 'app', 'avu', 'file', 'folder', 'user', 'quick_launch', 'instant_launch');
+
     -- dependency free tables: avus, comments, ratings, favorites, file links
     CREATE TABLE avus (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
@@ -149,7 +152,7 @@ BEGIN;
         display_order integer NOT NULL DEFAULT 0,
 
 	FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE,
-	UNIQUE (attribute_id, value)
+	UNIQUE (attribute_id, value),
 	PRIMARY KEY (id)
     );
 
