@@ -101,7 +101,7 @@ BEGIN;
         detacher_id VARCHAR (512) DEFAULT NULL,
         detached_on TIMESTAMP DEFAULT NULL,
 
-        FOREIGN KEY (tag_id) REFERENCES tags(id)
+        FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
     );
     
     CREATE INDEX attached_tags_target_id_idx ON attached_tags(target_id);
