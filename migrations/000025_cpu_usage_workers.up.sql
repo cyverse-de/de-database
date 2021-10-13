@@ -68,14 +68,14 @@ ALTER TABLE IF EXISTS ONLY cpu_usage_events
 
 DROP TRIGGER IF EXISTS cpu_usage_events_claimed_on_trigger ON cpu_usage_events CASCADE;
 CREATE TRIGGER cpu_usage_events_claimed_on_trigger
-    AFTER UPDATE ON cpu_usage_events
+    BEFORE UPDATE ON cpu_usage_events
     FOR EACH ROW
     WHEN (NOT OLD.claimed AND NEW.claimed)
     EXECUTE PROCEDURE moddatetime (claimed_on);
 
 DROP TRIGGER IF EXISTS cpu_usage_events_processed_on_trigger ON cpu_usage_events CASCADE;
 CREATE TRIGGER cpu_usage_events_processed_on_trigger
-    AFTER UPDATE ON cpu_usage_events
+    BEFORE UPDATE ON cpu_usage_events
     FOR EACH ROW
     WHEN (NOT OLD.processed AND NEW.processed)
     EXECUTE PROCEDURE moddatetime (processed_on);
