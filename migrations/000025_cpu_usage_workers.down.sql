@@ -2,10 +2,10 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
-DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.add';
-DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.subtract';
-DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.reset';
-DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.calculcate';
+-- DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.add';
+-- DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.subtract';
+-- DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.reset';
+-- DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.calculcate';
 
 ALTER TABLE IF EXISTS ONLY cpu_usage_events
     DROP If EXISTS claimed CASCADE,
