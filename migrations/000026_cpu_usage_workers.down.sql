@@ -8,7 +8,7 @@ SET search_path = public, pg_catalog;
 -- DELETE FROM ONLY cpu_usage_event_types WHERE name = 'cpu.hours.calculcate';
 
 ALTER TABLE IF EXISTS ONLY cpu_usage_events
-    DROP If EXISTS claimed CASCADE,
+    DROP IF EXISTS claimed CASCADE,
     DROP IF EXISTS claimed_by CASCADE,
     DROP IF EXISTS claimed_on CASCADE,
     DROP IF EXISTS claim_expires_on CASCADE,
