@@ -3,6 +3,12 @@ BEGIN;
 SET search_path = public, pg_catalog;
 
 --
+-- Drop obsolete views that will not work with versions.
+--
+DROP VIEW IF EXISTS app_job_types;
+DROP VIEW IF EXISTS vice_analyses;
+
+--
 -- app_versions table
 --
 CREATE TABLE IF NOT EXISTS app_versions (
@@ -131,14 +137,6 @@ CREATE OR REPLACE VIEW app_listing AS
                FROM ratings
                WHERE app_id = apps.id
            ) AS total_ratings,
-           EXISTS (
-               SELECT *
-               FROM app_category_app aca
-               JOIN app_categories ac ON aca.app_category_id = ac.id
-               JOIN workspace w ON ac.workspace_id = w.id
-               WHERE apps.id = aca.app_id
-               AND w.is_public IS TRUE
-           ) AS is_public,
            COUNT(steps.*) AS step_count,
            COUNT(t.tool_id) AS tool_count,
            COUNT(t.external_app_id) AS external_app_count,
@@ -189,5 +187,29 @@ CREATE OR REPLACE VIEW app_listing AS
              latest_version.version,
              latest_version.integration_date,
              latest_version.edited_date;
+
+--
+-- A view containing the tool information needed for the app listing service.
+--
+CREATE OR REPLACE VIEW tool_listing AS
+    SELECT row_number() OVER (ORDER BY apps.id, versions.id, steps.step) AS id,
+           apps.id AS app_id,
+           versions.id AS app_version_id,
+           steps.step AS execution_order,
+           tool.id AS tool_id,
+           tool."name",
+           tool.description,
+           tool.location,
+           tt."name" AS "type",
+           tt.hidden,
+           tool.version,
+           tool.attribution,
+           tool.container_images_id
+    FROM apps
+         JOIN app_versions versions ON apps.id = versions.app_id
+         JOIN app_steps steps ON versions.id = steps.app_version_id
+         JOIN tasks t ON steps.task_id = t.id
+         JOIN tools tool ON t.tool_id = tool.id
+         JOIN tool_types tt ON tool.tool_type_id = tt.id;
 
 COMMIT;
