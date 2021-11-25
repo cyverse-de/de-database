@@ -67,6 +67,61 @@ ALTER TABLE ONLY app_steps
 
 CREATE INDEX IF NOT EXISTS app_steps_app_id ON app_steps(app_id);
 
+ALTER TABLE ONLY app_documentation
+    ADD COLUMN IF NOT EXISTS app_id uuid;
+UPDATE app_documentation
+    SET app_id = (
+        SELECT app_id
+        FROM app_versions
+        WHERE app_documentation.app_version_id = app_versions.id
+        ORDER BY version_order DESC
+        LIMIT 1
+    );
+ALTER TABLE ONLY app_documentation
+    ALTER COLUMN app_id SET NOT NULL;
+ALTER TABLE ONLY app_documentation
+    DROP COLUMN IF EXISTS app_version_id;
+
+--
+-- `app_documentation` table primary key.
+--
+ALTER TABLE app_documentation
+    ADD CONSTRAINT app_documentation_pkey
+    PRIMARY KEY (app_id);
+
+--
+-- Foreign Key for `app_id` column in `app_documentation` table.
+--
+ALTER TABLE ONLY app_documentation
+    ADD CONSTRAINT app_documentation_app_id_fkey
+    FOREIGN KEY (app_id)
+    REFERENCES apps(id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY app_references
+    ADD COLUMN IF NOT EXISTS app_id uuid;
+UPDATE app_references
+    SET app_id = (
+        SELECT app_id
+        FROM app_versions
+        WHERE app_references.app_version_id = app_versions.id
+        ORDER BY version_order DESC
+        LIMIT 1
+    );
+ALTER TABLE ONLY app_references
+    ALTER COLUMN app_id SET NOT NULL;
+ALTER TABLE ONLY app_references
+    DROP COLUMN IF EXISTS app_version_id;
+
+--
+-- Foreign Key for `app_id` column in `app_references` table.
+--
+ALTER TABLE ONLY app_references
+    ADD CONSTRAINT app_references_app_id_fkey
+    FOREIGN KEY (app_id)
+    REFERENCES apps(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS app_references_app_id ON app_references(app_id);
+
 --
 -- A view containing the top-level information needed for the app listing
 -- service.
