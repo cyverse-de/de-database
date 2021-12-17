@@ -140,6 +140,38 @@ ALTER TABLE ONLY app_references
 CREATE INDEX IF NOT EXISTS app_references_app_version_id ON app_references(app_version_id);
 
 --
+-- Replace the `apps_id` column in the `apps_htcondor_extra` table
+-- with a new `app_version_id` column.
+--
+ALTER TABLE ONLY apps_htcondor_extra
+    ADD COLUMN IF NOT EXISTS app_version_id uuid;
+UPDATE apps_htcondor_extra
+    SET app_version_id = (
+        SELECT id
+        FROM app_versions
+        WHERE apps_htcondor_extra.apps_id = app_versions.app_id
+    );
+ALTER TABLE ONLY apps_htcondor_extra
+    ALTER COLUMN app_version_id SET NOT NULL;
+ALTER TABLE ONLY apps_htcondor_extra
+    DROP COLUMN IF EXISTS apps_id;
+
+--
+-- `apps_htcondor_extra` table primary key.
+--
+ALTER TABLE apps_htcondor_extra
+    ADD CONSTRAINT apps_htcondor_extra_pkey
+    PRIMARY KEY (app_version_id);
+
+--
+-- Foreign Key for `app_version_id` column in `apps_htcondor_extra` table.
+--
+ALTER TABLE ONLY apps_htcondor_extra
+    ADD CONSTRAINT apps_htcondor_extra_app_version_id_fkey
+    FOREIGN KEY (app_version_id)
+    REFERENCES app_versions(id) ON DELETE CASCADE;
+
+--
 -- Drop duplicate columns from the `apps` table
 --
 ALTER TABLE ONLY apps

@@ -122,6 +122,36 @@ ALTER TABLE ONLY app_references
 
 CREATE INDEX IF NOT EXISTS app_references_app_id ON app_references(app_id);
 
+ALTER TABLE ONLY apps_htcondor_extra
+    ADD COLUMN IF NOT EXISTS apps_id uuid;
+UPDATE apps_htcondor_extra
+    SET apps_id = (
+        SELECT app_id
+        FROM app_versions
+        WHERE apps_htcondor_extra.app_version_id = app_versions.id
+        ORDER BY version_order DESC
+        LIMIT 1
+    );
+ALTER TABLE ONLY apps_htcondor_extra
+    ALTER COLUMN apps_id SET NOT NULL;
+ALTER TABLE ONLY apps_htcondor_extra
+    DROP COLUMN IF EXISTS app_version_id;
+
+--
+-- Foreign Key for `apps_id` column in `apps_htcondor_extra` table.
+--
+ALTER TABLE ONLY apps_htcondor_extra
+    ADD CONSTRAINT apps_htcondor_extra_apps_id_fkey
+    FOREIGN KEY (apps_id)
+    REFERENCES apps(id) ON DELETE CASCADE;
+
+--
+-- `apps_htcondor_extra` table primary key.
+--
+ALTER TABLE apps_htcondor_extra
+    ADD CONSTRAINT apps_htcondor_extra_pkey
+    PRIMARY KEY (apps_id);
+
 --
 -- A view containing the top-level information needed for the app listing
 -- service.
