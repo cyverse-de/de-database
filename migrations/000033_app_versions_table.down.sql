@@ -67,6 +67,31 @@ ALTER TABLE ONLY app_steps
 
 CREATE INDEX IF NOT EXISTS app_steps_app_id ON app_steps(app_id);
 
+ALTER TABLE ONLY workflow_io_maps
+    ADD COLUMN IF NOT EXISTS app_id uuid;
+UPDATE workflow_io_maps
+    SET app_id = (
+        SELECT app_id
+        FROM app_versions
+        WHERE workflow_io_maps.app_version_id = app_versions.id
+        ORDER BY version_order DESC
+        LIMIT 1
+    );
+ALTER TABLE ONLY workflow_io_maps
+    ALTER COLUMN app_id SET NOT NULL;
+ALTER TABLE ONLY workflow_io_maps
+    DROP COLUMN IF EXISTS app_version_id;
+
+--
+-- Foreign Key for `app_id` column in `workflow_io_maps` table.
+--
+ALTER TABLE ONLY workflow_io_maps
+    ADD CONSTRAINT workflow_io_maps_app_id_fkey
+    FOREIGN KEY (app_id)
+    REFERENCES apps(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS workflow_io_maps_app_id ON workflow_io_maps(app_id);
+
 ALTER TABLE ONLY app_documentation
     ADD COLUMN IF NOT EXISTS app_id uuid;
 UPDATE app_documentation
