@@ -3,6 +3,12 @@ BEGIN;
 SET search_path = public, pg_catalog;
 
 --
+-- Drop views that depend on columns which will be dropped.
+--
+DROP VIEW IF EXISTS tool_listing;
+DROP VIEW IF EXISTS app_listing;
+
+--
 -- Repopulate `apps` data from `app_versions` table
 --
 ALTER TABLE ONLY apps
@@ -181,7 +187,7 @@ ALTER TABLE apps_htcondor_extra
 -- A view containing the top-level information needed for the app listing
 -- service.
 --
-CREATE OR REPLACE VIEW app_listing AS
+CREATE VIEW app_listing AS
     SELECT apps.id,
            apps."name",
            lower(apps."name") AS lower_case_name,
@@ -243,7 +249,7 @@ CREATE OR REPLACE VIEW app_listing AS
 --
 -- A view containing the tool information needed for the app listing service.
 --
-CREATE OR REPLACE VIEW tool_listing AS
+CREATE VIEW tool_listing AS
     SELECT row_number() OVER (ORDER BY apps.id, steps.step) AS id,
            apps.id AS app_id,
            apps.is_public,

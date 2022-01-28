@@ -9,6 +9,12 @@ DROP VIEW IF EXISTS app_job_types;
 DROP VIEW IF EXISTS vice_analyses;
 
 --
+-- Drop views that depend on columns which will be dropped.
+--
+DROP VIEW IF EXISTS tool_listing;
+DROP VIEW IF EXISTS app_listing;
+
+--
 -- app_versions table
 --
 CREATE TABLE IF NOT EXISTS app_versions (
@@ -215,7 +221,7 @@ ALTER TABLE ONLY apps
 --
 -- A view containing the top-level information needed for app listings.
 --
-CREATE OR REPLACE VIEW app_listing AS
+CREATE VIEW app_listing AS
     SELECT apps.id,
            apps."name",
            lower(apps."name") AS lower_case_name,
@@ -309,7 +315,7 @@ CREATE OR REPLACE VIEW app_listing AS
 --
 -- A view containing the tool information needed for the app listing service.
 --
-CREATE OR REPLACE VIEW tool_listing AS
+CREATE VIEW tool_listing AS
     SELECT row_number() OVER (ORDER BY apps.id, versions.id, steps.step) AS id,
            apps.id AS app_id,
            versions.id AS app_version_id,
