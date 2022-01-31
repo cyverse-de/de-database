@@ -118,4 +118,6 @@ DELETE FROM cpu_usage_event_types
     );
 
 -- Make sure that the name field is unique from now on.
-ALTER TABLE IF EXISTS cpu_usage_event_types ADD UNIQUE (name);
+ALTER TABLE IF EXISTS cpu_usage_event_types ADD CONSTRAINT cpu_usage_event_types_name_unique UNIQUE (name);
+
+COMMIT;
