@@ -18,4 +18,13 @@ DROP TRIGGER IF EXISTS cpu_usage_events_processed_on_trigger ON cpu_usage_events
 DROP TRIGGER IF EXISTS cpu_usage_workers_last_modified_trigger ON cpu_usage_workers CASCADE;
 DROP TABLE IF EXISTS cpu_usage_workers;
 
+DELETE FROM cpu_usage_event_types
+    WHERE name = 'cpu.hours.add';
+DELETE FROM cpu_usage_event_types
+    WHERE name = 'cpu.hours.subtract';
+DELETE FROM cpu_usage_event_types
+    WHERE name = 'cpu.hours.reset';
+DELETE FROM cpu_usage_event_types
+    WHERE name = 'cpu.hours.calculate';
+
 COMMIT;
