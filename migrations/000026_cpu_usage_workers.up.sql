@@ -2,6 +2,7 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
+-- Conditional inserts based on info from here https://brunoscheufler.com/blog/2020-02-08-conditional-inserts-in-postgres
 INSERT INTO cpu_usage_event_types (name, description)
     SELECT * FROM (
         VALUES ('cpu.hours.add', 'Add more CPU hours to the total for a user.') 
