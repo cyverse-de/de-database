@@ -2,13 +2,41 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
-INSERT INTO cpu_usage_event_types 
-    (name, description) 
-VALUES
-    ('cpu.hours.add', 'Add more CPU hours to the total for a user.'),
-    ('cpu.hours.subtract', 'Remove CPU hours from the total for a user.'),
-    ('cpu.hours.reset', 'Reset the CPU hours total for a user to a new value.'),
-    ('cpu.hours.calculate', '(Re)Calculate the CPU hours total for a user.');
+INSERT INTO cpu_usage_event_types (name, description)
+    SELECT * FROM (
+        VALUES ('cpu.hours.add', 'Add more CPU hours to the total for a user.') 
+    ) AS t (varchar, text)
+    WHERE (
+        SELECT name FROM cpu_usage_event_types
+        WHERE name = 'cpu.hours.add'
+    ) IS NULL;
+
+INSERT INTO cpu_usage_event_types (name, description)
+    SELECT * FROM (
+        VALUES ('cpu.hours.subtract', 'Remove CPU hours from the total for a user.')
+    ) AS t (varchar, text)
+    WHERE (
+        SELECT name FROM cpu_usage_event_types
+        WHERE name = 'cpu.hours.subtract'
+    ) IS NULL;
+
+INSERT INTO cpu_usage_event_types (name, description)
+    SELECT * FROM (
+        VALUES ('cpu.hours.reset', 'Reset the CPU hours total for a user to a new value.')
+    ) AS t (varchar, text)
+    WHERE (
+        SELECT name FROM cpu_usage_event_types
+        WHERE name = 'cpu.hours.reset'
+    ) IS NULL;
+
+INSERT INTO cpu_usage_event_types (name, description)
+    SELECT * FROM (
+        VALUES ('cpu.hours.calculate', '(Re)Calculate the CPU hours total for a user.')
+    ) AS t (varchar, text)
+    WHERE (
+        SELECT name FROM cpu_usage_event_types
+        WHERE name = 'cpu.hours.calculate'
+    ) IS NULL;
 
 CREATE TABLE IF NOT EXISTS cpu_usage_workers (
     id uuid UNIQUE NOT NULL DEFAULT uuid_generate_v1(),
