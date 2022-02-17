@@ -78,6 +78,9 @@ CREATE INDEX IF NOT EXISTS app_steps_app_id ON app_steps(app_id);
 ALTER TABLE ONLY jobs
     DROP COLUMN IF EXISTS app_version_id;
 
+ALTER TABLE ONLY quick_launches
+    DROP COLUMN IF EXISTS app_version_id;
+
 ALTER TABLE ONLY workflow_io_maps
     ADD COLUMN IF NOT EXISTS app_id uuid;
 UPDATE workflow_io_maps

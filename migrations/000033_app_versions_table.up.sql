@@ -111,6 +111,30 @@ ALTER TABLE ONLY jobs
 CREATE INDEX IF NOT EXISTS jobs_app_version_id ON jobs(app_version_id);
 
 --
+-- Add `app_version_id` column to the `quick_launches` table.
+--
+ALTER TABLE ONLY quick_launches
+    ADD COLUMN IF NOT EXISTS app_version_id uuid;
+UPDATE quick_launches
+    SET app_version_id = (
+        SELECT id
+        FROM app_versions
+        WHERE quick_launches.app_id = app_versions.app_id
+    );
+ALTER TABLE ONLY quick_launches
+    ALTER COLUMN app_version_id SET NOT NULL;
+
+--
+-- Foreign Key for `app_version_id` column in `quick_launches` table.
+--
+ALTER TABLE ONLY quick_launches
+    ADD CONSTRAINT quick_launches_app_version_id_fkey
+    FOREIGN KEY (app_version_id)
+    REFERENCES app_versions(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS quick_launches_app_version_id ON quick_launches(app_version_id);
+
+--
 -- Replace the `app_id` column in the `workflow_io_maps` table
 -- with a new `app_version_id` column.
 --
