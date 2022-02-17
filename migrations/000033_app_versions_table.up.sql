@@ -336,4 +336,73 @@ CREATE VIEW tool_listing AS
          JOIN tools tool ON t.tool_id = tool.id
          JOIN tool_types tt ON tool.tool_type_id = tt.id;
 
+--
+-- A function that counts the number of apps in an app group hierarchy rooted
+-- at the node with the given identifier.
+--
+CREATE OR REPLACE FUNCTION app_count(uuid) RETURNS bigint AS $$
+    SELECT COUNT(DISTINCT a.id) FROM apps a
+    JOIN app_category_app aca ON a.id = aca.app_id
+    WHERE EXISTS (
+        SELECT deleted
+        FROM app_versions v
+        WHERE v.app_id = a.id
+        AND v.deleted IS FALSE
+    )
+    AND aca.app_category_id IN (SELECT * FROM app_category_hierarchy_ids($1))
+$$ LANGUAGE SQL;
+
+--
+-- Another version of the same function that allows us to exclude apps
+-- containing external steps.
+--
+CREATE OR REPLACE FUNCTION app_count(uuid, boolean) RETURNS bigint AS $$
+    SELECT COUNT(DISTINCT a.id) FROM apps a
+    JOIN app_category_app aca ON a.id = aca.app_id
+    WHERE EXISTS (
+        SELECT deleted
+        FROM app_versions v
+        WHERE v.app_id = a.id
+        AND v.deleted IS FALSE
+    )
+    AND aca.app_category_id IN (SELECT * FROM app_category_hierarchy_ids($1))
+    AND CASE
+        WHEN $2 THEN TRUE
+        ELSE NOT EXISTS (
+            SELECT * FROM app_steps s
+            JOIN tasks t ON t.id = s.task_id
+            JOIN app_versions v ON s.app_version_id = v.id
+            WHERE v.app_id = a.id
+            AND t.external_app_id IS NOT NULL
+        )
+    END
+$$ LANGUAGE SQL;
+
+--
+-- Yet another version of the same function that allows us to limit the
+-- count to certain app IDs.
+--
+CREATE OR REPLACE FUNCTION app_count(uuid, boolean, anyarray) RETURNS bigint AS $$
+    SELECT COUNT(DISTINCT a.id) FROM apps a
+    JOIN app_category_app aca ON a.id = aca.app_id
+    WHERE EXISTS (
+        SELECT deleted
+        FROM app_versions v
+        WHERE v.app_id = a.id
+        AND v.deleted IS FALSE
+    )
+    AND aca.app_category_id IN (SELECT * FROM app_category_hierarchy_ids($1))
+    AND a.id = ANY ($3::uuid[])
+    AND CASE
+        WHEN $2 THEN TRUE
+        ELSE NOT EXISTS (
+            SELECT * FROM app_steps s
+            JOIN tasks t ON t.id = s.task_id
+            JOIN app_versions v ON s.app_version_id = v.id
+            WHERE v.app_id = a.id
+            AND t.external_app_id IS NOT NULL
+        )
+    END
+$$ LANGUAGE SQL;
+
 COMMIT;
