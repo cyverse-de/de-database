@@ -9,10 +9,12 @@ DROP VIEW IF EXISTS app_job_types;
 DROP VIEW IF EXISTS vice_analyses;
 
 --
--- Drop views that depend on columns which will be dropped.
+-- Drop views that depend on columns which will be dropped,
+-- or that will add new view columns.
 --
 DROP VIEW IF EXISTS tool_listing;
 DROP VIEW IF EXISTS app_listing;
+DROP VIEW IF EXISTS job_listings;
 
 --
 -- app_versions table
@@ -85,6 +87,28 @@ ALTER TABLE ONLY app_steps
     REFERENCES app_versions(id) ON DELETE CASCADE;
 
 CREATE INDEX IF NOT EXISTS app_steps_app_version_id ON app_steps(app_version_id);
+
+--
+-- Add `app_version_id` column to the `jobs` table.
+--
+ALTER TABLE ONLY jobs
+    ADD COLUMN IF NOT EXISTS app_version_id uuid;
+UPDATE jobs
+    SET app_version_id = (
+        SELECT id
+        FROM app_versions
+        WHERE jobs.app_id = CAST(app_versions.app_id AS character varying)
+    );
+
+--
+-- Foreign Key for `app_version_id` column in `jobs` table.
+--
+ALTER TABLE ONLY jobs
+    ADD CONSTRAINT jobs_app_version_id_fkey
+    FOREIGN KEY (app_version_id)
+    REFERENCES app_versions(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS jobs_app_version_id ON jobs(app_version_id);
 
 --
 -- Replace the `app_id` column in the `workflow_io_maps` table
@@ -335,6 +359,39 @@ CREATE VIEW tool_listing AS
          JOIN tasks t ON steps.task_id = t.id
          JOIN tools tool ON t.tool_id = tool.id
          JOIN tool_types tt ON tool.tool_type_id = tt.id;
+
+--
+-- A view containing the job information needed to produce a job listing.
+--
+CREATE VIEW job_listings AS
+    SELECT j.id,
+           j.job_name,
+           j.app_name,
+           j.start_date,
+           j.end_date,
+           j.status,
+           j.deleted,
+           j.notify,
+           u.username,
+           j.job_description,
+           j.app_id,
+           j.app_version_id,
+           j.app_wiki_url,
+           j.app_description,
+           j.result_folder_path,
+           j.submission,
+           t.name AS job_type,
+           j.parent_id,
+           EXISTS (
+               SELECT * FROM jobs child
+               WHERE child.parent_id = j.id
+           ) AS is_batch,
+           t.system_id,
+           j.planned_end_date,
+           j.user_id
+    FROM jobs j
+    JOIN users u ON j.user_id = u.id
+    JOIN job_types t ON j.job_type_id = t.id;
 
 --
 -- A function that counts the number of apps in an app group hierarchy rooted

@@ -3,10 +3,12 @@ BEGIN;
 SET search_path = public, pg_catalog;
 
 --
--- Drop views that depend on columns which will be dropped.
+-- Drop views that depend on columns which will be dropped,
+-- or that will change view columns.
 --
 DROP VIEW IF EXISTS tool_listing;
 DROP VIEW IF EXISTS app_listing;
+DROP VIEW IF EXISTS job_listings;
 
 --
 -- Repopulate `apps` data from `app_versions` table
@@ -72,6 +74,9 @@ ALTER TABLE ONLY app_steps
     REFERENCES apps(id) ON DELETE CASCADE;
 
 CREATE INDEX IF NOT EXISTS app_steps_app_id ON app_steps(app_id);
+
+ALTER TABLE ONLY jobs
+    DROP COLUMN IF EXISTS app_version_id;
 
 ALTER TABLE ONLY workflow_io_maps
     ADD COLUMN IF NOT EXISTS app_id uuid;
@@ -268,6 +273,38 @@ CREATE VIEW tool_listing AS
          JOIN tasks t ON steps.task_id = t.id
          JOIN tools tool ON t.tool_id = tool.id
          JOIN tool_types tt ON tool.tool_type_id = tt.id;
+
+--
+-- A view containing the job information needed to produce a job listing.
+--
+CREATE VIEW job_listings AS
+    SELECT j.id,
+           j.job_name,
+           j.app_name,
+           j.start_date,
+           j.end_date,
+           j.status,
+           j.deleted,
+           j.notify,
+           u.username,
+           j.job_description,
+           j.app_id,
+           j.app_wiki_url,
+           j.app_description,
+           j.result_folder_path,
+           j.submission,
+           t.name AS job_type,
+           j.parent_id,
+           EXISTS (
+               SELECT * FROM jobs child
+               WHERE child.parent_id = j.id
+           ) AS is_batch,
+           t.system_id,
+           j.planned_end_date,
+           j.user_id
+    FROM jobs j
+    JOIN users u ON j.user_id = u.id
+    JOIN job_types t ON j.job_type_id = t.id;
 
 --
 -- app_job_types view that lists app IDs and job types.
