@@ -9,6 +9,8 @@ spec:
       name: migrate-de-db
     spec:
       restartPolicy: Never
+      parallelism: 1
+      completions: 1
       containers:
       - name: update-de-db
         image: harbor.cyverse.org/de/de-database
