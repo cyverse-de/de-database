@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: migrate-de-db
 spec:
-  ttlSecondsAfterFinished: 86400
+  ttlSecondsAfterFinished: 259200 
   template:
     metadata:
       name: migrate-de-db
