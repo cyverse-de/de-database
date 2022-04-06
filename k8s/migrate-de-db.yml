@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-de-db
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      name: migrate-de-db
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: update-de-db
+        image: harbor.cyverse.org/de/de-database
+        imagePullPolicy: Always
+        env:
+          - name: DE_DATABASE_URI
+            valueFrom:
+              secretKeyRef:
+                name: configs
+                key: DE_DATABASE_URI
+        args: ["-database", "$(DE_DATABASE_URI)", "-path", "/migrations", "up"]
+        volumeMounts:
+          - name: localtime
+            mountPath: /etc/localtime
+            readOnly: true
+          - name: timezone
+            mountPath: /etc/timezone
+            subPath: timezone
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: timezone
+          configMap:
+            name: timezone
+            items:
+              - key: timezone
+                path: timezone
