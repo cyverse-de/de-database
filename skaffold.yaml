@@ -1,7 +1,7 @@
 apiVersion: skaffold/v1
 kind: Config
 metadata:
-  name: de-database.yml
+  name: de-database
 deploy:
   kubectl:
     manifests:
