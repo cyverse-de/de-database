@@ -1,11 +1,11 @@
 apiVersion: skaffold/v1
 kind: Config
 metadata:
-  name: migrate-de-db
+  name: de-database.yml
 deploy:
   kubectl:
     manifests:
-      - k8s/migrate-de-db.yml
+      - k8s/de-database.yml
 build:
   tagPolicy:
     gitCommit: {}
