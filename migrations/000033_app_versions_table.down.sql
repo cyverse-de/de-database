@@ -106,6 +106,9 @@ ALTER TABLE ONLY workflow_io_maps
 
 CREATE INDEX IF NOT EXISTS workflow_io_maps_app_id ON workflow_io_maps(app_id);
 
+ALTER TABLE ONLY workflow_io_maps
+    ADD UNIQUE (app_id, target_step, source_step);
+
 ALTER TABLE ONLY app_documentation
     ADD COLUMN IF NOT EXISTS app_id uuid;
 UPDATE app_documentation
