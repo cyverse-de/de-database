@@ -32,11 +32,11 @@ CREATE TABLE IF NOT EXISTS app_versions (
 
     PRIMARY KEY (id),
     FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE,
+    UNIQUE (app_id, version),
     UNIQUE (app_id, version_order)
 );
 
 CREATE INDEX IF NOT EXISTS app_versions_app_id ON app_versions(app_id);
-CREATE INDEX IF NOT EXISTS app_versions_version_order ON app_versions(version_order);
 
 --
 -- Initial app_versions data
