@@ -2,8 +2,6 @@ BEGIN;
 
 SET search_path = public, pg_catalog;
 
-DROP VIEW IF EXISTS app_listing;
-
 --
 -- A view containing the top-level information needed for app version listings.
 --
@@ -46,58 +44,5 @@ CREATE OR REPLACE VIEW app_versions_listing AS
              integration.user_id,
              u.username,
              v.id;
-
---
--- A view containing the top-level information needed for app listings.
---
-CREATE VIEW app_listing AS
-    SELECT apps.id,
-           apps."name",
-           lower(apps."name") AS lower_case_name,
-           apps.description,
-           apps.wiki_url,
-           v.integrator_name,
-           v.integrator_email,
-           v.version,
-           v.version_id,
-           v.integration_date,
-           v.edited_date,
-           v.step_count,
-           v.tool_count,
-           v.external_app_count,
-           v.task_count,
-           v.overall_job_type,
-           v.integrator_id,
-           v.integrator_username,
-           v.job_types,
-           (   SELECT EVERY(deleted)
-               FROM app_versions
-               WHERE app_id = apps.id
-           ) AS deleted,
-           (   SELECT EVERY(disabled)
-               FROM app_versions
-               WHERE app_id = apps.id
-           ) AS disabled,
-           (   SELECT CAST(COALESCE(AVG(rating), 0.0) AS DOUBLE PRECISION)
-               FROM ratings
-               WHERE app_id = apps.id
-           ) AS average_rating,
-           (   SELECT COUNT(rating)
-               FROM ratings
-               WHERE app_id = apps.id
-           ) AS total_ratings
-    FROM apps
-         LEFT JOIN app_versions_listing v ON apps.id = v.id
-              AND v.version_order = COALESCE(
-                (   SELECT MAX(version_order)
-                    FROM app_versions
-                    WHERE app_id = apps.id
-                    AND deleted = false
-                ),
-                (   SELECT MAX(version_order)
-                    FROM app_versions
-                    WHERE app_id = apps.id
-                )
-              );
 
 COMMIT;
