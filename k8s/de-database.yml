@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: de-database
 spec:
-  ttlSecondsAfterFinished: 259200 
+  ttlSecondsAfterFinished: 259200
   template:
     metadata:
       name: de-database
@@ -13,6 +13,15 @@ spec:
       - name: update-de-db
         image: harbor.cyverse.org/de/de-database
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "245Mi"
+            ephemeral-storage: "1Gi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+            ephemeral-storage: "1Gi"
         env:
           - name: DE_DATABASE_URI
             valueFrom:
