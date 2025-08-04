@@ -10,39 +10,32 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-      - name: update-de-db
-        image: harbor.cyverse.org/de/de-database
-        imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: "250m"
-            memory: "245Mi"
-            ephemeral-storage: "1Gi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-            ephemeral-storage: "1Gi"
-        env:
-          - name: DE_DATABASE_URI
-            valueFrom:
-              secretKeyRef:
-                name: configs
-                key: DE_DATABASE_URI
-        args: ["-database", "$(DE_DATABASE_URI)", "-path", "/migrations", "up"]
-        volumeMounts:
-          - name: localtime
-            mountPath: /etc/localtime
-            readOnly: true
-          - name: timezone
-            mountPath: /etc/timezone
-            subPath: timezone
-      volumes:
-        - name: localtime
-          hostPath:
-            path: /etc/localtime
-        - name: timezone
-          configMap:
-            name: timezone
-            items:
-              - key: timezone
-                path: timezone
+        - name: update-de-db
+          image: harbor.cyverse.org/de/de-database
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "245Mi"
+              ephemeral-storage: "1Gi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+              ephemeral-storage: "1Gi"
+          env:
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: timezone
+                  key: timezone
+            - name: DE_DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: configs
+                  key: DE_DATABASE_URI
+          args:
+            - "-database"
+            - "$(DE_DATABASE_URI)"
+            - "-path"
+            - "/migrations"
+            - "up"
