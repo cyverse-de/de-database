@@ -72,4 +72,25 @@ COMMENT ON COLUMN bucket_permissions.user_id IS 'User receiving access';
 COMMENT ON COLUMN bucket_permissions.permission_level IS 'Level of access granted (read, write, admin)';
 COMMENT ON COLUMN bucket_permissions.created_by IS 'User who granted this permission';
 
+--
+-- Job buckets table - tracks bucket usage in analyses/jobs
+--
+CREATE TABLE IF NOT EXISTS job_buckets (
+    job_id uuid NOT NULL,
+    bucket_id uuid NOT NULL,
+    mountpoint_path text NOT NULL,
+    created_at timestamp NOT NULL DEFAULT now(),
+    PRIMARY KEY (job_id, bucket_id),
+    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
+    FOREIGN KEY (bucket_id) REFERENCES buckets(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_job_buckets_job_id ON job_buckets(job_id);
+CREATE INDEX idx_job_buckets_bucket_id ON job_buckets(bucket_id);
+
+COMMENT ON TABLE job_buckets IS 'Tracks which S3 buckets were used with which analyses (jobs)';
+COMMENT ON COLUMN job_buckets.job_id IS 'The analysis/job that used this bucket';
+COMMENT ON COLUMN job_buckets.bucket_id IS 'The bucket that was used in the analysis';
+COMMENT ON COLUMN job_buckets.mountpoint_path IS 'Path where the bucket was mounted inside the pod/container';
+
 COMMIT;
