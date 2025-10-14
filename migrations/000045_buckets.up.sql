@@ -54,11 +54,11 @@ CREATE TABLE IF NOT EXISTS bucket_permissions (
     user_id uuid NOT NULL,
     permission_level bucket_permission_level NOT NULL,
     created_at timestamp NOT NULL DEFAULT now(),
-    created_by uuid NOT NULL,
+    created_by uuid,
     PRIMARY KEY (id),
     FOREIGN KEY (bucket_id) REFERENCES buckets(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(id),
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
     CONSTRAINT unique_bucket_user_permission UNIQUE (bucket_id, user_id)
 );
 
