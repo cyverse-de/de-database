@@ -7,10 +7,10 @@ SET search_path = public, pg_catalog;
 --
 CREATE TABLE IF NOT EXISTS buckets (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
-    name text NOT NULL UNIQUE,
+    name text NOT NULL,
     user_id uuid NOT NULL,
     endpoint_url text NOT NULL,
-    region text,
+    region text NOT NULL,
     description text,
     deleted boolean NOT NULL DEFAULT false,
     created_at timestamp NOT NULL DEFAULT now(),
@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS buckets (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_buckets_name ON buckets(name);
-CREATE INDEX idx_buckets_user_id ON buckets(user_id);
-CREATE INDEX idx_buckets_deleted ON buckets(deleted);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_buckets_name ON buckets(name);
+CREATE INDEX IF NOT EXISTS idx_buckets_user_id ON buckets(user_id);
+CREATE INDEX IF NOT EXISTS idx_buckets_deleted ON buckets(deleted);
 
 COMMENT ON TABLE buckets IS 'S3 buckets managed by the Discovery Environment on behalf of users';
 COMMENT ON COLUMN buckets.name IS 'S3 bucket name (globally unique)';
@@ -58,13 +58,13 @@ CREATE TABLE IF NOT EXISTS bucket_permissions (
     PRIMARY KEY (id),
     FOREIGN KEY (bucket_id) REFERENCES buckets(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
-    CONSTRAINT unique_bucket_user_permission UNIQUE (bucket_id, user_id)
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_bucket_permissions_bucket_id ON bucket_permissions(bucket_id);
-CREATE INDEX idx_bucket_permissions_user_id ON bucket_permissions(user_id);
-CREATE INDEX idx_bucket_permissions_permission_level ON bucket_permissions(permission_level);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_bucket_permissions_bucket_user ON bucket_permissions(bucket_id, user_id);
+CREATE INDEX IF NOT EXISTS idx_bucket_permissions_bucket_id ON bucket_permissions(bucket_id);
+CREATE INDEX IF NOT EXISTS idx_bucket_permissions_user_id ON bucket_permissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_bucket_permissions_permission_level ON bucket_permissions(permission_level);
 
 COMMENT ON TABLE bucket_permissions IS 'Access permissions for shared S3 buckets';
 COMMENT ON COLUMN bucket_permissions.bucket_id IS 'The bucket being shared';
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS job_buckets (
     FOREIGN KEY (bucket_id) REFERENCES buckets(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_job_buckets_job_id ON job_buckets(job_id);
-CREATE INDEX idx_job_buckets_bucket_id ON job_buckets(bucket_id);
+CREATE INDEX IF NOT EXISTS idx_job_buckets_job_id ON job_buckets(job_id);
+CREATE INDEX IF NOT EXISTS idx_job_buckets_bucket_id ON job_buckets(bucket_id);
 
 COMMENT ON TABLE job_buckets IS 'Tracks which S3 buckets were used with which analyses (jobs)';
 COMMENT ON COLUMN job_buckets.job_id IS 'The analysis/job that used this bucket';
