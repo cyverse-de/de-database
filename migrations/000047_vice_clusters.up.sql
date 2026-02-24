@@ -30,12 +30,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS vice_clusters_updated ON vice_clusters;
 CREATE TRIGGER vice_clusters_updated
     BEFORE UPDATE ON vice_clusters
     FOR EACH ROW EXECUTE FUNCTION update_vice_clusters_timestamp();
 
 -- Track which cluster is running each analysis.
-ALTER TABLE jobs ADD COLUMN IF NOT EXISTS cluster_id uuid REFERENCES vice_clusters(id) ON DELETE SET NULL;
+ALTER TABLE jobs ADD COLUMN IF NOT EXISTS cluster_id uuid REFERENCES vice_clusters(id) ON DELETE RESTRICT;
 
 CREATE INDEX IF NOT EXISTS idx_jobs_cluster_id ON jobs(cluster_id);
 
