@@ -29,7 +29,7 @@ CREATE TRIGGER trigger_operators_notify
 
 DROP TRIGGER IF EXISTS trigger_operators_notify_update ON operators;
 CREATE TRIGGER trigger_operators_notify_update
-    AFTER UPDATE OF name, url, tls_skip_verify, auth_user, auth_password_encrypted, priority ON operators
+    AFTER UPDATE OF name, url, tls_skip_verify, priority ON operators
     FOR EACH ROW
     EXECUTE FUNCTION notify_operators_changed();
 

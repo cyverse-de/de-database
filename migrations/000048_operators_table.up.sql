@@ -13,9 +13,6 @@ CREATE TABLE IF NOT EXISTS operators (
     url text NOT NULL UNIQUE CHECK (url ~ '\S'),
     -- When true, skip TLS certificate verification for this operator's endpoint.
     tls_skip_verify boolean NOT NULL DEFAULT false,
-    auth_user text NOT NULL CHECK (auth_user ~ '\S'),
-    -- Application-layer encrypted credential; decryption is handled by the service, not the DB.
-    auth_password_encrypted text NOT NULL CHECK (auth_password_encrypted ~ '\S'),
     -- Explicit scheduling priority; lower values are tried first.
     priority integer NOT NULL DEFAULT 0,
     -- NULL pair means the operator has never been reconciled.
