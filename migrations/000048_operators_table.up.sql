@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS operators (
     auth_user text NOT NULL CHECK (auth_user ~ '\S'),
     -- Application-layer encrypted credential; decryption is handled by the service, not the DB.
     auth_password_encrypted text NOT NULL CHECK (auth_password_encrypted ~ '\S'),
+    -- Explicit scheduling priority; lower values are tried first.
+    priority integer NOT NULL DEFAULT 0,
     -- NULL pair means the operator has never been reconciled.
     last_reconciled_at timestamp with time zone,
     -- Identifier of the service or user that performed the last reconciliation.
@@ -77,5 +79,10 @@ COMMENT ON COLUMN jobs.operator_id IS
 --
 CREATE INDEX IF NOT EXISTS operators_reconciliation_idx
     ON operators (last_reconciled_at);
+
+-- Supports scheduling order queries: lower priority value is tried first,
+-- creation time breaks ties.
+CREATE INDEX IF NOT EXISTS operators_priority_idx
+    ON operators (priority ASC, created_at ASC);
 
 COMMIT;

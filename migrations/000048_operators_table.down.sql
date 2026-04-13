@@ -18,6 +18,7 @@ ALTER TABLE IF EXISTS ONLY jobs
 
 DROP TRIGGER IF EXISTS trigger_operators_updated_at ON operators;
 DROP FUNCTION IF EXISTS update_operators_updated_at();
+DROP INDEX IF EXISTS operators_priority_idx;
 DROP INDEX IF EXISTS operators_reconciliation_idx;
 DROP TABLE IF EXISTS operators;
 
