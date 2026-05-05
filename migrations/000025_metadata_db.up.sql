@@ -1,12 +1,20 @@
 BEGIN;
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
     CREATE SCHEMA IF NOT EXISTS metadata;
     SET search_path = metadata, public, pg_catalog;
 
     -- target_enum type
-    CREATE TYPE target_enum AS enum ('analysis', 'app', 'avu', 'file', 'folder', 'user', 'quick_launch', 'instant_launch');
+    DO $$
+    BEGIN
+        CREATE TYPE target_enum AS enum ('analysis', 'app', 'avu', 'file', 'folder', 'user', 'quick_launch', 'instant_launch');
+    EXCEPTION
+        WHEN duplicate_object THEN
+            RAISE NOTICE 'target_enum type already exists, moving on';
+    END$$;
 
     -- dependency free tables: avus, comments, ratings, favorites, file links
-    CREATE TABLE avus (
+    CREATE TABLE IF NOT EXISTS avus (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         attribute TEXT,
         value TEXT,
@@ -17,15 +25,15 @@ BEGIN;
         modified_by varchar(512) NOT NULL,
         created_on timestamp DEFAULT now() NOT NULL,
         modified_on timestamp DEFAULT now() NOT NULL,
-    
+
         UNIQUE (target_id, target_type, attribute, value, unit),
         PRIMARY KEY (id)
     );
-    
-    CREATE INDEX avus_target_id_idx ON avus(target_id, target_type);
-    CREATE INDEX avus_avu_idx ON avus(attribute, value, unit);
 
-    CREATE TABLE comments (
+    CREATE INDEX IF NOT EXISTS avus_target_id_idx ON avus(target_id, target_type);
+    CREATE INDEX IF NOT EXISTS avus_avu_idx ON avus(attribute, value, unit);
+
+    CREATE TABLE IF NOT EXISTS comments (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         value TEXT NOT NULL,
         post_time timestamp DEFAULT now() NOT NULL,
@@ -38,10 +46,10 @@ BEGIN;
 
         PRIMARY KEY (id)
     );
-    
-    CREATE INDEX comments_target_id_idx ON comments(target_id);
 
-    CREATE TABLE ratings (
+    CREATE INDEX IF NOT EXISTS comments_target_id_idx ON comments(target_id);
+
+    CREATE TABLE IF NOT EXISTS ratings (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         rating integer NOT NULL,
         target_id UUID NOT NULL,
@@ -51,11 +59,11 @@ BEGIN;
 
         PRIMARY KEY (id)
     );
-    
-    CREATE INDEX ratings_target_id_idx ON ratings(target_id);
-    CREATE INDEX ratings_owner_id_idx ON ratings(owner_id);
 
-    CREATE TABLE favorites (
+    CREATE INDEX IF NOT EXISTS ratings_target_id_idx ON ratings(target_id);
+    CREATE INDEX IF NOT EXISTS ratings_owner_id_idx ON ratings(owner_id);
+
+    CREATE TABLE IF NOT EXISTS favorites (
         target_id UUID NOT NULL,
         target_type target_enum NOT NULL,
         owner_id varchar(512) NOT NULL,
@@ -64,7 +72,7 @@ BEGIN;
         PRIMARY KEY (owner_id, target_id)
     );
 
-    CREATE TABLE file_links (
+    CREATE TABLE IF NOT EXISTS file_links (
         file_id UUID NOT NULL,
         target_id UUID NOT NULL,
         target_type target_enum NOT NULL,
@@ -73,11 +81,11 @@ BEGIN;
 
         PRIMARY KEY (file_id, target_id, owner_id)
     );
-    
-    CREATE INDEX file_links_target_id_idx ON file_links(target_id);
+
+    CREATE INDEX IF NOT EXISTS file_links_target_id_idx ON file_links(target_id);
 
     -- Tags and tag attachments
-    CREATE TABLE tags (
+    CREATE TABLE IF NOT EXISTS tags (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         value VARCHAR(255) NOT NULL,
         description TEXT,
@@ -89,10 +97,10 @@ BEGIN;
         UNIQUE (value, owner_id),
         PRIMARY KEY (id)
     );
-    
-    CREATE INDEX tags_owner_id_idx ON tags(owner_id);
 
-    CREATE TABLE attached_tags (
+    CREATE INDEX IF NOT EXISTS tags_owner_id_idx ON tags(owner_id);
+
+    CREATE TABLE IF NOT EXISTS attached_tags (
         target_id UUID NOT NULL,
         target_type target_enum NOT NULL,
         tag_id UUID NOT NULL,
@@ -103,13 +111,13 @@ BEGIN;
 
         FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
     );
-    
-    CREATE INDEX attached_tags_target_id_idx ON attached_tags(target_id);
-    CREATE INDEX attached_tags_tag_id_idx ON attached_tags(tag_id);
+
+    CREATE INDEX IF NOT EXISTS attached_tags_target_id_idx ON attached_tags(target_id);
+    CREATE INDEX IF NOT EXISTS attached_tags_tag_id_idx ON attached_tags(tag_id);
 
     -- attributes
 
-    CREATE TABLE value_types (
+    CREATE TABLE IF NOT EXISTS value_types (
         id uuid NOT NULL DEFAULT uuid_generate_v1(),
         name varchar(64) NOT NULL,
 
@@ -117,7 +125,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE attributes (
+    CREATE TABLE IF NOT EXISTS attributes (
         id uuid NOT NULL DEFAULT uuid_generate_v1(),
         name varchar(64) NOT NULL,
         description text NOT NULL,
@@ -133,7 +141,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE attr_synonyms (
+    CREATE TABLE IF NOT EXISTS attr_synonyms (
         attribute_id uuid NOT NULL,
         synonym_id uuid NOT NULL,
 
@@ -141,10 +149,10 @@ BEGIN;
         FOREIGN KEY (synonym_id) REFERENCES attributes(id) ON DELETE CASCADE
     );
 
-    CREATE INDEX attr_synonyms_attribute_id ON attr_synonyms(attribute_id);
-    CREATE INDEX attr_synonyms_synonym_id ON attr_synonyms(synonym_id);
+    CREATE INDEX IF NOT EXISTS attr_synonyms_attribute_id ON attr_synonyms(attribute_id);
+    CREATE INDEX IF NOT EXISTS attr_synonyms_synonym_id ON attr_synonyms(synonym_id);
 
-    CREATE TABLE attr_enum_values (
+    CREATE TABLE IF NOT EXISTS attr_enum_values (
         id uuid NOT NULL DEFAULT (uuid_generate_v1()),
         attribute_id uuid NOT NULL,
         value text NOT NULL,
@@ -156,9 +164,9 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE INDEX attr_enum_values_attribute_id ON attr_enum_values(attribute_id);
+    CREATE INDEX IF NOT EXISTS attr_enum_values_attribute_id ON attr_enum_values(attribute_id);
 
-    CREATE TABLE attr_attrs (
+    CREATE TABLE IF NOT EXISTS attr_attrs (
         parent_id uuid NOT NULL,
         child_id uuid NOT NULL,
         display_order integer NOT NULL,
@@ -168,8 +176,8 @@ BEGIN;
         CHECK (parent_id != child_id)
     );
 
-    CREATE INDEX attr_attrs_parent_id ON attr_attrs(parent_id);
-    CREATE UNIQUE INDEX attr_attrs_child_id ON attr_attrs(child_id);
+    CREATE INDEX IF NOT EXISTS attr_attrs_parent_id ON attr_attrs(parent_id);
+    CREATE UNIQUE INDEX IF NOT EXISTS attr_attrs_child_id ON attr_attrs(child_id);
 
     CREATE OR REPLACE FUNCTION attribute_synonyms(uuid)
     RETURNS
@@ -204,7 +212,7 @@ BEGIN;
 
     -- templates
 
-    CREATE TABLE templates (
+    CREATE TABLE IF NOT EXISTS templates (
         id uuid NOT NULL DEFAULT uuid_generate_v1(),
         name varchar(64) NOT NULL,
         description text,
@@ -217,7 +225,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE template_attrs (
+    CREATE TABLE IF NOT EXISTS template_attrs (
         template_id uuid NOT NULL,
         attribute_id uuid NOT NULL,
         display_order integer NOT NULL,
@@ -226,12 +234,12 @@ BEGIN;
         FOREIGN KEY (attribute_id) REFERENCES attributes(id) ON DELETE CASCADE
     );
 
-    CREATE INDEX template_attrs_template_id ON template_attrs(template_id);
-    CREATE INDEX template_attrs_attribute_id ON template_attrs(attribute_id);
+    CREATE INDEX IF NOT EXISTS template_attrs_template_id ON template_attrs(template_id);
+    CREATE INDEX IF NOT EXISTS template_attrs_attribute_id ON template_attrs(attribute_id);
 
     -- permanent ID requests
 
-    CREATE TABLE permanent_id_request_types (
+    CREATE TABLE IF NOT EXISTS permanent_id_request_types (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         type VARCHAR NOT NULL,
         description TEXT NOT NULL,
@@ -240,7 +248,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE permanent_id_requests (
+    CREATE TABLE IF NOT EXISTS permanent_id_requests (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         requested_by varchar(512) NOT NULL,
         type UUID,
@@ -254,7 +262,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE permanent_id_request_status_codes (
+    CREATE TABLE IF NOT EXISTS permanent_id_request_status_codes (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         name VARCHAR(64) NOT NULL,
         description TEXT NOT NULL,
@@ -263,7 +271,7 @@ BEGIN;
         PRIMARY KEY (id)
     );
 
-    CREATE TABLE permanent_id_request_statuses (
+    CREATE TABLE IF NOT EXISTS permanent_id_request_statuses (
         id UUID NOT NULL DEFAULT uuid_generate_v1(),
         permanent_id_request UUID NOT NULL,
         permanent_id_request_status_code UUID NOT NULL,
@@ -278,7 +286,7 @@ BEGIN;
 
     -- ontologies
 
-    CREATE TABLE ontologies (
+    CREATE TABLE IF NOT EXISTS ontologies (
         version VARCHAR NOT NULL,
         iri VARCHAR,
         deleted BOOLEAN NOT NULL DEFAULT FALSE,
@@ -290,21 +298,21 @@ BEGIN;
     );
 
 
-    CREATE TABLE ontology_classes (
+    CREATE TABLE IF NOT EXISTS ontology_classes (
         ontology_version VARCHAR NOT NULL,
         iri VARCHAR NOT NULL,
         label VARCHAR,
         description TEXT,
-      
+
         FOREIGN KEY (ontology_version) REFERENCES ontologies(version) ON DELETE CASCADE,
         PRIMARY KEY (ontology_version, iri)
     );
 
-    CREATE TABLE ontology_hierarchies (
+    CREATE TABLE IF NOT EXISTS ontology_hierarchies (
         ontology_version VARCHAR NOT NULL,
         class_iri VARCHAR NOT NULL,
         subclass_iri VARCHAR NOT NULL,
-    
+
         FOREIGN KEY (ontology_version) REFERENCES ontologies(version) ON DELETE CASCADE,
         FOREIGN KEY (ontology_version, class_iri) REFERENCES ontology_classes(ontology_version, iri),
         FOREIGN KEY (ontology_version, subclass_iri) REFERENCES ontology_classes(ontology_version, iri),
