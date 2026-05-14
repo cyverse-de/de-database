@@ -4,9 +4,10 @@ SET search_path = public, pg_catalog;
 
 --
 -- The base URL of the VICE landing/loading domain for analyses launched on
--- this operator (e.g. https://sandbox.cyverse.rocks). Nullable: pre-existing
--- rows have no value and consumers fall back to a static default. New
--- operators are required to supply one at creation time.
+-- this operator (e.g. https://sandbox.cyverse.rocks). Nullable at the schema
+-- level: pre-existing rows have no value and consumers fall back to a static
+-- default. app-exposer's admin API requires a value when creating a new
+-- operator, so NULL only occurs on legacy rows that predate this column.
 --
 ALTER TABLE IF EXISTS ONLY operators
     ADD COLUMN IF NOT EXISTS base_url text CHECK (base_url ~ '\S');
