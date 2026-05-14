@@ -3,9 +3,10 @@ BEGIN;
 SET search_path = public, pg_catalog;
 
 --
--- Restore the job listing view without operator_id. CREATE OR REPLACE cannot
--- drop a column, so the view is dropped and recreated. Nothing else depends
--- on job_listings, so no CASCADE is needed.
+-- Restore the job listing view without the operators left-join or the
+-- operator_base_url column. CREATE OR REPLACE cannot drop a column, so the
+-- view is dropped and recreated. Nothing else depends on job_listings, so no
+-- CASCADE is needed.
 --
 -- The is_batch subquery uses SELECT 1 rather than SELECT * so the recreated
 -- view does not capture a frozen dependency on jobs.operator_id (which still

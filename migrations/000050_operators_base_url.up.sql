@@ -13,9 +13,12 @@ ALTER TABLE IF EXISTS ONLY operators
     ADD COLUMN IF NOT EXISTS base_url text CHECK (base_url ~ '\S');
 
 --
--- Recreate the job listing view to expose operator_id so consumers can join
--- to the operators table and resolve the per-operator base URL. operator_id
+-- Recreate the job listing view to left-join the operators table and expose
+-- operator_base_url, so consumers can resolve the per-operator VICE base URL
+-- directly from the view instead of joining operators themselves. The column
 -- is appended at the end of the select list so CREATE OR REPLACE is valid.
+-- The join is LEFT so jobs with no operator_id (legacy / non-VICE jobs) still
+-- appear, with a NULL operator_base_url.
 --
 -- The is_batch subquery uses SELECT 1 rather than SELECT * so the view does
 -- not capture a frozen dependency on every column of jobs. SELECT * would
@@ -49,9 +52,10 @@ CREATE OR REPLACE VIEW job_listings AS
            t.system_id,
            j.planned_end_date,
            j.user_id,
-           j.operator_id
+           o.base_url AS operator_base_url
     FROM jobs j
     JOIN users u ON j.user_id = u.id
-    JOIN job_types t ON j.job_type_id = t.id;
+    JOIN job_types t ON j.job_type_id = t.id
+    LEFT JOIN operators o ON o.id = j.operator_id;
 
 COMMIT;
