@@ -17,6 +17,12 @@ ALTER TABLE IF EXISTS ONLY operators
 -- to the operators table and resolve the per-operator base URL. operator_id
 -- is appended at the end of the select list so CREATE OR REPLACE is valid.
 --
+-- The is_batch subquery uses SELECT 1 rather than SELECT * so the view does
+-- not capture a frozen dependency on every column of jobs. SELECT * would
+-- expand to the jobs column list as it stands at view-creation time, which
+-- would make this view block an unrelated DROP COLUMN on jobs later (e.g.
+-- rolling back the operator_id column in migration 000048).
+--
 CREATE OR REPLACE VIEW job_listings AS
     SELECT j.id,
            j.job_name,
@@ -37,7 +43,7 @@ CREATE OR REPLACE VIEW job_listings AS
            t.name AS job_type,
            j.parent_id,
            EXISTS (
-               SELECT * FROM jobs child
+               SELECT 1 FROM jobs child
                WHERE child.parent_id = j.id
            ) AS is_batch,
            t.system_id,

@@ -7,6 +7,11 @@ SET search_path = public, pg_catalog;
 -- drop a column, so the view is dropped and recreated. Nothing else depends
 -- on job_listings, so no CASCADE is needed.
 --
+-- The is_batch subquery uses SELECT 1 rather than SELECT * so the recreated
+-- view does not capture a frozen dependency on jobs.operator_id (which still
+-- exists at this point). A SELECT * here would expand to include operator_id
+-- and block migration 000048's down step from dropping that column.
+--
 DROP VIEW IF EXISTS job_listings;
 
 CREATE VIEW job_listings AS
@@ -29,7 +34,7 @@ CREATE VIEW job_listings AS
            t.name AS job_type,
            j.parent_id,
            EXISTS (
-               SELECT * FROM jobs child
+               SELECT 1 FROM jobs child
                WHERE child.parent_id = j.id
            ) AS is_batch,
            t.system_id,
