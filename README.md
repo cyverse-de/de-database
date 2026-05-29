@@ -75,6 +75,69 @@ Remove the most recent migration from the database:
 $ migrate -database "$DBURL" -path migrations down 1
 ```
 
+## Test database container image
+
+For functional and integration testing of DE services, this repository also
+builds a standalone PostgreSQL image that comes up with the DE schema already
+migrated and a small set of synthetic, anonymized test data preloaded. It is
+separate from the production migration-runner image described above (the root
+`Dockerfile`) and is **not** part of the production build/deploy path.
+
+The schema and data are baked into the image at build time, so a container starts
+up ready to use. The image, its build script, and the test data live alongside
+the migrations:
+
+- `Dockerfile.testdb` — builds the image.
+- `testdata/` — the build script and the synthetic data files (see
+  [`testdata/README.md`](testdata/README.md) for details and conventions).
+- `docker-compose.yml` — convenience wrapper for running it.
+
+### Using Docker Compose
+
+```
+$ docker compose up -d            # build (first run) and start
+$ docker compose up -d --build    # force a rebuild after editing testdata/
+$ docker compose down -v          # stop and drop the volume
+```
+
+The database listens on host port `5432` by default. If that port is already in
+use locally, override it:
+
+```
+$ DE_DB_PORT=5440 docker compose up -d
+```
+
+Other compose stacks can wait for a ready database with:
+
+```yaml
+depends_on:
+  de-database:
+    condition: service_healthy
+```
+
+### Using Docker directly
+
+```
+$ docker build -f Dockerfile.testdb -t de-database-testdb .
+$ docker run -d --name de-database-testdb -p 5432:5432 de-database-testdb
+```
+
+### Connecting
+
+The database name, user, and password are all `de`, and the `de` account owns the
+database and all schemas:
+
+```
+postgres://de:de@localhost:5432/de?sslmode=disable
+```
+
+The container exposes a `pg_isready` health check, so you can wait for it to
+finish coming up before pointing tests at it:
+
+```
+$ until docker exec de-database-testdb pg_isready -U de -d de; do sleep 1; done
+```
+
 [1]: https://github.com/cyverse-de/de-db
 [2]: https://github.com/cyverse-de/metadata-db
 [3]: https://github.com/cyverse-de/permissions-db
