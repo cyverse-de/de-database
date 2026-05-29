@@ -120,8 +120,9 @@ depends_on:
 
 The compose stack can also run the [`apps`](https://github.com/cyverse-de/apps)
 service against the test database, so its endpoints can be exercised directly. The
-apps image builds from `../apps`, so that repository must be checked out next to
-this one (both under `.../cyverse-de/`). Its test config is
+apps image builds from `../apps` by default, so that repository is expected next to
+this one (both under `.../cyverse-de/`); point elsewhere with
+`APPS_CONTEXT=/path/to/apps docker compose up -d`. Its test config is
 `testdata/apps/apps.properties`.
 
 This is a **database-only** setup: apps boots against the test database, but many
