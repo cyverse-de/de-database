@@ -125,15 +125,26 @@ this one (both under `.../cyverse-de/`); point elsewhere with
 `APPS_CONTEXT=/path/to/apps docker compose up -d`. Its test config is
 `testdata/apps/apps.properties`.
 
-This is a **database-only** setup: apps boots against the test database, but many
-endpoints (including the main app listing/details) call the iplant-groups,
-permissions, and metadata services mid-request and error when those aren't in the
-stack. Reference/DB-only endpoints (`/apps/elements/*`, `/tool-requests`,
-`/reference-genomes`, `/`) work as-is; the central app endpoints need
-iplant-groups + permissions (and metadata) added next. Most endpoints take a
-`user` query parameter naming a seeded user, e.g.
-`curl 'http://localhost:60000/apps/elements/parameter-types?user=testuser01'`
-(Swagger UI at `/docs`). See [`testdata/apps/README.md`](testdata/apps/README.md).
+apps boots against the test database, and with the metadata service also in the
+stack (below) its metadata-backed endpoints work too — e.g.
+`curl 'http://localhost:60000/apps/66666666-6666-6666-6666-666666666601/metadata?user=testuser01'`
+returns the seeded app AVUs. The central app listing/details endpoints, however,
+also call the **iplant-groups** and **permissions** services mid-request and error
+until those are added to the stack; reference/DB-only endpoints
+(`/apps/elements/*`, `/tool-requests`, `/reference-genomes`, `/`) work regardless.
+Most endpoints take a `user` query parameter naming a seeded user (Swagger UI at
+`/docs`). See [`testdata/apps/README.md`](testdata/apps/README.md).
+
+#### metadata service
+
+The stack also runs the [`metadata`](https://github.com/cyverse-de/metadata)
+service (built from `../metadata`, override with `METADATA_CONTEXT`) plus a
+`rabbitmq` broker it requires at startup. Because the metadata service addresses
+its tables unqualified, it connects as a dedicated `metadata` database role whose
+`search_path` resolves the `metadata` schema first (created by
+`testdata/sql/90_metadata_role.sql`). Its test config is
+`testdata/metadata/metadata.properties`; it listens on `60010` by default
+(`METADATA_PORT`). See [`testdata/metadata/README.md`](testdata/metadata/README.md).
 
 ### Using Docker directly
 

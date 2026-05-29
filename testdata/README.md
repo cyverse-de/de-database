@@ -65,10 +65,21 @@ duplicated here. The files in `sql/` add the user-content layer on top:
 - `50_jobs` — analyses across the common statuses, including a batch parent with
   children and interactive jobs tied to operators; job steps and status updates.
 - `60_launches` — submissions, quick launches, instant launches.
-- `70_metadata` — the `metadata` schema (AVUs, tags, comments, favorites, ratings),
-  including Beta/ontology/community AVUs for metadata-service-backed features.
+- `70_metadata` — core `metadata` schema content (AVUs, tags, comments, favorites,
+  ratings), including Beta/ontology/community AVUs for metadata-service-backed
+  apps features.
+- `72_metadata_templates` — the metadata template/attribute system: a template
+  with attributes of several value types (incl. an Enum with values, a Grouping
+  with nested sub-attributes, and a synonym pair), plus a deleted template.
+  References the migration-seeded `value_types`.
+- `74_metadata_ontologies` — a synthetic ontology with classes and a parent/child
+  hierarchy.
+- `76_metadata_pid_requests` — permanent-ID (DOI) requests with status histories
+  (references the migration-seeded request types and status codes).
 - `80_permissions` — the `permissions` schema (user + group subjects, resources,
   grants).
+- `90_metadata_role` — a dedicated `metadata` DB login role (search_path
+  `metadata, public`) for the metadata service; see `metadata/README.md`.
 
 ## Apps service coverage
 
