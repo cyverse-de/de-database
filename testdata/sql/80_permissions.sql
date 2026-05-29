@@ -44,4 +44,21 @@ INSERT INTO permissions.permissions (id, subject_id, resource_id, permission_lev
     ('17171717-0000-0000-0000-00000000000b', '15151515-0000-0000-0000-000000000002', '16161616-0000-0000-0000-0000000d0d01', (SELECT id FROM permissions.permission_levels WHERE name='write'))
 ON CONFLICT (id) DO NOTHING;
 
+-- A group subject and resources for the versioned and parameters apps, so the
+-- permission-lister and sharing paths have group grants and more apps to report.
+INSERT INTO permissions.subjects (id, subject_id, subject_type) VALUES
+    ('15151515-0000-0000-0000-0000000000f1', 'test-group-1', 'group')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO permissions.resources (id, name, resource_type_id) VALUES
+    ('16161616-0000-0000-0000-000000000606', '66666666-6666-6666-6666-666666666606', (SELECT id FROM permissions.resource_types WHERE name='app')),
+    ('16161616-0000-0000-0000-000000000610', '66666666-6666-6666-6666-666666666610', (SELECT id FROM permissions.resource_types WHERE name='app'))
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO permissions.permissions (id, subject_id, resource_id, permission_level_id) VALUES
+    ('17171717-0000-0000-0000-00000000000c', '15151515-0000-0000-0000-000000000001', '16161616-0000-0000-0000-000000000606', (SELECT id FROM permissions.permission_levels WHERE name='own')),
+    ('17171717-0000-0000-0000-00000000000d', '15151515-0000-0000-0000-000000000002', '16161616-0000-0000-0000-000000000610', (SELECT id FROM permissions.permission_levels WHERE name='own')),
+    ('17171717-0000-0000-0000-00000000000e', '15151515-0000-0000-0000-0000000000f1', '16161616-0000-0000-0000-000000000601', (SELECT id FROM permissions.permission_levels WHERE name='read'))
+ON CONFLICT (id) DO NOTHING;
+
 COMMIT;

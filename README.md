@@ -138,6 +138,12 @@ finish coming up before pointing tests at it:
 $ until docker exec de-database-testdb pg_isready -U de -d de; do sleep 1; done
 ```
 
+The preloaded data is sized to support functional/regression testing of DE
+services. For the apps service in particular, `testdata/COVERAGE.md` maps read
+endpoints to the fixtures that exercise them, and `testdata/verify/apps_smoke.sql`
+provides a sanity report plus assertions. See `testdata/README.md` for the full
+contents and conventions.
+
 [1]: https://github.com/cyverse-de/de-db
 [2]: https://github.com/cyverse-de/metadata-db
 [3]: https://github.com/cyverse-de/permissions-db

@@ -42,4 +42,17 @@ INSERT INTO metadata.ratings (id, owner_id, target_id, target_type, rating) VALU
     ('a3a3a3a3-0000-0000-0000-000000000001', 'testuser02@example.org', '66666666-6666-6666-6666-666666666601', 'app', 5)
 ON CONFLICT (id) DO NOTHING;
 
+-- AVUs that drive metadata-service-backed apps features (Beta category, ontology
+-- hierarchies, communities). These are NOT consulted by the apps service via the
+-- database directly; they require the metadata service running against this DB.
+-- Attribute IRIs/labels mirror the apps service config (apps.workspace.metadata.*):
+-- Beta marker attr "n2t.net/ark:/99152/h1459" = "beta"; ontology category attrs
+-- "rdf:type" and "http://edamontology.org/has_topic". See COVERAGE.md.
+INSERT INTO metadata.avus (id, attribute, value, unit, target_id, target_type, created_by, modified_by) VALUES
+    ('a2a2a2a2-0000-0000-0000-000000000101', 'n2t.net/ark:/99152/h1459', 'beta', '', '66666666-6666-6666-6666-666666666602', 'app', 'testuser01@example.org', 'testuser01@example.org'),
+    ('a2a2a2a2-0000-0000-0000-000000000102', 'rdf:type', 'http://edamontology.org/topic_0091', '', '66666666-6666-6666-6666-666666666603', 'app', 'testuser02@example.org', 'testuser02@example.org'),
+    ('a2a2a2a2-0000-0000-0000-000000000103', 'http://edamontology.org/has_topic', 'http://edamontology.org/topic_3168', '', '66666666-6666-6666-6666-666666666610', 'app', 'testuser02@example.org', 'testuser02@example.org'),
+    ('a2a2a2a2-0000-0000-0000-000000000104', 'cyverse-internal-community', 'Test Community', '', '66666666-6666-6666-6666-666666666601', 'app', 'testuser01@example.org', 'testuser01@example.org')
+ON CONFLICT (id) DO NOTHING;
+
 COMMIT;
