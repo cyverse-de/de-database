@@ -90,21 +90,22 @@ the migrations:
 - `Dockerfile.testdb` — builds the image.
 - `testdata/` — the build script and the synthetic data files (see
   [`testdata/README.md`](testdata/README.md) for details and conventions).
-- `docker-compose.yml` — convenience wrapper for running it.
+- `docker-compose.yml` — runs the database, and optionally the apps service.
 
 ### Using Docker Compose
 
 ```
-$ docker compose up -d            # build (first run) and start
-$ docker compose up -d --build    # force a rebuild after editing testdata/
-$ docker compose down -v          # stop and drop the volume
+$ docker compose up -d de-database   # just the database (fast)
+$ docker compose up -d               # database + apps service (first build is slow)
+$ docker compose up -d --build       # force a rebuild after changes
+$ docker compose down -v             # stop and drop volumes
 ```
 
-The database listens on host port `5432` by default. If that port is already in
-use locally, override it:
+The database listens on host port `5432` and apps on `60000` by default. Override
+either if a port is already in use:
 
 ```
-$ DE_DB_PORT=5440 docker compose up -d
+$ DE_DB_PORT=5440 APPS_PORT=60001 docker compose up -d
 ```
 
 Other compose stacks can wait for a ready database with:
@@ -114,6 +115,24 @@ depends_on:
   de-database:
     condition: service_healthy
 ```
+
+#### apps service
+
+The compose stack can also run the [`apps`](https://github.com/cyverse-de/apps)
+service against the test database, so its endpoints can be exercised directly. The
+apps image builds from `../apps`, so that repository must be checked out next to
+this one (both under `.../cyverse-de/`). Its test config is
+`testdata/apps/apps.properties`.
+
+This is a **database-only** setup: apps boots against the test database, but many
+endpoints (including the main app listing/details) call the iplant-groups,
+permissions, and metadata services mid-request and error when those aren't in the
+stack. Reference/DB-only endpoints (`/apps/elements/*`, `/tool-requests`,
+`/reference-genomes`, `/`) work as-is; the central app endpoints need
+iplant-groups + permissions (and metadata) added next. Most endpoints take a
+`user` query parameter naming a seeded user, e.g.
+`curl 'http://localhost:60000/apps/elements/parameter-types?user=testuser01'`
+(Swagger UI at `/docs`). See [`testdata/apps/README.md`](testdata/apps/README.md).
 
 ### Using Docker directly
 

@@ -1,15 +1,28 @@
-# Spins up the standalone DE test database (schema migrated + synthetic data
-# baked in). For functional/integration testing of DE services; not part of the
+# Test stack for functional/integration testing of DE services. Not part of the
 # production build/deploy path.
 #
 #   docker compose up -d            # build (first run) and start
-#   docker compose up -d --build    # force a rebuild after changing testdata/
-#   docker compose down -v          # stop and drop the volume
+#   docker compose up -d --build    # force a rebuild after changes
+#   docker compose down -v          # stop and drop volumes
 #
-# The published host port defaults to 5432 but can be overridden if that port is
-# already in use locally:  DE_DB_PORT=5440 docker compose up -d
+# Services:
+#   de-database  the baked test database (schema + synthetic data)
+#   apps         the apps service, built from ../apps, pointed at de-database
+#
+# The apps build context is ../apps, so this repo (de-database) and the apps repo
+# must be checked out side by side under .../cyverse-de/. The apps image only
+# needs the database to run; its other service clients (metadata, permissions,
+# etc.) are lazy, so database-backed endpoints work but metadata/permissions-
+# backed ones error until those services are added. See testdata/apps/README.md.
+#
+# Bring up just the database (the apps build is slow on first run):
+#   docker compose up -d de-database
+#
+# Host ports default to 5432 (db) and 60000 (apps); override if already in use:
+#   DE_DB_PORT=5440 APPS_PORT=60001 docker compose up -d
 #
 # Connect: postgres://de:de@localhost:5432/de?sslmode=disable
+#          apps at http://localhost:60000 (Swagger UI at /docs)
 #
 # Other compose stacks can wait for a ready database with:
 #   depends_on:
@@ -35,3 +48,17 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+
+  apps:
+    build:
+      context: ../apps
+      dockerfile: Dockerfile
+    image: cyverse-de/apps:test
+    container_name: de-apps-test
+    depends_on:
+      de-database:
+        condition: service_healthy
+    ports:
+      - "${APPS_PORT:-60000}:60000"
+    volumes:
+      - ./testdata/apps/apps.properties:/etc/iplant/de/apps.properties:ro
