@@ -75,6 +75,106 @@ Remove the most recent migration from the database:
 $ migrate -database "$DBURL" -path migrations down 1
 ```
 
+## Test database container image
+
+For functional and integration testing of DE services, this repository also
+builds a standalone PostgreSQL image that comes up with the DE schema already
+migrated and a small set of synthetic, anonymized test data preloaded. It is
+separate from the production migration-runner image described above (the root
+`Dockerfile`) and is **not** part of the production build/deploy path.
+
+The schema and data are baked into the image at build time, so a container starts
+up ready to use. The image, its build script, and the test data live alongside
+the migrations:
+
+- `Dockerfile.testdb` — builds the image.
+- `testdata/` — the build script and the synthetic data files (see
+  [`testdata/README.md`](testdata/README.md) for details and conventions).
+- `docker-compose.yml` — runs the database, and optionally the apps service.
+
+### Using Docker Compose
+
+```
+$ docker compose up -d de-database   # just the database (fast)
+$ docker compose up -d               # database + apps service (first build is slow)
+$ docker compose up -d --build       # force a rebuild after changes
+$ docker compose down -v             # stop and drop volumes
+```
+
+The database listens on host port `5432` and apps on `60000` by default. Override
+either if a port is already in use:
+
+```
+$ DE_DB_PORT=5440 APPS_PORT=60001 docker compose up -d
+```
+
+Other compose stacks can wait for a ready database with:
+
+```yaml
+depends_on:
+  de-database:
+    condition: service_healthy
+```
+
+#### apps service
+
+The compose stack can also run the [`apps`](https://github.com/cyverse-de/apps)
+service against the test database, so its endpoints can be exercised directly. The
+apps image builds from `../apps` by default, so that repository is expected next to
+this one (both under `.../cyverse-de/`); point elsewhere with
+`APPS_CONTEXT=/path/to/apps docker compose up -d`. Its test config is
+`testdata/apps/apps.properties`.
+
+apps boots against the test database, and with the metadata service also in the
+stack (below) its metadata-backed endpoints work too — e.g.
+`curl 'http://localhost:60000/apps/66666666-6666-6666-6666-666666666601/metadata?user=testuser01'`
+returns the seeded app AVUs. The central app listing/details endpoints, however,
+also call the **iplant-groups** and **permissions** services mid-request and error
+until those are added to the stack; reference/DB-only endpoints
+(`/apps/elements/*`, `/tool-requests`, `/reference-genomes`, `/`) work regardless.
+Most endpoints take a `user` query parameter naming a seeded user (Swagger UI at
+`/docs`). See [`testdata/apps/README.md`](testdata/apps/README.md).
+
+#### metadata service
+
+The stack also runs the [`metadata`](https://github.com/cyverse-de/metadata)
+service (built from `../metadata`, override with `METADATA_CONTEXT`) plus a
+`rabbitmq` broker it requires at startup. Because the metadata service addresses
+its tables unqualified, it connects as a dedicated `metadata` database role whose
+`search_path` resolves the `metadata` schema first (created by
+`testdata/sql/90_metadata_role.sql`). Its test config is
+`testdata/metadata/metadata.properties`; it listens on `60010` by default
+(`METADATA_PORT`). See [`testdata/metadata/README.md`](testdata/metadata/README.md).
+
+### Using Docker directly
+
+```
+$ docker build -f Dockerfile.testdb -t de-database-testdb .
+$ docker run -d --name de-database-testdb -p 5432:5432 de-database-testdb
+```
+
+### Connecting
+
+The database name, user, and password are all `de`, and the `de` account owns the
+database and all schemas:
+
+```
+postgres://de:de@localhost:5432/de?sslmode=disable
+```
+
+The container exposes a `pg_isready` health check, so you can wait for it to
+finish coming up before pointing tests at it:
+
+```
+$ until docker exec de-database-testdb pg_isready -U de -d de; do sleep 1; done
+```
+
+The preloaded data is sized to support functional/regression testing of DE
+services. For the apps service in particular, `testdata/COVERAGE.md` maps read
+endpoints to the fixtures that exercise them, and `testdata/verify/apps_smoke.sql`
+provides a sanity report plus assertions. See `testdata/README.md` for the full
+contents and conventions.
+
 [1]: https://github.com/cyverse-de/de-db
 [2]: https://github.com/cyverse-de/metadata-db
 [3]: https://github.com/cyverse-de/permissions-db

@@ -1,0 +1,39 @@
+# Standalone PostgreSQL image with the DE schema migrated and synthetic,
+# anonymized test data baked in, for functional/integration testing of DE
+# services. This is separate from the root Dockerfile (the migration runner)
+# and is not part of the production build/deploy path.
+#
+# The schema and data are applied at BUILD time (see testdata/build/bake.sh) so
+# the container comes up already populated. Build:
+#   docker build -f Dockerfile.testdb -t de-database-testdb .
+# Run:
+#   docker run -d --name detest -p 5432:5432 de-database-testdb
+# Connect:
+#   postgres://de:de@localhost:5432/de?sslmode=disable
+
+FROM migrate/migrate:4 AS migrate
+
+FROM postgres:12
+
+# Bake the cluster into a path OUTSIDE the base image's declared
+# VOLUME (/var/lib/postgresql/data); writes under that volume during build are
+# discarded, which would throw away the baked data.
+ENV PGDATA=/var/lib/postgresql/dedata
+ENV POSTGRES_USER=de
+ENV POSTGRES_DB=de
+ENV POSTGRES_PASSWORD=de
+
+COPY --from=migrate /usr/local/bin/migrate /usr/local/bin/migrate
+COPY migrations /migrations
+COPY testdata/ /testdata/
+
+# initdb + migrate + load run as the postgres user; the baked data dir must be
+# owned by it for the runtime entrypoint to start cleanly.
+USER postgres
+RUN bash /testdata/build/bake.sh
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=5 \
+    CMD pg_isready -U de -d de || exit 1
+
+# Inherit the base postgres image's entrypoint/CMD, which starts the server.
+# On startup it finds a populated $PGDATA and serves it directly (no init).

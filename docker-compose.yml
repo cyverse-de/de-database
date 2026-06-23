@@ -1,0 +1,110 @@
+# Test stack for functional/integration testing of DE services. Not part of the
+# production build/deploy path.
+#
+#   docker compose up -d            # build (first run) and start
+#   docker compose up -d --build    # force a rebuild after changes
+#   docker compose down -v          # stop and drop volumes
+#
+# Services:
+#   de-database  the baked test database (schema + synthetic data)
+#   rabbitmq     message broker required by the metadata service at startup
+#   apps         the apps service, built from ../apps, pointed at de-database
+#   metadata     the metadata service, built from ../metadata
+#
+# The apps and metadata build contexts default to ../apps and ../metadata, so this
+# repo (de-database) and those repos are expected side by side under
+# .../cyverse-de/; override with APPS_CONTEXT / METADATA_CONTEXT. The apps image
+# only needs the database to boot (its service clients are lazy); metadata needs
+# both the database and rabbitmq. Many apps endpoints (the main app
+# listing/details) also call the iplant-groups and permissions services, which are
+# not yet in the stack, so those error until added. See testdata/apps/README.md
+# and testdata/metadata/README.md.
+#
+# Bring up just the database (the service builds are slow on first run):
+#   docker compose up -d de-database
+#
+# Host ports default to 5432 (db), 60000 (apps), 60010 (metadata), 5672 (rabbitmq);
+# override any if already in use:
+#   DE_DB_PORT=5440 APPS_PORT=60001 METADATA_PORT=60011 RABBITMQ_PORT=5673 docker compose up -d
+# Override the service build contexts:
+#   APPS_CONTEXT=/path/to/apps METADATA_CONTEXT=/path/to/metadata docker compose up -d
+#
+# Connect: postgres://de:de@localhost:5432/de?sslmode=disable
+#          apps at http://localhost:60000 (Swagger UI at /docs)
+#          metadata at http://localhost:60010 (Swagger UI at /docs)
+#
+# Other compose stacks can wait for a ready database with:
+#   depends_on:
+#     de-database:
+#       condition: service_healthy
+
+services:
+  de-database:
+    build:
+      context: .
+      dockerfile: Dockerfile.testdb
+    image: de-database-testdb
+    container_name: de-database-testdb
+    ports:
+      - "${DE_DB_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: de
+      POSTGRES_DB: de
+      POSTGRES_PASSWORD: de
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "de", "-d", "de"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: de-rabbitmq-test
+    environment:
+      # RabbitMQ's built-in "guest" user only works over localhost, so define a
+      # user the metadata container can use across the compose network.
+      RABBITMQ_DEFAULT_USER: de
+      RABBITMQ_DEFAULT_PASS: de
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  apps:
+    build:
+      context: ${APPS_CONTEXT:-../apps}
+      dockerfile: Dockerfile
+    image: cyverse-de/apps:test
+    container_name: de-apps-test
+    depends_on:
+      de-database:
+        condition: service_healthy
+    ports:
+      - "${APPS_PORT:-60000}:60000"
+    volumes:
+      - ./testdata/apps/apps.properties:/etc/iplant/de/apps.properties:ro
+
+  metadata:
+    build:
+      context: ${METADATA_CONTEXT:-../metadata}
+      dockerfile: Dockerfile
+    image: cyverse-de/metadata:test
+    container_name: de-metadata-test
+    depends_on:
+      de-database:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "${METADATA_PORT:-60010}:60000"
+    volumes:
+      - ./testdata/metadata/metadata.properties:/etc/iplant/de/metadata.properties:ro
+    # The metadata image's default CMD is "--help"; override it to run the server.
+    # (The apps image has no such default, so it needs no command here.)
+    command: ["--config", "/etc/iplant/de/metadata.properties"]
