@@ -10,7 +10,7 @@ SET search_path = public, pg_catalog;
 -- operator, so NULL only occurs on legacy rows that predate this column.
 --
 ALTER TABLE IF EXISTS ONLY operators
-    ADD COLUMN IF NOT EXISTS base_url text CHECK (base_url ~ '\S');
+    ADD COLUMN IF NOT EXISTS base_url text CHECK (base_url ~ '[^[:space:]]');
 
 --
 -- Recreate the job listing view to left-join the operators table and expose
