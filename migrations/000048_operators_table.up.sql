@@ -9,8 +9,8 @@ SET search_path = public, pg_catalog;
 --
 CREATE TABLE IF NOT EXISTS operators (
     id uuid NOT NULL DEFAULT uuid_generate_v1(),
-    name text NOT NULL UNIQUE CHECK (name ~ '\S'),
-    url text NOT NULL UNIQUE CHECK (url ~ '\S'),
+    name text NOT NULL UNIQUE CHECK (name ~ '[^[:space:]]'),
+    url text NOT NULL UNIQUE CHECK (url ~ '[^[:space:]]'),
     -- When true, skip TLS certificate verification for this operator's endpoint.
     tls_skip_verify boolean NOT NULL DEFAULT false,
     -- Explicit scheduling priority; lower values are tried first.
