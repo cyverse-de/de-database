@@ -339,4 +339,59 @@ CREATE TRIGGER trigger_groups_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION update_groups_updated_at();
 
+--
+-- Which system owns group data. The Grouper importer reconciles -- it removes
+-- memberships and grants that Grouper no longer has -- which is correct only
+-- while Grouper is still authoritative. Run it once after cutover and it would
+-- delete whatever was created natively in the meantime.
+--
+-- The importer refuses to start unless this says 'grouper'. There is deliberately
+-- no override flag: the only way to run a destructive reconcile after cutover is
+-- to set this back, which is a deliberate write with attribution and a timestamp
+-- rather than something typed at the end of an argument list. Flipping it to
+-- 'native' is an ordered step of the cutover, performed before anything is
+-- pointed at the new store.
+--
+CREATE TABLE IF NOT EXISTS group_data_source (
+    -- Single row: the only permitted key is true, and the primary key makes it
+    -- unique, so a second row cannot be inserted.
+    id boolean NOT NULL DEFAULT true CHECK (id),
+    source varchar(16) NOT NULL CHECK (source IN ('grouper', 'native')),
+    changed_at timestamp with time zone NOT NULL DEFAULT now(),
+    -- Who performed the change. Free text: this is usually an operator, not a
+    -- subject or a DE user.
+    changed_by varchar(512) NOT NULL CHECK (changed_by ~ '[^[:space:]]'),
+    note text,
+    PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE group_data_source IS
+    'Single row recording whether Grouper or this database is authoritative for group '
+    'data. The Grouper importer refuses to run a destructive reconcile unless it says '
+    'grouper; set it to native as part of cutover.';
+
+INSERT INTO group_data_source (source, changed_by, note)
+     VALUES ('grouper', 'migration 000054',
+             'Grouper remains authoritative until cutover.')
+ON CONFLICT DO NOTHING;
+
+--
+-- Keeps changed_at honest: the timestamp matters precisely because someone will
+-- want to know when the cutover happened, and an operator flipping source by
+-- hand would not think to set it.
+--
+CREATE OR REPLACE FUNCTION update_group_data_source_changed_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.changed_at = now();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trigger_group_data_source_changed_at ON group_data_source;
+CREATE TRIGGER trigger_group_data_source_changed_at
+    BEFORE UPDATE ON group_data_source
+    FOR EACH ROW
+    EXECUTE FUNCTION update_group_data_source_changed_at();
+
 COMMIT;

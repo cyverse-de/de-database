@@ -8,6 +8,10 @@ SET search_path = permissions, public, pg_catalog;
 -- rather than a migration.
 --
 
+DROP TRIGGER IF EXISTS trigger_group_data_source_changed_at ON group_data_source;
+DROP FUNCTION IF EXISTS update_group_data_source_changed_at();
+DROP TABLE IF EXISTS group_data_source;
+
 DROP TRIGGER IF EXISTS trigger_groups_updated_at ON groups;
 DROP FUNCTION IF EXISTS update_groups_updated_at();
 
