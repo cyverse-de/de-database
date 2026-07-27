@@ -25,6 +25,55 @@ ALTER TABLE subjects
     ALTER COLUMN subject_id SET DEFAULT replace(uuid_generate_v1()::text, '-', '');
 
 --
+-- Correlates a user subject with its DE user row. subject_id is a bare username
+-- while public.users.username carries a domain suffix, so a join between the two
+-- otherwise has to reconstruct the suffixed form every time.
+--
+-- Nullable and best-effort by design: a subject can be created before the user
+-- has ever logged in to the DE, and 5 of the 19,728 production user subjects
+-- correspond to no DE user at all. A NULL means "not correlated", never "no such
+-- user", and consumers must not treat it as the latter.
+--
+-- ON DELETE SET NULL rather than CASCADE: removing a DE user must not remove the
+-- subject, because that would cascade away their group memberships and every
+-- permission ever granted to them.
+--
+-- Deliberately not backfilled here. Matching requires the username suffix, which
+-- is deployment-specific, so population belongs to the services and the Grouper
+-- importer, which have it configured.
+--
+ALTER TABLE subjects ADD COLUMN IF NOT EXISTS user_id uuid;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'subjects_user_id_fkey'
+    ) THEN
+        ALTER TABLE subjects
+            ADD CONSTRAINT subjects_user_id_fkey FOREIGN KEY (user_id)
+                REFERENCES public.users (id) ON DELETE SET NULL;
+    END IF;
+
+    -- Only a user subject can name a DE user; a group never does.
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'subjects_user_id_is_user'
+    ) THEN
+        ALTER TABLE subjects
+            ADD CONSTRAINT subjects_user_id_is_user
+                CHECK (user_id IS NULL OR subject_type = 'user');
+    END IF;
+END$$;
+
+COMMENT ON COLUMN subjects.user_id IS
+    'The public.users row this subject corresponds to, or NULL when it has not been '
+    'correlated -- which is not the same as the user not existing.';
+
+-- At most one subject may claim a given DE user. The partial index leaves the
+-- uncorrelated rows out entirely rather than relying on NULL distinctness.
+CREATE UNIQUE INDEX IF NOT EXISTS subjects_user_id_unique
+    ON subjects (user_id) WHERE user_id IS NOT NULL;
+
+--
 -- Redundant with the primary key for uniqueness, but required as the target of
 -- the composite foreign keys below, which pin the subject type of a referencing
 -- row (a group's backing subject must be a group; an effective member must be a

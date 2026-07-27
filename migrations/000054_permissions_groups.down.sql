@@ -28,6 +28,11 @@ DROP TABLE IF EXISTS groups;
 
 DROP TABLE IF EXISTS group_types;
 
+DROP INDEX IF EXISTS subjects_user_id_unique;
+ALTER TABLE subjects DROP CONSTRAINT IF EXISTS subjects_user_id_is_user;
+ALTER TABLE subjects DROP CONSTRAINT IF EXISTS subjects_user_id_fkey;
+ALTER TABLE subjects DROP COLUMN IF EXISTS user_id;
+
 ALTER TABLE subjects DROP CONSTRAINT IF EXISTS subjects_id_subject_type_key;
 ALTER TABLE subjects ALTER COLUMN subject_id DROP DEFAULT;
 
