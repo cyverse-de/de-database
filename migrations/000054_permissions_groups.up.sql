@@ -253,7 +253,11 @@ RETURNS SETOF uuid AS $$
          WHERE gm.member_type = 'group'
     )
     SELECT id FROM up;
-$$ LANGUAGE sql STABLE;
+$$ LANGUAGE sql STABLE
+-- Pinned so the function resolves the group tables no matter what the calling
+-- session's search_path is. Without this, deleting a group from any client that
+-- does not put this schema on its path fails inside the delete trigger.
+SET search_path = permissions, public, pg_catalog;
 
 COMMENT ON FUNCTION group_ancestors(uuid[]) IS
     'The given groups plus every group transitively containing them: the set to '
@@ -284,7 +288,8 @@ BEGIN
     )
     SELECT DISTINCT root, member_id FROM reachable WHERE member_type = 'user';
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
 
 COMMENT ON FUNCTION recompute_group_closure(uuid[]) IS
     'Rebuilds the effective membership of the given groups from direct membership.';
@@ -316,7 +321,8 @@ BEGIN
 
     RETURN OLD;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
 
 DROP TRIGGER IF EXISTS trigger_groups_detach_before_delete ON groups;
 CREATE TRIGGER trigger_groups_detach_before_delete
@@ -331,7 +337,8 @@ BEGIN
     NEW.updated_at = now();
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
 
 DROP TRIGGER IF EXISTS trigger_groups_updated_at ON groups;
 CREATE TRIGGER trigger_groups_updated_at
@@ -386,7 +393,8 @@ BEGIN
     NEW.changed_at = now();
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
 
 DROP TRIGGER IF EXISTS trigger_group_data_source_changed_at ON group_data_source;
 CREATE TRIGGER trigger_group_data_source_changed_at
