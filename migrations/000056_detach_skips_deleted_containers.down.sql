@@ -15,6 +15,7 @@ BEGIN
       FROM group_ancestors(ARRAY[OLD.subject_id]) AS a
      WHERE a <> OLD.subject_id;
 
+    -- Detach first so the recomputation observes the graph without this group.
     DELETE FROM group_memberships WHERE member_id = OLD.subject_id;
 
     IF containers IS NOT NULL THEN

@@ -9,9 +9,9 @@ SET search_path = permissions, public, pg_catalog;
 -- them. Under READ COMMITTED the DELETE blocks on a concurrent writer's locks
 -- and then re-evaluates, finding the rows gone, while the following INSERT
 -- takes a fresh snapshot that sees the other transaction's committed work. Two
--- transactions recomputing a shared ancestor -- de-users is an ancestor of a
--- great many groups -- collide on group_effective_members_pkey and one write is
--- lost to a rollback.
+-- transactions recomputing a shared ancestor -- a community holding several
+-- nested groups is an ancestor of each of them -- collide on
+-- group_effective_members_pkey and one write is lost to a rollback.
 --
 -- The second is worse because it is silent: group_ancestors is computed from
 -- the writer's snapshot, so a parent being attached concurrently is invisible
@@ -21,8 +21,12 @@ SET search_path = permissions, public, pg_catalog;
 --
 -- Locking the groups whose closure is being rebuilt, in a deterministic order,
 -- serializes the recomputations that overlap and leaves disjoint ones
--- concurrent. Ordering by id is what keeps two writers from deadlocking when
--- their ancestor sets intersect in opposite orders.
+-- concurrent. Ordering by id keeps two recomputations from deadlocking when
+-- their ancestor sets intersect in opposite orders. It does not rule deadlock
+-- out entirely: the membership triggers and the tuple lock of a group DELETE
+-- acquire groups rows outside this ordering, so concurrent bulk writes can
+-- still abort with 40P01 -- an availability cost, not a correctness one, and
+-- the caller's remedy is to retry the transaction.
 --
 CREATE OR REPLACE FUNCTION recompute_group_closure(group_ids uuid[]) RETURNS void
     LANGUAGE plpgsql
