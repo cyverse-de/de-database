@@ -7,7 +7,7 @@ SET search_path = public, pg_catalog;
 -- select when launching analyses, instead of choosing CPU/memory/GPU values
 -- individually.
 --
-CREATE TABLE resource_presets (
+CREATE TABLE IF NOT EXISTS resource_presets (
     id                 uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     label              text NOT NULL UNIQUE,
     description        text,
@@ -26,7 +26,7 @@ CREATE TABLE resource_presets (
 );
 
 -- Enforce at most one row may be marked as the default preset.
-CREATE UNIQUE INDEX resource_presets_single_default_idx
+CREATE UNIQUE INDEX IF NOT EXISTS resource_presets_single_default_idx
     ON resource_presets (is_default)
     WHERE is_default = true;
 
