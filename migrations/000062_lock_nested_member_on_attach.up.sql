@@ -6,7 +6,7 @@ SET search_path = permissions, public, pg_catalog;
 -- Attaching a group to a new parent, concurrently with a membership change
 -- inside that group, left the new parent permanently stale -- silently.
 --
--- 000057 serializes recomputations that share a group, which fixes the case
+-- 000060 serializes recomputations that share a group, which fixes the case
 -- where two writers rebuild the same ancestor. It cannot fix this one: the two
 -- writers lock disjoint sets. One recomputes A and its ancestors, which do not
 -- yet include Q; the other attaches A under Q and recomputes Q, reading A's

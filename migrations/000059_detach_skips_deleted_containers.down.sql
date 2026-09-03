@@ -2,7 +2,7 @@ BEGIN;
 
 SET search_path = permissions, public, pg_catalog;
 
--- Restores the form from 000054, which cannot delete a set of nested groups in
+-- Restores the form from 000057, which cannot delete a set of nested groups in
 -- one statement.
 CREATE OR REPLACE FUNCTION groups_detach_before_delete() RETURNS trigger
     LANGUAGE plpgsql

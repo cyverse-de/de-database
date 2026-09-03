@@ -378,7 +378,7 @@ COMMENT ON TABLE group_data_source IS
     'grouper; set it to native as part of cutover.';
 
 INSERT INTO group_data_source (source, changed_by, note)
-     VALUES ('grouper', 'migration 000054',
+     VALUES ('grouper', 'migration 000057',
              'Grouper remains authoritative until cutover.')
 ON CONFLICT DO NOTHING;
 

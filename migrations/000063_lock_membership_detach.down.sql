@@ -5,7 +5,7 @@ SET search_path = permissions, public, pg_catalog;
 DROP TRIGGER IF EXISTS trigger_group_memberships_lock_for_closure ON group_memberships;
 DROP FUNCTION IF EXISTS group_memberships_lock_for_closure();
 
--- Restores the insert-only lock from 000059.
+-- Restores the insert-only lock from 000062.
 CREATE OR REPLACE FUNCTION group_memberships_lock_nested_member() RETURNS trigger
     LANGUAGE plpgsql
     SET search_path = permissions, public, pg_catalog
@@ -26,7 +26,7 @@ CREATE TRIGGER group_memberships_lock_nested_member
     BEFORE INSERT ON group_memberships
     FOR EACH ROW EXECUTE FUNCTION group_memberships_lock_nested_member();
 
--- Restores the 000054 comment.
+-- Restores the 000057 comment.
 COMMENT ON TABLE group_effective_members IS
     'Derived: every user reachable from a group through any depth of nesting. '
     'Maintained on write by the groups service; reconcile by recomputing from '

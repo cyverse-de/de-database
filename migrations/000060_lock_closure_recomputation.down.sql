@@ -2,7 +2,7 @@ BEGIN;
 
 SET search_path = permissions, public, pg_catalog;
 
--- Restores the unlocked form from 000054, which loses concurrent membership
+-- Restores the unlocked form from 000057, which loses concurrent membership
 -- writes and can leave a concurrently-attached parent permanently stale.
 CREATE OR REPLACE FUNCTION recompute_group_closure(group_ids uuid[]) RETURNS void
     LANGUAGE plpgsql

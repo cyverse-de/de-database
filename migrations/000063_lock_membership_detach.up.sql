@@ -5,10 +5,10 @@ SET search_path = permissions, public, pg_catalog;
 --
 -- Removing a member, concurrently with the group being attached to a new
 -- parent, left the parent's closure permanently stale -- the same silent
--- failure 000059 fixed for additions, in the over-permissive direction: the
+-- failure 000062 fixed for additions, in the over-permissive direction: the
 -- removed user kept every permission granted to the new parent.
 --
--- 000059 works for additions for a reason it did not state: inserting a
+-- 000062 works for additions for a reason it did not state: inserting a
 -- membership row takes an FK KEY SHARE lock on the group's row, which
 -- conflicts with the attach trigger's FOR UPDATE, so the two writers meet. A
 -- DELETE performs no referential-integrity check and takes no lock at all on
@@ -64,7 +64,7 @@ CREATE TRIGGER trigger_group_memberships_lock_for_closure
     BEFORE INSERT OR UPDATE OR DELETE ON group_memberships
     FOR EACH ROW EXECUTE FUNCTION group_memberships_lock_for_closure();
 
--- The 000054 comment told the service to collect containers before deleting a
+-- The 000057 comment told the service to collect containers before deleting a
 -- group, which groups_detach_before_delete has done automatically since then;
 -- following the old instruction would double-recompute.
 COMMENT ON TABLE group_effective_members IS
