@@ -17,8 +17,16 @@ DROP FUNCTION IF EXISTS update_groups_updated_at();
 
 DROP TRIGGER IF EXISTS trigger_groups_detach_before_delete ON groups;
 DROP FUNCTION IF EXISTS groups_detach_before_delete();
+DROP TRIGGER IF EXISTS trigger_group_memberships_check_member_group ON group_memberships;
+DROP FUNCTION IF EXISTS group_memberships_check_member_group();
 DROP FUNCTION IF EXISTS recompute_group_closure(uuid[]);
 DROP FUNCTION IF EXISTS group_ancestors(uuid[]);
+
+DROP TRIGGER IF EXISTS trigger_group_memberships_lock_group_graph ON group_memberships;
+DROP TRIGGER IF EXISTS trigger_groups_lock_group_graph ON groups;
+DROP TRIGGER IF EXISTS trigger_subjects_lock_group_graph ON subjects;
+DROP FUNCTION IF EXISTS group_graph_lock_before_statement();
+DROP FUNCTION IF EXISTS lock_group_graph();
 
 DROP INDEX IF EXISTS group_effective_members_member_idx;
 DROP TABLE IF EXISTS group_effective_members;
@@ -38,7 +46,9 @@ ALTER TABLE subjects DROP CONSTRAINT IF EXISTS subjects_user_id_fkey;
 ALTER TABLE subjects DROP COLUMN IF EXISTS user_id;
 
 ALTER TABLE subjects DROP CONSTRAINT IF EXISTS subjects_id_subject_type_key;
-ALTER TABLE subjects ALTER COLUMN subject_id DROP DEFAULT;
+
+DROP TRIGGER IF EXISTS trigger_subjects_default_group_subject_id ON subjects;
+DROP FUNCTION IF EXISTS subjects_default_group_subject_id();
 
 --
 -- Restores the original width. This fails rather than truncates if any subject

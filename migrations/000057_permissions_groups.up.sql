@@ -18,11 +18,28 @@ ALTER TABLE subjects ALTER COLUMN subject_id TYPE varchar(512);
 --
 -- Groups imported from Grouper keep their original 32-hex identifiers so that
 -- existing permission grants and iRODS group names remain valid. Groups created
--- from here on must be indistinguishable from them, so the default mints the
--- same dashless form rather than a canonical uuid.
+-- from here on must be indistinguishable from them, so a group subject inserted
+-- without an identifier is given the same dashless form rather than a canonical
+-- uuid. A user subject's identifier is its username and is never minted: left
+-- NULL, it fails the NOT NULL constraint instead of silently becoming an orphan
+-- no username will ever match.
 --
-ALTER TABLE subjects
-    ALTER COLUMN subject_id SET DEFAULT replace(uuid_generate_v1()::text, '-', '');
+CREATE OR REPLACE FUNCTION subjects_default_group_subject_id()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.subject_id IS NULL AND NEW.subject_type = 'group' THEN
+        NEW.subject_id := replace(uuid_generate_v1()::text, '-', '');
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
+
+DROP TRIGGER IF EXISTS trigger_subjects_default_group_subject_id ON subjects;
+CREATE TRIGGER trigger_subjects_default_group_subject_id
+    BEFORE INSERT ON subjects
+    FOR EACH ROW
+    EXECUTE FUNCTION subjects_default_group_subject_id();
 
 --
 -- Correlates a user subject with its DE user row. subject_id is a bare username
@@ -44,10 +61,13 @@ ALTER TABLE subjects
 --
 ALTER TABLE subjects ADD COLUMN IF NOT EXISTS user_id uuid;
 
+-- Constraint names are unique only per table, so the guards name the table too.
 DO $$
 BEGIN
     IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint WHERE conname = 'subjects_user_id_fkey'
+        SELECT 1 FROM pg_constraint
+         WHERE conname = 'subjects_user_id_fkey'
+           AND conrelid = 'permissions.subjects'::regclass
     ) THEN
         ALTER TABLE subjects
             ADD CONSTRAINT subjects_user_id_fkey FOREIGN KEY (user_id)
@@ -56,7 +76,9 @@ BEGIN
 
     -- Only a user subject can name a DE user; a group never does.
     IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint WHERE conname = 'subjects_user_id_is_user'
+        SELECT 1 FROM pg_constraint
+         WHERE conname = 'subjects_user_id_is_user'
+           AND conrelid = 'permissions.subjects'::regclass
     ) THEN
         ALTER TABLE subjects
             ADD CONSTRAINT subjects_user_id_is_user
@@ -82,7 +104,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS subjects_user_id_unique
 DO $$
 BEGIN
     IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint WHERE conname = 'subjects_id_subject_type_key'
+        SELECT 1 FROM pg_constraint
+         WHERE conname = 'subjects_id_subject_type_key'
+           AND conrelid = 'permissions.subjects'::regclass
     ) THEN
         ALTER TABLE subjects
             ADD CONSTRAINT subjects_id_subject_type_key UNIQUE (id, subject_type);
@@ -119,6 +143,15 @@ INSERT INTO group_types (name, description, owner_required) VALUES
 -- without translating between identifier spaces. The externally visible group
 -- identifier is subjects.subject_id.
 --
+-- A public group is marked by a read grant held by the GrouperAll subject.
+-- Grouper granted that subject up to three separate privileges -- viewers (the
+-- group is discoverable), readers (its member list is public) and optins (a user
+-- may add themselves) -- and the permissions service has no level weaker than
+-- read, so all three arrive as the same grant. members_public and joinable keep
+-- the two finer distinctions, as properties of the group rather than grants,
+-- because GrouperAll is a sentinel with no members rather than a real subject.
+-- Both default to false: migrating a group must not widen what it exposed.
+--
 CREATE TABLE IF NOT EXISTS groups (
     subject_id uuid NOT NULL,
     subject_type subject_type_enum NOT NULL DEFAULT 'group'
@@ -138,6 +171,8 @@ CREATE TABLE IF NOT EXISTS groups (
     -- identifier later without another migration.
     display_name varchar(255),
     description text NOT NULL DEFAULT '',
+    members_public boolean NOT NULL DEFAULT false,
+    joinable boolean NOT NULL DEFAULT false,
     -- The full Grouper path this group was imported under, for provenance and
     -- reconciliation. NULL for groups created after the migration.
     legacy_name text,
@@ -158,6 +193,16 @@ COMMENT ON TABLE groups IS
 COMMENT ON COLUMN groups.owner IS
     'Namespace segment (a username) frozen at creation. NOT the current owner of the '
     'group, which is the ''own'' permission in the permissions table and may be transferred.';
+
+COMMENT ON COLUMN groups.members_public IS
+    'Whether a public group''s member list is public too. Grouper''s `readers` privilege '
+    'for GrouperAll, as opposed to `viewers`. Meaningless unless the group carries a read '
+    'grant to GrouperAll.';
+
+COMMENT ON COLUMN groups.joinable IS
+    'Whether a user may add themselves to this group without approval. Grouper''s `optins` '
+    'privilege for GrouperAll, as opposed to `viewers` (discoverable) or `readers` (members '
+    'listable). Meaningless unless the group also carries a read grant to GrouperAll.';
 
 --
 -- Structured identity. coalesce rather than NULLS NOT DISTINCT so the index works
@@ -225,16 +270,76 @@ CREATE TABLE IF NOT EXISTS group_effective_members (
 
 COMMENT ON TABLE group_effective_members IS
     'Derived: every user reachable from a group through any depth of nesting. '
-    'Maintained on write by the groups service; reconcile by recomputing from '
-    'group_memberships and diffing. Deleting a nested group cascades away the '
-    'membership row without updating this table, so the service must collect the '
-    'containing groups BEFORE issuing the delete and recompute them after -- once '
-    'the cascade fires, the path is gone and they can no longer be found. Stale '
-    'rows here grant access that direct membership no longer justifies.';
+    'Maintained by the groups service: after changing a group''s direct membership '
+    'it must call recompute_group_closure(group_ancestors(ARRAY[group_id])) in the '
+    'same transaction, keyed on the group written to and not on the member -- '
+    'once a nested group is detached, its own ancestors no longer include the '
+    'former parent. Group deletion is handled by the trigger on groups, which '
+    'detaches and recomputes the containers itself. Reconcile by recomputing from '
+    'group_memberships and diffing; stale rows here grant access that direct '
+    'membership no longer justifies.';
 
 -- The permission-lookup direction: given a user, which groups contain them.
 CREATE INDEX IF NOT EXISTS group_effective_members_member_idx
     ON group_effective_members (member_id, group_id);
+
+--
+-- Every write to the group graph serializes on one transaction-scoped advisory
+-- lock. A closure recomputation reads the whole subtree below the groups it
+-- rebuilds, so it must not overlap an attach or detach anywhere in that subtree;
+-- row locks on the rebuilt groups alone cannot express that, and a change one
+-- level further down would leave a concurrently attached ancestor permanently
+-- stale, with no error. Group-graph writes are rare next to the permission reads
+-- that consume the closure, so serializing all of them costs little.
+--
+-- The lock is taken by statement-level BEFORE triggers so that it precedes every
+-- tuple lock a write takes: a DELETE locks its rows before any row-level trigger
+-- runs, and a row-level trigger taking the advisory lock afterwards would order
+-- the two locks oppositely to a recomputation, which holds the advisory lock and
+-- then locks group and subject rows through its foreign keys. Deleting a subject
+-- cascades into the graph, so subject deletion takes the lock as well.
+--
+-- A transaction that locks a groups or subjects row some other way -- a SELECT
+-- FOR UPDATE, say -- before its first group-graph write can still deadlock
+-- against a concurrent delete of that row. Calling lock_group_graph() first
+-- prevents it; otherwise the remedy is to retry on SQLSTATE 40P01.
+--
+CREATE OR REPLACE FUNCTION lock_group_graph()
+RETURNS void AS $$
+    SELECT pg_advisory_xact_lock(hashtext('permissions.group_graph'));
+$$ LANGUAGE sql;
+
+COMMENT ON FUNCTION lock_group_graph() IS
+    'Takes the transaction-scoped advisory lock that serializes every write to the '
+    'group graph. Taken automatically by the first write to groups or '
+    'group_memberships or delete from subjects; call it explicitly to take it earlier.';
+
+CREATE OR REPLACE FUNCTION group_graph_lock_before_statement()
+RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM lock_group_graph();
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
+
+DROP TRIGGER IF EXISTS trigger_subjects_lock_group_graph ON subjects;
+CREATE TRIGGER trigger_subjects_lock_group_graph
+    BEFORE DELETE ON subjects
+    FOR EACH STATEMENT
+    EXECUTE FUNCTION group_graph_lock_before_statement();
+
+DROP TRIGGER IF EXISTS trigger_groups_lock_group_graph ON groups;
+CREATE TRIGGER trigger_groups_lock_group_graph
+    BEFORE INSERT OR UPDATE OR DELETE ON groups
+    FOR EACH STATEMENT
+    EXECUTE FUNCTION group_graph_lock_before_statement();
+
+DROP TRIGGER IF EXISTS trigger_group_memberships_lock_group_graph ON group_memberships;
+CREATE TRIGGER trigger_group_memberships_lock_group_graph
+    BEFORE INSERT OR UPDATE OR DELETE ON group_memberships
+    FOR EACH STATEMENT
+    EXECUTE FUNCTION group_graph_lock_before_statement();
 
 --
 -- Every group that transitively contains any of the given groups, including the
@@ -273,6 +378,8 @@ COMMENT ON FUNCTION group_ancestors(uuid[]) IS
 CREATE OR REPLACE FUNCTION recompute_group_closure(group_ids uuid[])
 RETURNS void AS $$
 BEGIN
+    PERFORM lock_group_graph();
+
     DELETE FROM group_effective_members WHERE group_id = ANY(group_ids);
 
     INSERT INTO group_effective_members (group_id, member_id)
@@ -292,7 +399,34 @@ $$ LANGUAGE plpgsql
 SET search_path = permissions, public, pg_catalog;
 
 COMMENT ON FUNCTION recompute_group_closure(uuid[]) IS
-    'Rebuilds the effective membership of the given groups from direct membership.';
+    'Rebuilds the effective membership of the given groups from direct membership, '
+    'under the group-graph lock. Pass group_ancestors(ARRAY[group_id]) for the group '
+    'whose direct membership changed.';
+
+--
+-- The foreign key on (member_id, member_type) guarantees a group-typed member has
+-- a group subject, but not that it has a groups row. Reachable only by direct
+-- SQL, but a membership pointing at a subject with no group would leave closure
+-- rows nothing can recompute, so it is refused rather than silently orphaned.
+--
+CREATE OR REPLACE FUNCTION group_memberships_check_member_group()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.member_type = 'group'
+       AND NOT EXISTS (SELECT 1 FROM groups WHERE subject_id = NEW.member_id) THEN
+        RAISE EXCEPTION 'group-typed member % has no groups row; the member group does not exist or was deleted concurrently', NEW.member_id
+            USING ERRCODE = 'foreign_key_violation';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql
+SET search_path = permissions, public, pg_catalog;
+
+DROP TRIGGER IF EXISTS trigger_group_memberships_check_member_group ON group_memberships;
+CREATE TRIGGER trigger_group_memberships_check_member_group
+    BEFORE INSERT OR UPDATE ON group_memberships
+    FOR EACH ROW
+    EXECUTE FUNCTION group_memberships_check_member_group();
 
 --
 -- Deleting a group removes it from its containers by cascade, which would leave
@@ -303,6 +437,10 @@ COMMENT ON FUNCTION recompute_group_closure(uuid[]) IS
 -- and it covers deletes initiated by any caller, including a cascade from a
 -- subjects row.
 --
+-- A container that is itself being deleted by the same statement is skipped: it
+-- may already be gone by the time this row is reached, and rebuilding its
+-- closure would insert rows for a group no longer in groups.
+--
 CREATE OR REPLACE FUNCTION groups_detach_before_delete()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -310,7 +448,8 @@ DECLARE
 BEGIN
     SELECT array_agg(a) INTO containers
       FROM group_ancestors(ARRAY[OLD.subject_id]) AS a
-     WHERE a <> OLD.subject_id;
+     WHERE a <> OLD.subject_id
+       AND EXISTS (SELECT 1 FROM groups g WHERE g.subject_id = a);
 
     -- Detach first so the recomputation observes the graph without this group.
     DELETE FROM group_memberships WHERE member_id = OLD.subject_id;
@@ -323,6 +462,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql
 SET search_path = permissions, public, pg_catalog;
+
+COMMENT ON FUNCTION groups_detach_before_delete() IS
+    'Detaches a group from its containers and recomputes them before the row is '
+    'deleted, while the containers can still be found.';
 
 DROP TRIGGER IF EXISTS trigger_groups_detach_before_delete ON groups;
 CREATE TRIGGER trigger_groups_detach_before_delete
